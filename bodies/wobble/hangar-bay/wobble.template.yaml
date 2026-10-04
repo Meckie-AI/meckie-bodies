@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: d8d662846556668d4fbed6cb4cd1f84611fed3fd7f98b70781b7735de25a657c   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 5baf3dd7f2a548b38828b82e029006ad0752eb9ebb7af1fe80897056affd3fcb   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: wobble
   name: Wobble

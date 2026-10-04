@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: f2185c926f9b58d1b1c527959a65d40ad1aee5faf7419aeca1f04b42fb1efad7   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: a44096310f0bf8e107c2865c405a7299165251aadd05d5ddaeca1880d64805c0   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: rover-lite
   name: Rover Lite

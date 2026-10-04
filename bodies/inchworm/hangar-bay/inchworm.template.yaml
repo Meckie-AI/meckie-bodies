@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: a1ca6b4aabf58dbac95b252338eb3f18d81bde74551546838b982e8a314d649d   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 910d80b02bfbb5a172795826be66183b5252bb27c023d8d4b9d731818c7e2199   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: inchworm
   name: Inchworm

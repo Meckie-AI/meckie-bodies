@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 87de1fdf4f3d6e11426b541d54e827cfbf3a903902fb68109e026f8c85d10315   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: e5af0fa5cc77d8fdb9e4924094ffe40d5bbf40d879e352b4c4d05ef1af39d350   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: biped-mini
   name: Biped Mini

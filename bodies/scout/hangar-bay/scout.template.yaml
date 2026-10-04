@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 4b7cb87b47f9b627dd8d27d7ff9aaa141933fe731bcaaec5ee3ee718a7bf4266   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 04b2418319ae39a308aa49fce8a86a3ec011d0f754ba18917944575f750f6b01   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: scout
   name: Scout

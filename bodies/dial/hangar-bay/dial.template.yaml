@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 081b3ce70cc059c34b22300711058836a1671396801d3018a0cb359e80d72fd7   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 6bc0cb3369298fc3d5126ffc6f2a77032c75580e214c9936051a070b92e6dfc7   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: dial
   name: Dial

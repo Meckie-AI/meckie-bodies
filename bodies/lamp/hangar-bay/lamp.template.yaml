@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 77ffbca35ea13eb860a401e0426fba0f54fab8d9ee1d93af874543cf989edb99   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 0529829c4f47713d5e44eda28cf74436679ef2932cb79d1714be8fcd04f0d2d3   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: lamp
   name: Lamp
