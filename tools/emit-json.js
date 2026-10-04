@@ -140,8 +140,30 @@ function buildManifest(slug, tpl, hw, cat) {
 function buildSpec(slug, tpl, hw) {
   const reflex = tpl.targets.reflex || {};
   const esp = Object.entries(tpl.targets).filter(([, t]) => t.role);
-  const display = peripheral(hw, p => /gc9a01|st7789|ili9341|st7735/.test(p.part || ''));
   const unsupported = [];
+
+  // Which MCU hosts a peripheral decides whether it belongs in this file at
+  // all. Hangar Bay generates PlatformIO ESP32 firmware, so a display or mic
+  // wired to the Raspberry Pi is served by the Pi's own software and must NOT
+  // appear here - listing it would have the generator resolve Pi GPIO numbers
+  // as if they were ESP32 pins, and its pin audit would then compare two
+  // different boards' pins against each other.
+  const espHosts = new Set(esp.map(([k]) => k));
+  const hostOf = hostOfBus(hw);
+  const hostOfPart = (p) => p && (p.host || hostOf[p.bus] || 'reflex');
+  const onEsp = (p) => espHosts.has(hostOfPart(p));
+
+  const displayAny = peripheral(hw, p => /gc9a01|st7789|ili9341|st7735/.test(p.part || ''));
+  const display = displayAny && onEsp(displayAny) ? displayAny : null;
+  if (displayAny && !display) {
+    unsupported.push({
+      what: `display (${displayAny.part})`,
+      value: `hosted on ${hostOfPart(displayAny)}`,
+      reason: `wired to the ${hostOfPart(displayAny)} board, which is not an ESP32 firmware `
+            + 'target, so show_face is served by that board\'s own software and the '
+            + 'generator must not resolve its pins',
+    });
+  }
 
   const build = {
     model: slug,
@@ -175,7 +197,7 @@ function buildSpec(slug, tpl, hw) {
     const FALLBACK = { mosi: 23, sclk: 18, cs: 5, dc: 16, rst: 17, bl: 4 };
     const sym = ['cs', 'rst', 'bl'].filter(k => typeof display[k] === 'string');
     if (sym.length) {
-      const owners = pinOwners(hw, display.host || hostOfBus(hw)[display.bus] || 'reflex');
+      const owners = pinOwners(hw, hostOfPart(display));
       const collisions = [];
       for (const k of sym) {
         const gpio = FALLBACK[k];
@@ -245,24 +267,89 @@ function buildSpec(slug, tpl, hw) {
     unsupported.push({
       what: `${serial.length} serial-bus servo(s) on ${buses.length} bus(es)`,
       value: [...new Set(serial.map(s => s.model))].join(', '),
-      reason: 'fw-templates.js implements PWM hobby servos only (ESP32Servo.h, '
-            + 'panServo.write(0..180)). No Feetech/STS serial protocol exists in '
-            + 'lib/bodies/, so look_at cannot be generated for this body yet',
+      reason: 'needs the Feetech STS serial-bus driver, which lives on the Meckie OS '
+            + 'branch feat/serial-bus-servos and is NOT on main yet. On main, '
+            + 'fw-templates.js has one actuator model - a PWM hobby servo per GPIO '
+            + '(ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be '
+            + 'generated for this body from main',
     });
   }
   if (pwm.length) {
     build.servo = { pan: pwm[0].pwm_gpio, axes: 1, part: pwm[0].part, role: 'kickstand' };
   }
 
-  if (peripheral(hw, p => /ws2812|sk6812/.test(p.part || ''))) {
-    const led = peripheral(hw, p => /ws2812|sk6812/.test(p.part || ''));
-    build.led = { pin: led.gpio, part: led.part };
+  const ledAny = peripheral(hw, p => /ws2812|sk6812/.test(p.part || ''));
+  if (ledAny && onEsp(ledAny)) build.led = { pin: ledAny.gpio, part: ledAny.part };
+
+  // Mic and speaker: real I2S pins off the bus they sit on, or nothing. The
+  // generator defaults to pins from a different board when these are absent,
+  // which on a single-MCU body can land on a motor pin, so an unknown here is
+  // recorded rather than left to a fallback.
+  const i2sPins = (p) => {
+    const bus = (hw.buses || {})[p.bus] || {};
+    const out = {};
+    if (Number.isFinite(bus.bclk)) out.bclk = bus.bclk;
+    const lr = bus.lrclk ?? bus.ws;
+    if (Number.isFinite(lr)) out.lrclk = lr;
+    if (Number.isFinite(bus.din)) out.din = bus.din;
+    if (Number.isFinite(bus.dout)) out.dout = bus.dout;
+    return out;
+  };
+
+  const micAny = peripheral(hw, p => /ics43434|onboard_pdm|inmp441/.test(p.part || ''));
+  if (micAny && onEsp(micAny)) {
+    const pins = i2sPins(micAny);
+    build.mic_type = micAny.part;
+    if (Number.isFinite(micAny.clk)) pins.bclk = micAny.clk;      // PDM mics name it clk
+    if (Number.isFinite(micAny.data)) pins.din = micAny.data;
+    if (Object.keys(pins).length) build.mic = { pins };
+    if (/pdm/.test(micAny.part)) {
+      unsupported.push({
+        what: `mic (${micAny.part})`,
+        value: `clk ${micAny.clk}, data ${micAny.data}`,
+        reason: 'the generator\'s audio_up block is I2S; a PDM mic needs a different '
+              + 'driver, so audio_up cannot be generated for this body',
+      });
+    }
+  } else if (micAny) {
+    unsupported.push({
+      what: `mic (${micAny.part})`,
+      value: `hosted on ${hostOfPart(micAny)}`,
+      reason: `wired to the ${hostOfPart(micAny)} board, which is not an ESP32 firmware target`,
+    });
   }
-  const mics = peripheral(hw, p => /ics43434|onboard_pdm/.test(p.part || ''));
-  if (mics) build.mic_type = mics.part;
-  const spk = peripheral(hw, p => /max98357a|pam8302/.test(p.part || ''));
-  if (spk) build.speaker = spk.part;
-  if (peripheral(hw, p => /imx708|ov3660/.test(p.part || ''))) build.camera = true;
+
+  const spkAny = peripheral(hw, p => /max98357a|pam8302/.test(p.part || ''));
+  if (spkAny && onEsp(spkAny)) {
+    const pins = i2sPins(spkAny);
+    if (Number.isFinite(spkAny.sd)) pins.amp_sd = spkAny.sd;
+    build.speaker = spkAny.part;
+    if (Object.keys(pins).length) build.speaker_pins = { pins };
+    if (typeof spkAny.sd === 'string') {
+      unsupported.push({
+        what: 'speaker amp shutdown',
+        value: `sd=${spkAny.sd}`,
+        reason: 'tied to a rail or behind the I2C expander, not an MCU pin',
+      });
+    }
+  } else if (spkAny) {
+    unsupported.push({
+      what: `speaker (${spkAny.part})`,
+      value: `hosted on ${hostOfPart(spkAny)}`,
+      reason: `wired to the ${hostOfPart(spkAny)} board, which is not an ESP32 firmware target`,
+    });
+  }
+
+  const camAny = peripheral(hw, p => /imx708|ov3660|ov2640/.test(p.part || ''));
+  if (camAny && onEsp(camAny)) build.camera = true;
+  else if (camAny) {
+    unsupported.push({
+      what: `camera (${camAny.part})`,
+      value: `hosted on ${hostOfPart(camAny)}`,
+      reason: `wired to the ${hostOfPart(camAny)} board (${camAny.bus}), which is not an `
+            + 'ESP32 firmware target',
+    });
+  }
 
   // --- topology ----------------------------------------------------------
   if (esp.length > 1) {

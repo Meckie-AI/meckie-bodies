@@ -39,7 +39,23 @@
     "part": "ws2812"
   },
   "mic_type": "ics43434",
+  "mic": {
+    "pins": {
+      "bclk": 3,
+      "lrclk": 4,
+      "din": 5,
+      "dout": 6
+    }
+  },
   "speaker": "max98357a",
+  "speaker_pins": {
+    "pins": {
+      "bclk": 3,
+      "lrclk": 4,
+      "din": 5,
+      "dout": 6
+    }
+  },
   "camera": true,
   "topology": {
     "boards": [
@@ -85,6 +101,11 @@
       "what": "motor enable pins (ena/enb)",
       "value": "n/a on a DRV8833",
       "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+    },
+    {
+      "what": "speaker amp shutdown",
+      "value": "sd=tied_high",
+      "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
     }
   ],
   "_generated": {

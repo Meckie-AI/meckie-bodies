@@ -6,19 +6,6 @@
   "arduino": {
     "memory_type": "qio_opi"
   },
-  "display": {
-    "controller": "gc9a01",
-    "width": 240,
-    "height": 240,
-    "pins": {
-      "mosi": 10,
-      "sclk": 11,
-      "cs": 8,
-      "dc": 25,
-      "rst": 24,
-      "bl": 13
-    }
-  },
   "servo_bus": [
     {
       "name": "servo_bus",
@@ -67,8 +54,6 @@
     "pin": 48,
     "part": "ws2812"
   },
-  "mic_type": "ics43434",
-  "speaker": "max98357a",
   "camera": true,
   "topology": {
     "boards": [
@@ -106,9 +91,24 @@
   "transport": "ws",
   "unsupported": [
     {
+      "what": "display (gc9a01)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+    },
+    {
       "what": "4 serial-bus servo(s) on 1 bus(es)",
       "value": "sts3215",
-      "reason": "fw-templates.js implements PWM hobby servos only (ESP32Servo.h, panServo.write(0..180)). No Feetech/STS serial protocol exists in lib/bodies/, so look_at cannot be generated for this body yet"
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "mic (ics43434)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
     },
     {
       "what": "1 Raspberry Pi target(s): face",

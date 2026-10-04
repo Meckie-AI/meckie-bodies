@@ -18,6 +18,12 @@
     "pins": {}
   },
   "mic_type": "onboard_pdm",
+  "mic": {
+    "pins": {
+      "bclk": 42,
+      "din": 41
+    }
+  },
   "speaker": "pam8302",
   "camera": true,
   "transport": "ws",
@@ -32,6 +38,16 @@
       "what": "drive pins",
       "value": "{\"left\":{\"pwm\":3,\"dir\":\"expander.p0\",\"enc_a\":1,\"pcnt_unit\":0},\"right\":{\"pwm\":4,\"dir\":\"expander.p1\",\"enc_a\":2,\"pcnt_unit\":1}}",
       "reason": "differential: motor direction runs through expander.p0 rather than a second MCU pin, so the ain1/ain2 + bin1/bin2 shape does not fit"
+    },
+    {
+      "what": "mic (onboard_pdm)",
+      "value": "clk 42, data 41",
+      "reason": "the generator's audio_up block is I2S; a PDM mic needs a different driver, so audio_up cannot be generated for this body"
+    },
+    {
+      "what": "speaker amp shutdown",
+      "value": "sd=expander.p6",
+      "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
     }
   ],
   "_generated": {

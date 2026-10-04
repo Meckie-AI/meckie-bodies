@@ -74,7 +74,13 @@
     "part": "ws2812"
   },
   "mic_type": "ics43434",
-  "speaker": "max98357a",
+  "mic": {
+    "pins": {
+      "bclk": 3,
+      "lrclk": 4,
+      "din": 5
+    }
+  },
   "camera": true,
   "topology": {
     "boards": [
@@ -133,7 +139,12 @@
     {
       "what": "5 serial-bus servo(s) on 1 bus(es)",
       "value": "sts3215",
-      "reason": "fw-templates.js implements PWM hobby servos only (ESP32Servo.h, panServo.write(0..180)). No Feetech/STS serial protocol exists in lib/bodies/, so look_at cannot be generated for this body yet"
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on audio",
+      "reason": "wired to the audio board, which is not an ESP32 firmware target"
     },
     {
       "what": "1 Raspberry Pi target(s): audio",
