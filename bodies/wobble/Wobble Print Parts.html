@@ -165,7 +165,7 @@ part('battery_cradle','Battery cradle (screws to the spine)',1,'PETG','Base down
  for(const[x,y]of [[-20,-10],[20,-10],[-20,10],[20,10]])g=S(g,clr('M2',x,y,-1,4),csk('M2',x,y,2,true));return g;});
 
 part('esp_cradle','ESP32-S3 DevKitC cradle (screws to the spine)',1,'PETG','Base down.',()=>{const Lb=63.6,Wb=25.9;let g=BOX(Lb+4,Wb+4,2,0,0,0);
- for(const s of [-1,1]){g=U(g,BOX(Lb,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
+ for(const s of [-1,1]){g=U(g,BOX(Lb+4,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
  g=U(g,BOX(2,Wb,6,-(Lb/2+1),0,0));for(const x of [-20,20])g=S(g,clr('M2',x,0,-1,4),csk('M2',x,0,2,true));return g;});
 
 part('board_plate','Small-board plate (charger, buck, driver)',2,'CF-nylon','Flat.',()=>{let g=RR(40,30,3,2.5);
@@ -208,13 +208,13 @@ part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; ho
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
 
 part('face_bezel','Face bezel + TPU-look visor ring',1,'PETG, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
- for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.8*Math.cos(b2),23.8*Math.sin(b2),3.5));}return g;});
+ for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}return g;});
 
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
- for(const s of [-1,1])g=U(g,BOX(23,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
+ for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
 
-part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.5,-1.5));});
+part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
 
 part('battery_door','Battery door',1,'PETG sea foam (deep)','Outer face down; latch upright.',()=>{
  let g=RR(43.4,51.4,6,2);g=U(g,BOX(38,3.6,1.2,0,-(51.4/2)-1.5,.6).rotateZ?BOX(3.6,38,1.2,0,0,0):0);

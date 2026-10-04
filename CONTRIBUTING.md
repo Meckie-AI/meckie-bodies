@@ -126,15 +126,40 @@ Every STL must be binary, watertight (no boundary edges), a single shell, inside
 fixes zero-area triangles mechanically.
 
 Edges used by more than two triangles are also a failure, with one exception:
-`mesh-exceptions.json` lists 20 files from the original handoff with exact
-counts. That list is checked **both ways** — a count that rises fails, and a
-count that falls fails too, so a part you fix must have its entry removed. It
-cannot decay into a blanket exemption.
+`mesh-exceptions.json` lists 4 files with exact counts. That list is checked
+**both ways** — a count that rises fails, and a count that falls fails too, so a
+part you fix must have its entry removed. It cannot decay into a blanket
+exemption.
 
-Those 20 are all the same kind of defect: two surfaces that abut exactly instead
-of overlapping by a few microns, which makes four triangles share one edge. The
-meshes are still closed and printable. The fix belongs in the part's build
-function in `<Name> Print Parts.html`, not in a post-processor.
+All four are the same defect: two features that meet along a *line* instead of
+overlapping, which makes four triangles share one edge. Manifold emits that
+faithfully — two solids touching along a line genuinely cannot be a manifold
+solid there. The meshes are still closed and printable.
+
+The fix belongs in the part's build function, not in a post-processor:
+
+```
+node tools/diagnose-mesh.mjs <slug>          # prints the bad edges, in mm
+# find the feature at those coordinates in <Name> Print Parts.html, give it a
+# small overlap, then:
+node tools/reexport.js <slug> <part> && npm run clean-mesh
+```
+
+then delete its entry. Sixteen files were fixed this way rather than listed; see
+the git history for what moved and why.
+
+### STLs must come back out of the generator
+
+`<Name> Print Parts.html` is the geometric source of truth, so every committed
+STL should be reproducible from it — `tools/geom.mjs` runs that geometry in Node
+with no browser, which is what makes re-export and this check possible.
+
+`node tools/reexport.js --verify` proves it. 11 files do not reproduce, all
+inherited from the handoff and recorded in `stl-drift.json`: four are rotated
+relative to the generator, four mirrored or shifted, three differ in triangle
+count. They are deliberately **not** regenerated — print orientation is a real
+decision and the STL is what a builder slices, so which copy is correct is a
+design call, not a cleanup. Same both-ways discipline as the mesh list.
 
 ## Verify before you print
 

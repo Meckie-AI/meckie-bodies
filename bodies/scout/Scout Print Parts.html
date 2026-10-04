@@ -153,7 +153,7 @@ part('upper_shell','Upper shell (dome)',1,'PETG cream','Rim on the bed. Dome clo
  return g.decompose().reduce((a,b)=>b.volume()>a.volume()?b:a);});
 
 const bumper=(key,name,front)=>part(key,name,1,'TPU 95A','Flange down. 2 walls, 20% gyroid.',()=>{
- const pts=bumperPath(front);const sph=pts.map(p=>toM(new THREE.SphereGeometry(5.5,20,14).translate(p.x,p.y,5.5)));const segs=[];for(let i=0;i<sph.length-1;i++)segs.push(Manifold.hull([sph[i],sph[i+1]]));
+ const pts=bumperPath(front);const sph=pts.map(p=>toM(new THREE.SphereGeometry(5.5,20,14).translate(p.x,p.y,5.6)));const segs=[];for(let i=0;i<sph.length-1;i++)segs.push(Manifold.hull([sph[i],sph[i+1]]));
  return U(Manifold.union(segs),I(bumperFlange(front),BOX(300,300,2,0,0,0)));});
 bumper('bumper_front','Bumper, front',true);
 bumper('bumper_rear','Bumper, rear',false);
@@ -206,19 +206,19 @@ part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; ho
 
 part('face_bezel','Face bezel',1,'PETG, chrome paint','Face down; hooks upright.',()=>{
  let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
- for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9).rotateZ?BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9):0);const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.8*Math.cos(b2),23.8*Math.sin(b2),3.5));}
+ for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9).rotateZ?BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9):0);const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}
  return g;});
 
 part('xiao_bracket','XIAO ESP32-S3 Sense snap cradle',1,'PETG','Base down. Screws to the camera mount disc inside the dome so the lens looks out of the camera hole.',()=>{
  let g=BOX(26,24,2,0,0,0);
- for(const s of [-1,1])g=U(g,BOX(23,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));
+ for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));
  g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));
  return g;});
 
 part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{
  let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));
- g=U(g,RING(7.4,6.6,1.5,-1.5));return g;});
+ g=U(g,RING(7.4,6.6,1.8,-1.5));return g;});
 
 part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{
  let g=S(RR(36,10,2,2),CYL(9,4,0,0,-1));g=U(g,RING(11,9,2,0));for(const y of [-14,14])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});

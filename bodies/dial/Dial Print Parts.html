@@ -187,7 +187,7 @@ part('tray','Electronics tray (10 mm insert grid)',1,'CF-nylon','Flat. No suppor
 part('esp_cradle','ESP32-S3 DevKitC snap cradle',1,'PETG','Base down. Rails flex to click the board in.',()=>{
  const Lb=63.6,Wb=25.9;
  let g=BOX(Lb+4,Wb+4,2,0,0,0);
- for(const s of [-1,1]){g=U(g,BOX(Lb,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
+ for(const s of [-1,1]){g=U(g,BOX(Lb+4,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
  g=U(g,BOX(2,Wb,6,-(Lb/2+1),0,0));
  for(const x of [-20,20])g=S(g,clr('M25',x,0,-1,4),csk('M25',x,0,2,true));
  return g;});

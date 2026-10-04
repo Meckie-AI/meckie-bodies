@@ -10,11 +10,15 @@
     "sync": "node tools/sync-template.js",
     "clean-mesh": "node tools/meshclean.js",
     "selftest": "bash tools/selftest.sh",
-    "check": "node tools/validate.js && node tools/sync-template.js --check && node tools/emit-json.js --check && bash tools/selftest.sh"
+    "check": "node tools/validate.js && node tools/sync-template.js --check && node tools/emit-json.js --check && bash tools/selftest.sh",
+    "reexport": "node tools/reexport.js",
+    "diagnose": "node tools/diagnose-mesh.mjs"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "manifold-3d": "^3.0.0",
+    "three": "^0.184.0"
   }
 }

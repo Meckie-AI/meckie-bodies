@@ -180,11 +180,11 @@ part('head_rear','Head shell, rear',1,'PETG cream','Rim down. No supports.',()=>
 part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const q=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(q),19.6*Math.sin(q),2.4,q,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
 part('face_bezel','Face bezel + red TPU-look ring',1,'PETG, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
- for(let i=0;i<3;i++){const q=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(q),22.7*Math.sin(q),5.9));const b2=q+P/3;g=S(g,BOX(1.2,4,5,23.8*Math.cos(b2),23.8*Math.sin(b2),3.5));}return g;});
+ for(let i=0;i<3;i++){const q=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(q),22.7*Math.sin(q),5.9));const b2=q+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}return g;});
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
- for(const s of [-1,1])g=U(g,BOX(23,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
+ for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-7,7])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
-part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.5,-1.5));});
+part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
 part('sensor_clamp','Lidar / mic clamp plate',3,'PETG','Flat.',()=>{let g=S(RR(8,22,2,2.5),BOX(4,10,4,0,0,-1));for(const y of [-9,9])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
 part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
 part('antenna_tip','Antenna glow tip (over a 2020 LED)',2,'PETG natural (translucent)','Hole up. 100% infill.',()=>bigOf(S(new THREE.SphereGeometry(4.5,24,16).translate(0,0,4.5),CYL(1.6,3.2,0,0,-.1),CYL(.9,6,0,0,2))));

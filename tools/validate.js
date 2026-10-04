@@ -11,6 +11,7 @@
 const fs = require('fs');
 const path = require('path');
 const Ajv = require('ajv/dist/2020');
+const { execFileSync } = require('child_process');
 const P = require('./lib/packs');
 const mesh = require('./lib/mesh');
 const csv = require('./lib/csv');
@@ -18,16 +19,17 @@ const csv = require('./lib/csv');
 const argv = process.argv.slice(2);
 const only = (argv.find(a => a.startsWith('--only=')) || '').slice(7).split(',').filter(Boolean);
 const warnOnly = new Set((argv.find(a => a.startsWith('--warn=')) || '').slice(7).split(',').filter(Boolean));
+const skip = new Set((argv.find(a => a.startsWith('--skip=')) || '').slice(7).split(',').filter(Boolean));
 
 const errors = [];
 const warnings = [];
 let checks = 0;
 
 function group(name) {
-  const skip = only.length && !only.includes(name);
+  const skipped = skip.has(name) || (only.length && !only.includes(name));
   const soft = warnOnly.has(name);
   return {
-    name, skip,
+    name, skip: skipped,
     fail(msg) { checks++; (soft ? warnings : errors).push(`[${name}] ${msg}`); },
     pass() { checks++; },
     check(ok, msg) { checks++; if (!ok) (soft ? warnings : errors).push(`[${name}] ${msg}`); },
@@ -405,6 +407,39 @@ const catalog = P.catalog();
       // The generated manifest must describe the manifest that is on disk now.
       g.check(m._generated && m._generated.hardware_sha256 === P.hash(P.readManifestText(s)),
         `${s}: generated/manifest.json is stale (run npm run emit)`);
+    }
+  }
+}
+
+// ----------------------------------------------------- stl reproducibility ---
+{
+  const g = group('reproducible');
+  if (!g.skip) {
+    // The pack standard calls <Body> Print Parts.html the geometric source of
+    // truth, so every committed STL should come back out of it. 11 do not, all
+    // of them inherited from the handoff - see stl-drift.json. Exact allowlist,
+    // same discipline as the mesh one: an unlisted file that drifts fails, and
+    // a listed file that stops drifting fails too.
+    const expected = JSON.parse(fs.readFileSync(path.join(P.ROOT, 'stl-drift.json'), 'utf8')).drift;
+    let actual;
+    try {
+      actual = JSON.parse(execFileSync(process.execPath,
+        [path.join(P.ROOT, 'tools', 'reexport.js'), '--json'],
+        { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+    } catch (e) {
+      g.fail(`could not run tools/reexport.js --json: ${e.message.split('\n')[0]}`);
+      actual = null;
+    }
+    if (actual) {
+      for (const file of Object.keys(actual)) {
+        g.check(file in expected,
+          `${file}: does not reproduce from its generator and is not in stl-drift.json ` +
+          `(${actual[file].kind}: ${actual[file].note})`);
+      }
+      for (const file of Object.keys(expected)) {
+        g.check(file in actual,
+          `stl-drift.json lists ${file}, but it now reproduces — remove the entry`);
+      }
     }
   }
 }

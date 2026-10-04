@@ -213,7 +213,7 @@ part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; ho
 part('led_diffuser','LED ring diffuser',1,'PETG natural (translucent)','Flat.',()=>RING(33.9,28.3,1.6,0));
 part('face_bezel','Face bezel',1,'PETG, chrome paint','Face down.',()=>RING(23.4,16.2,2.4,0));
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
- for(const s of [-1,1])g=U(g,BOX(23,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
+ for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-3.5,3.5])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
 part('mic_clamp','Mic retainer plate',2,'PETG','Flat.',()=>{let g=S(RR(8,20,2,2),BOX(4,4,4,0,0,-1));for(const y of [-6,6])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
 part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});

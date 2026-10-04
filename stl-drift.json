@@ -1,0 +1,80 @@
+{
+  "_why": [
+    "These STLs do not come back from the generator that the pack standard calls",
+    "the geometric source of truth. The drift is INHERITED: every entry is present",
+    "in this repo's first commit, the handoff exactly as delivered, so the bundle",
+    "shipped STLs exported from an earlier revision of the generator than the one",
+    "it also shipped. Nothing done in this repo introduced any of it, and the 16",
+    "parts that were regenerated here all reproduced faithfully first (largest",
+    "disagreement 1.9e-6 mm) before being touched.",
+    "",
+    "Nothing here has been regenerated, deliberately. Four files are ROTATED",
+    "relative to the generator and four more are MIRRORED or shifted. Print",
+    "orientation is a real decision and the STL is what a builder slices, so",
+    "regenerating would re-orient parts on a guess about which copy is correct.",
+    "Whoever owns the design decides that, and the first test print settles it.",
+    "",
+    "Check:   node tools/reexport.js --verify",
+    "Rebuild: node tools/reexport.js <slug> <part> && npm run clean-mesh",
+    "         (only once you know the generator is the copy to trust)",
+    "then delete the entry here. Validation fails on a file that drifts and is not",
+    "listed, and on a listed file that no longer drifts, so the list cannot rot.",
+    "",
+    "Tolerance is 1e-5 mm. The page centres parts in float32 while the Node path",
+    "uses doubles, so untouched parts still disagree by about 2 nanometres."
+  ],
+  "drift": {
+    "bodies/dial/stl/dial-turntable-x1.stl": {
+      "kind": "triangle count",
+      "note": "generator makes 4504 triangles, file has 4502"
+    },
+    "bodies/dial/stl/dial-pan_sleeve-x1.stl": {
+      "kind": "triangle count",
+      "note": "generator makes 1362 triangles, file has 1338"
+    },
+    "bodies/scout/stl/scout-upper_shell-x1.stl": {
+      "kind": "triangle count",
+      "note": "generator makes 11694 triangles, file has 12550"
+    },
+    "bodies/biped-mini/stl/biped-mini-pelvis-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 60 x 100 x 28 mm, file 60 x 100 x 28 mm",
+      "max_delta_mm": 100
+    },
+    "bodies/biped-mini/stl/biped-mini-roll_cap-x2.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 2 x 20.5 x 25 mm, file 25 x 20.5 x 2 mm",
+      "max_delta_mm": 25
+    },
+    "bodies/biped-mini/stl/biped-mini-ankle_cap-x2.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 3 x 44.4 x 31.1 mm, file 31.1 x 44.4 x 3 mm",
+      "max_delta_mm": 31.1
+    },
+    "bodies/biped-mini/stl/biped-mini-foot_strap-x2.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 24 x 34.6 x 3.75 mm, file 24 x 34.6 x 3.75 mm",
+      "max_delta_mm": 34.6
+    },
+    "bodies/biped-mini/stl/biped-mini-torso_lower-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 100 x 124 x 24 mm, file 100 x 124 x 24 mm",
+      "max_delta_mm": 124
+    },
+    "bodies/biped-mini/stl/biped-mini-torso_upper-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 99.53 x 123.42 x 48.1 mm, file 99.53 x 123.42 x 48.1 mm",
+      "max_delta_mm": 0
+    },
+    "bodies/biped-mini/stl/biped-mini-tail_skid-x1.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 50 x 28 x 119 mm, file 50 x 119 x 28 mm",
+      "max_delta_mm": 119
+    },
+    "bodies/biped-mini/stl/biped-mini-arm-x2.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 17 x 34.5 x 17 mm, file 17 x 17 x 34.5 mm",
+      "max_delta_mm": 29.45
+    }
+  }
+}

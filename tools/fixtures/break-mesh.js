@@ -71,6 +71,14 @@ switch (mode) {
     break;
   }
 
+  // Shift every vertex 1 mm in x: still a valid, watertight, manifold mesh, so
+  // only the reproducibility check can notice.
+  case 'shift': {
+    const t = tris.map(x => x.map(p => [p[0] + 1, p[1], p[2]]));
+    write(file, t);
+    break;
+  }
+
   // Rename the part, so an allowlist entry points at a file that is gone.
   case 'rename':
     fs.renameSync(file, path.join(path.dirname(file), 'zz-renamed-x1.stl'));

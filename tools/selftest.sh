@@ -24,12 +24,23 @@ restore() {
   git ls-files --others --exclude-standard -- bodies/ | while IFS= read -r f; do rm -f "$f"; done
 }
 
+# Restore on ANY exit, including a kill or a timeout. Learned the hard way: a
+# timeout killed this script between applying a fixture and restoring it, and
+# the deletion it had made got committed by the next commit. A self-test that
+# edits the tree must never be able to leave it edited.
+trap restore EXIT INT TERM
+
 pass=0; fail=0
+
+# VGROUP scopes validate.js to the group a case is about. The reproducibility
+# group rebuilds all 192 parts from their generators, which is far too slow to
+# run once per case, so it is skipped unless a case asks for it.
+VGROUP="--skip=reproducible"
 
 try() {           # try <name> <expected substring> <command...>
   local name="$1" want="$2"; shift 2
   "$@" >/dev/null 2>&1
-  local out; out="$(node tools/validate.js 2>&1)"
+  local out; out="$(node tools/validate.js $VGROUP 2>&1)"
   restore
   if printf '%s' "$out" | grep -qF -- "$want"; then
     printf '  ok    %s\n' "$name"; pass=$((pass+1))
@@ -124,7 +135,7 @@ try "a new non-manifold file (not on the allowlist)" "shared by more than two" \
   node tools/fixtures/break-mesh.js nonmanifold bodies/dial/stl/dial-yoke-x1.stl
 
 try "an allowlisted file gets worse" "allowlist permits" \
-  node tools/fixtures/break-mesh.js nonmanifold bodies/scout/stl/scout-face_bezel-x1.stl
+  node tools/fixtures/break-mesh.js nonmanifold bodies/lamp/stl/lamp-knuckle_half-x2.stl
 
 try "a part grown past the print bed" "exceeds the" \
   node tools/fixtures/break-mesh.js oversize bodies/dial/stl/dial-yoke-x1.stl
@@ -133,7 +144,15 @@ try "a mesh split into two shells" "separate shells" \
   node tools/fixtures/break-mesh.js twoshells bodies/dial/stl/dial-yoke-x1.stl
 
 try "an allowlist entry for a part that is gone" "no longer exists" \
-  node tools/fixtures/break-mesh.js rename bodies/scout/stl/scout-face_bezel-x1.stl
+  node tools/fixtures/break-mesh.js rename bodies/lamp/stl/lamp-knuckle_half-x2.stl
+
+# --- stl reproducibility ----------------------------------------------------
+VGROUP="--only=reproducible"
+try "an STL that stops matching its generator" "not in stl-drift.json" \
+  node tools/fixtures/break-mesh.js shift bodies/dial/stl/dial-yoke-x1.stl
+
+try "a stl-drift entry that now reproduces" "remove the entry" \
+  node tools/fixtures/add-drift-entry.js bodies/dial/stl/dial-yoke-x1.stl
 
 echo
 if [ "$fail" -gt 0 ]; then

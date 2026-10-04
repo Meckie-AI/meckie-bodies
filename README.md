@@ -64,9 +64,16 @@ each body should measure it and record what it finds.
   eFuse FLT, while its safety block lists `drv_fault` and `efuse_fault` as
   separate triggers. Its ESP32-S3 has only two unused pins and both are boot
   strapping pins, so this needs a design decision, not a pin swap.
-- **20 meshes are not edge-manifold** — two surfaces abutting exactly rather
-  than overlapping. Closed and printable; listed with exact counts in
+- **4 meshes are not edge-manifold** — down from 20; the other 16 were fixed by
+  giving the touching features a small overlap. The remainder are closed and
+  printable, and listed with exact counts and coordinates in
   `mesh-exceptions.json`.
+- **11 STLs do not reproduce from their generator.** Inherited from the handoff,
+  which shipped STLs exported from an earlier revision of the generator it also
+  shipped: four parts are rotated, four mirrored or shifted, three differ in
+  triangle count. Recorded in `stl-drift.json` and deliberately not regenerated,
+  because print orientation is a design call. `node tools/reexport.js --verify`
+  checks it.
 - **Biped Mini** runs its STS3032 roll joints at about 50% of their short-term
   budget, so the gait planner must keep the CoM within 8 mm of the stance foot.
   It has two servo buses: **never put an STS3032 on the 12 V bus.**
@@ -82,6 +89,8 @@ npm run sync          # regenerate template hardware blocks and hashes
 npm run emit          # regenerate the JSON Meckie OS consumes
 npm run clean-mesh    # strip zero-area triangles from the STLs
 npm run selftest      # break each rule on purpose, prove CI catches it
+npm run reexport      # rebuild STLs from the Print Parts generator, in Node
+npm run diagnose      # locate non-manifold edges, in mm
 ```
 
 `CONTRIBUTING.md` is the pack standard: what a pack contains, what is generated
@@ -95,7 +104,8 @@ shared/                 the master copy of the per-pack HTML runtime
 schema/                 MANIFEST.schema.json, vendored from the Body SDK
 tools/                  validators and generators
 docs/HANDOFF.md         the original design handoff, as received
-mesh-exceptions.json    the 20 non-manifold meshes, with exact counts
+mesh-exceptions.json    the 4 remaining non-manifold meshes, with coordinates
+stl-drift.json          the 11 STLs that do not reproduce from their generator
 ```
 
 ### Viewing a body
@@ -109,6 +119,10 @@ it is the geometric source of truth.
 These pages load three.js, manifold-3d and three-bvh-csg from a CDN, and the
 briefs compile JSX in the browser. They are design references, not production
 web code — fine to read, not a basis for a website.
+
+`tools/geom.mjs` runs the Print Parts geometry in Node instead, with three and
+manifold-3d from npm, so parts can be rebuilt and measured without a browser.
+That is what makes `npm run reexport` and `npm run diagnose` possible.
 
 ## Provenance
 

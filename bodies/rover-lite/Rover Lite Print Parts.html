@@ -235,7 +235,7 @@ part('porthole_bezel','Porthole bezel with rivets',1,'PETG, chrome paint (rivets
  let g=U(RING(26,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<8;i++){const a=i*P/4;g=U(g,new THREE.SphereGeometry(1.7,12,8).translate(25.5*Math.cos(a),25.5*Math.sin(a),0));}
  g=I(g,BOX(80,80,10,0,0,0));
- for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.8*Math.cos(b2),23.8*Math.sin(b2),3.5));}
+ for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}
  return g;});
 
 part('camera_lamp','Camera lamp housing',1,'PETG, chrome paint','Lamp face down.',()=>{
@@ -315,7 +315,7 @@ part('tray_front','Front electronics tray (ESP32-S3 cradle + grid)',1,'CF-nylon'
  let g=RR(34,68,5,5.5,0,0,0);for(const[x,y]of [[-14,-30],[14,-30],[-14,30],[14,30]])g=S(g,clr('M25',x,y,-1,8),csk('M25',x,y,5.5,true));
  for(const y of [-20,20])g=S(g,insUp('M25',0,y,5.5));return g;});
 part('esp_cradle','ESP32-S3 DevKitC snap cradle',1,'PETG','Base down.',()=>{const Lb=63.6,Wb=25.9;let g=BOX(Lb+4,Wb+4,2,0,0,0);
- for(const s of [-1,1]){g=U(g,BOX(Lb,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
+ for(const s of [-1,1]){g=U(g,BOX(Lb+4,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
  g=U(g,BOX(2,Wb,6,-(Lb/2+1),0,0));for(const x of [-20,20])g=S(g,clr('M25',x,0,-1,4),csk('M25',x,0,2,true));return g;});
 
 part('sensor_clamp','Sensor clamp plate',3,'PETG','Flat.',()=>{let g=S(RR(9,34,2,2.5),BOX(5,14,4,0,0,-1));for(const y of [-14,14])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
