@@ -47,19 +47,29 @@ each body should measure it and record what it finds.
 
 ### Known open items
 
-- **Serial-bus servos are not yet supported by Hangar Bay firmware generation.**
-  Meckie OS's template library implements PWM hobby servos only. Five of these
-  seven bodies (dial, rover-lite, lamp, inchworm, biped-mini) are built entirely
-  on STS3215/STS3032 serial servos, so their `look_at` cannot be generated yet.
-  Each pack's `generated/build.json` lists this and everything else Meckie OS
-  cannot yet consume, under `unsupported`.
-- **Do not flash generated firmware for scout, wobble or inchworm yet.** These
-  three tie a display pin to a rail or run it through the I2C GPIO expander, so
-  it is not a pin number and the generator falls back to a default that lands on
-  a pin the body already uses. On scout the backlight default is GPIO 4, which
-  is the **right motor's PWM** — showing a face would spin a wheel. Each case is
-  named exactly, with the conflicting signal, in that pack's
-  `generated/build.json`.
+- **Serial-bus servos need Meckie OS branch `feat/serial-bus-servos`, not yet on
+  main.** Five of these seven bodies (dial 2 joints, rover-lite 2, lamp 4,
+  inchworm 5, biped-mini 10) are built entirely on STS3215/STS3032 serial
+  servos. On main, firmware generation has one actuator model — a PWM hobby
+  servo per GPIO — so `look_at` cannot be generated for them. The branch adds a
+  Feetech STS bus driver that handles all five, keeps biped-mini's 12 V and 6 V
+  buses separate, clamps every goal to the joint's declared range, and holds
+  position on `stop` rather than cutting torque. **Its register map is not
+  verified against hardware** — first power-on should be one joint at low
+  torque, behind the calibration `safety_test`.
+- **The generator now refuses the builds it used to get wrong.** scout, wobble
+  and inchworm tie a display pin to a rail or route it through the I2C expander,
+  so it is not a pin number, and generation used to fall back to a default that
+  landed on a pin the body already uses — on scout, the **right motor's PWM**,
+  so showing a face would have spun a wheel. The branch's pin audit refuses both
+  that and any guessed pin that moves the body. Each case is still named, with
+  the conflicting signal, in that pack's `generated/build.json`.
+- **Three bodies' faces, ears and eyes are not ESP32 firmware at all.** On dial,
+  rover-lite and biped-mini the display, mic, speaker and camera all hang off
+  the Raspberry Pi (on lamp, the display and audio do). Generated firmware
+  covers only the reflex board — servos, drive, sensors — and `show_face`,
+  `say` and `frames` are served by the Pi's own software. `build.json` records
+  which board hosts what.
 - **rover-lite shares reflex GPIO 21** between the DRV8833 nFAULT and the servo
   eFuse FLT, while its safety block lists `drv_fault` and `efuse_fault` as
   separate triggers. Its ESP32-S3 has only two unused pins and both are boot
