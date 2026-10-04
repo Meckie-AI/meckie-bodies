@@ -12,20 +12,29 @@ body:
   version: 1.0.0
   license: { hardware: CERN-OHL-S-2.0, code: MIT }
   drives: false
-  pack: https://bodies.meckie.example/lamp
+  pack: unpublished               # set to the pack URL when the catalog goes live
 targets:
   reflex:
-    board: esp32s3_devkitc_n16r8
-    firmware: meckie-reflex@stable
-    flash: { method: usb_serial, tool: built_in, erase: true }
-  head:
-    board: xiao_esp32s3_sense
-    firmware: meckie-head@stable
-    flash: { method: usb_serial, tool: built_in, erase: true }
+    role: body                      # PlatformIO env + OTA target id
+    mcu: esp32s3
+    board: esp32-s3-devkitc-1       # espressif32@6.6.0
+    platform: espressif32@6.6.0
+    board_options:                  # DevKitC-1 N16R8: 16 MB flash, 8 MB octal PSRAM
+      board_upload.flash_size: 16MB
+      board_build.arduino.memory_type: qio_opi
+      build_flags: [-DBOARD_HAS_PSRAM]
+    flash: { method: usb_serial, tool: esptool_js, erase: true }
+  head_cam:
+    role: head                      # PlatformIO env + OTA target id
+    mcu: esp32s3
+    board: seeed_xiao_esp32s3       # espressif32@6.6.0
+    platform: espressif32@6.6.0
+    flash: { method: usb_serial, tool: esptool_js, erase: true }
   face:
-    board: rpi_zero_2w
-    image: meckie-face@stable
-    flash: { method: sd_card, tool: built_in_imager }
+    host: rpi_zero_2w               # not a Hangar Bay flash target
+    os: raspberrypi-os-bookworm-lite-64
+    provision: meckie-body-client   # installed on first boot, pairs over the LAN
+    flash: { method: sd_card, tool: rpi_imager, by: builder }
 pairing:
   central: auto_discover          # finds your household Central on the LAN
   wifi: from_meckie_app           # credentials pushed during flash, never stored in this file
