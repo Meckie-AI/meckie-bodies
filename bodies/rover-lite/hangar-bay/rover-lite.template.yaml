@@ -28,7 +28,7 @@ pairing:
   brain: account_required         # the Meckie brain is a paid service; the body runs reflexes without it
 calibration_wizard:
   - { step: servo_ids, prompt: "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest", auto: true }
-  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: servos[].offset_deg }
+  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: "servos[].offset_deg" }
   - { step: wheel_direction, prompt: "Lift the body; Hangar Bay spins each motor forward briefly", writes: drive.invert }
   - { step: imu_level, prompt: "Place the body on a flat surface", writes: imu.offsets }
   - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [lidar_fwd, drop_front, drop_rear] }
@@ -68,7 +68,7 @@ hardware: |
   servos:
     - { id: 1, name: pan,  model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }
     - { id: 2, name: tilt, model: sts3215, min_deg: -25,  max_deg: 35,  rest_deg: -25 }
-    limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
+  servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
   peripherals:
     - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
     - { name: tof_fwd,    part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }

@@ -32,7 +32,7 @@ pairing:
   brain: account_required         # the Meckie brain is a paid service; the body runs reflexes without it
 calibration_wizard:
   - { step: servo_ids, prompt: "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest", auto: true }
-  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: servos[].offset_deg }
+  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: "servos[].offset_deg" }
   - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; the body must go to its rest pose", required: true }
 calibration:                      # filled in by the wizard; safe defaults below
   servo_offsets_deg: {}
