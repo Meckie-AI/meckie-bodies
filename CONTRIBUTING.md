@@ -91,11 +91,32 @@ when Central goes away, so it is not optional and it is not somewhere in the
 middle. Every ToF sensor must also appear in a wizard `checks` list — a builder
 must not be able to finish setup with an untested drop sensor.
 
-**5. Fabrication.** Fits a 256 × 256 mm bed. PETG shells, CF-nylon structure,
+**5. Pins are unique per host MCU** — partitioned by host, because a two-board
+body has two independent GPIO spaces and merging them invents collisions that
+do not exist.
+
+One pin may carry more than one signal only where the manifest declares it:
+
+```yaml
+shared_pins:
+  - { host: reflex, gpio: 21, active: low, wire_or: open_drain,
+      signals: [drive.driver.nfault, servo_pwr.fault] }
+```
+
+The entry must name **every** signal on that pin and say how it is shared, and
+CI fails on a `shared_pins` entry for a pin only one signal uses — so a stale
+declaration cannot sit there looking like an approved exception. Open-drain
+fault lines genuinely do wire-OR, and on a pin-starved board that is the right
+call; it just has to be a stated decision, because the cost is that firmware
+cannot tell the sources apart. Say so in `safety.triggers` too: rover-lite
+declares one `fault` trigger rather than `drv_fault` and `efuse_fault`, because
+its wiring cannot distinguish them.
+
+**6. Fabrication.** Fits a 256 × 256 mm bed. PETG shells, CF-nylon structure,
 TPU bumpers and tyres. Bearings at every pivot, metal servo horns, hidden
 fasteners. Insert bores: M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4.
 
-**6. Supplier links stay plain.** No affiliate or campaign tags. Prefer a search
+**7. Supplier links stay plain.** No affiliate or campaign tags. Prefer a search
 URL over a specific listing: listings rot, searches do not.
 
 ## Meshes

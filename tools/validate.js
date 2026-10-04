@@ -293,10 +293,34 @@ const catalog = P.catalog();
       for (const p of hw.peripherals || []) walk(p, p.host || hostOf[p.bus] || 'reflex');
       if (hw.drive) walk(hw.drive, 'reflex');
       if (hw.kickstand) walk(hw.kickstand, 'reflex');
+      // A shared pin is legal only where the manifest says so and names every
+      // signal on it. Open-drain fault lines genuinely do wire-OR, and on a
+      // pin-starved board that is the right call - but it has to be a stated
+      // decision, because the cost is that firmware cannot tell the sources
+      // apart, and the safety triggers have to reflect that.
+      const declaredShare = new Map();
+      for (const sp of hw.shared_pins || []) {
+        declaredShare.set(`${sp.host || 'reflex'}:${sp.gpio}`, sp);
+      }
       for (const [at, keys] of Object.entries(used)) {
-        if (keys.length > 1) {
-          g.fail(`${s}: ${at.split(':')[0]} GPIO ${at.split(':')[1]} assigned to ${keys.length} signals (${keys.join(', ')})`);
+        const [host, gpio] = at.split(':');
+        if (keys.length <= 1) continue;
+        const share = declaredShare.get(at);
+        if (!share) {
+          g.fail(`${s}: ${host} GPIO ${gpio} assigned to ${keys.length} signals (${keys.join(', ')}) ` +
+            'with no shared_pins entry declaring it');
+          continue;
         }
+        g.check(Array.isArray(share.signals) && share.signals.length === keys.length,
+          `${s}: shared_pins GPIO ${gpio} lists ${(share.signals || []).length} signals, ` +
+          `but ${keys.length} are wired to it (${keys.join(', ')})`);
+        g.check(!!share.wire_or, `${s}: shared_pins GPIO ${gpio} must state how it is shared (wire_or)`);
+        declaredShare.delete(at);
+      }
+      // A share that no longer exists must not keep sitting in the manifest
+      // looking like an approved exception.
+      for (const [at, sp] of declaredShare) {
+        g.fail(`${s}: shared_pins declares ${at}, but only one signal uses that pin`);
       }
 
       // Every sensor a reflex or a wizard step names must exist.

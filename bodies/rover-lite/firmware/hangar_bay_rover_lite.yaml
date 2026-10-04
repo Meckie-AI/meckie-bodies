@@ -24,14 +24,27 @@ drive:
   motor: { part: n20_6v, ratio: 298, driver: drv8833, pwm_hz: 20000, vm: 6.0 }
   left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }
   right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }
-  driver: { nsleep: 42, nfault: 21 }
+  driver: { nsleep: 42, nfault: 21 }        # shared fault line, see shared_pins
   limits: { accel_mps2: 1.5, brake_mps2: 2.5, v_mps: 0.2, v_reverse_mps: 0.12 }
 servos:
   - { id: 1, name: pan,  model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }
   - { id: 2, name: tilt, model: sts3215, min_deg: -25,  max_deg: 35,  rest_deg: -25 }
 servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
+shared_pins:
+  # Both fault outputs are open-drain active-low, so they wire-OR onto one pin.
+  # This is deliberate, not a leftover: the reflex ESP32-S3 has exactly two
+  # unused GPIOs (0 and 45) and both are boot strapping pins, so there is no
+  # safe pin to separate them onto. A pulled-up fault on 45 selects 1.8 V flash
+  # at boot, and on 0 a latched fault at power-on drops the board into download
+  # mode instead of booting - failing worst exactly when a fault is present.
+  #
+  # The cost is that firmware cannot tell which source tripped, so safety
+  # declares one `fault` trigger rather than drv_fault and efuse_fault. Both
+  # mean the same thing anyway: stop, brake, go to rest.
+  - { host: reflex, gpio: 21, active: low, wire_or: open_drain,
+      signals: [drive.driver.nfault, servo_pwr.fault] }
 peripherals:
-  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
+  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }   # shared, see shared_pins
   - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8, role: obstacle }
   - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30, role: drop_off }
   - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30, role: drop_off }
@@ -49,6 +62,6 @@ reflexes:
   obstacle: { sensor: lidar_fwd, stop_mm: 60 }
   tilt:     { sensor: imu, max_deg: 35, action: tracks_off }
 safety:
-  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault, drv_fault, stall_1s]
+  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, fault, stall_1s]
   routine:  [stop, brake, wait_2s, edge_clear_creep, head_to_rest_slow, torque_low, face_sleepy]
   resume:   fresh_command_only

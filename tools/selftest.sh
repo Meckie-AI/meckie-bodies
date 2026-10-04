@@ -74,6 +74,15 @@ try "reflex points at an undeclared sensor" "referenced but never declared" \
 try "two signals on one GPIO" "assigned to 2 signals" \
   perl -i -pe 's/int: 7, rst: 6, location: hips/int: 7, rst: 7, location: hips/' bodies/biped-mini/firmware/hangar_bay_biped_mini.yaml
 
+try "an undeclared shared pin" "no shared_pins entry" \
+  perl -i -ne 'print unless /host: reflex, gpio: 21/ .. /signals: \[drive/' bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml
+
+try "a shared pin that under-reports its signals" "but 2 are wired to it" \
+  perl -i -pe 's/signals: \[drive\.driver\.nfault, servo_pwr\.fault\]/signals: [servo_pwr.fault]/' bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml
+
+try "a shared-pin entry for a pin nobody shares" "only one signal uses that pin" \
+  perl -i -pe 's/gpio: 21, active: low/gpio: 42, active: low/' bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml
+
 try "duplicate servo IDs on a bus" "duplicate servo IDs" \
   perl -i -pe 's/\{ id: 3, name: j3_pitch/{ id: 2, name: j3_pitch/' bodies/inchworm/firmware/hangar_bay_inchworm.yaml
 

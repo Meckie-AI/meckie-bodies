@@ -63,7 +63,7 @@
   "_generated": {
     "by": "meckie-bodies tools/emit-json.js",
     "from": "bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml",
-    "hardware_sha256": "f2584376d1f5c28fcd89be67fed324eb4b25d86475afc094f253422f58cc5831",
+    "hardware_sha256": "a5a71cad0935d0aa7111169c04f7d738657a754dac9e0f1f1a5a0a2d946c6f74",
     "note": "Generated. Edit the pack YAML, then run npm run emit."
   }
 }
