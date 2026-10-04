@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: a44096310f0bf8e107c2865c405a7299165251aadd05d5ddaeca1880d64805c0   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: f2584376d1f5c28fcd89be67fed324eb4b25d86475afc094f253422f58cc5831   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: rover-lite
   name: Rover Lite
@@ -71,10 +71,10 @@ hardware: |
   servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
   peripherals:
     - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
-    - { name: tof_fwd,    part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }
-    - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30 }
-    - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30 }
-    - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, location: com }
+    - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8, role: obstacle }
+    - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30, role: drop_off }
+    - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30, role: drop_off }
+    - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, location: com, role: imu }
     - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 6 }
     - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
     - { name: face_wake,  gpio: 46, to: face.gpio3 }
@@ -85,7 +85,7 @@ hardware: |
     - { name: camera,     part: imx708,    bus: csi }
   reflexes:
     edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_30mm] }
-    obstacle: { sensor: tof_fwd, stop_mm: 60 }
+    obstacle: { sensor: lidar_fwd, stop_mm: 60 }
     tilt:     { sensor: imu, max_deg: 35, action: tracks_off }
   safety:
     triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault, drv_fault, stall_1s]

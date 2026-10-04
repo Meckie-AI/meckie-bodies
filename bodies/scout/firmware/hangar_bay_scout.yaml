@@ -25,9 +25,9 @@ drive:
   limits: { accel_mps2: 2.5, brake_mps2: 3.5, v_table_mps: 0.4, v_reverse_mps: 0.15, yaw_dps: 360 }
 peripherals:
   - { name: lidar_fwd, part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 44, fov: 27, role: obstacle }
-  - { name: tof_front, part: vl53l0x, bus: i2c0, addr: 0x30, tilt_deg: 25, role: drop_off }
-  - { name: tof_rear,  part: vl53l0x, bus: i2c0, addr: 0x29, xshut: expander.p5, tilt_deg: -25, role: drop_off }
-  - { name: imu,       part: lsm6dsox, bus: i2c0, addr: 0x6A, location: com }
+  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, tilt_deg: 25, role: drop_off }
+  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x29, xshut: expander.p5, tilt_deg: -25, role: drop_off }
+  - { name: imu,       part: lsm6dsox, bus: i2c0, addr: 0x6A, location: com, role: imu }
   - { name: gauge,     part: max17048, bus: i2c0, addr: 0x36 }
   - { name: display,   part: gc9a01, bus: spi2, dc: 8, cs: tied_low, rst: expander.p3, bl: expander.p4, size: 240x240 }
   - { name: mic,       part: onboard_pdm, clk: 42, data: 41 }
@@ -35,8 +35,8 @@ peripherals:
   - { name: camera,    part: ov3660, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
 reflexes:
   obstacle: { sensor: lidar_fwd, stop_mm: 80, slow_mm: 250 }
-  edge:  { sensors: [tof_front, tof_rear], drop_mm: 25, action: [brake, back_off_20mm] }
-  lift:  { sensors: [imu, tof_front, tof_rear], action: motors_off }
+  edge:  { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_20mm] }
+  lift:  { sensors: [imu, drop_front, drop_rear], action: motors_off }
   bump:  { sensors: [imu, encoders], decel_g: 1.5, stall_ms: 300, action: [stop, back_off_30mm] }
 safety:
   triggers: [heartbeat_lost, soc_below_15, vbat_below_3v45, drv_fault, stall_1s, overcurrent]

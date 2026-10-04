@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: e5af0fa5cc77d8fdb9e4924094ffe40d5bbf40d879e352b4c4d05ef1af39d350   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 850531b253e417eb88e6fbf971eb69c1d15d4a504efc7f2bc47b8870ad93b6e9   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: biped-mini
   name: Biped Mini
@@ -84,10 +84,10 @@ hardware: |
   peripherals:
     - { name: servo_pwr,  part: efuse, en: 14, fault: 21, bus: servo_bus }
     - { name: servo_pwr_6v, part: efuse, en: 47, fault: 41, bus: servo_bus_6v, supply: buck_6v_5a }
-    - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, rst: 6, location: hips }
-    - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }
-    - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, look_ahead_mm: 80, pitch_comp: true }
-    - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, look_ahead_mm: 60, mount: tail_skid }
+    - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, rst: 6, location: hips, role: imu }
+    - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8, role: obstacle }
+    - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, look_ahead_mm: 80, pitch_comp: true, role: drop_off }
+    - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, look_ahead_mm: 60, mount: tail_skid, role: drop_off }
     - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 12 }
     - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
     - { name: face_wake,  gpio: 46, to: face.gpio3 }

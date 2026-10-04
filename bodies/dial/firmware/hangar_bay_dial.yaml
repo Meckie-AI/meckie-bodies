@@ -17,7 +17,7 @@ servos:
   - { id: 2, name: tilt, model: sts3215, center: 2048, min: 1707, max: 2503, rest: 1764 }
 servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
 peripherals:
-  - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5 }
+  - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5, role: presence }
   - { name: charger,    part: bq25798,   bus: i2c0, addr: 0x6B, int: 6, ce: 7 }
   - { name: gauge,      part: sbs_pack,  bus: i2c1_smb, addr: 0x0B }
   - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }
@@ -27,6 +27,7 @@ peripherals:
   - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 92 }
   - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
   - { name: camera,     part: imx708,    bus: csi }
+sensing_rule: { drives: false, forward_lidar: tof_front, drop_off: not_applicable_fixed_base }
 safety:
   triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]
   routine:  [stop, brake, wait_2s, slow_to_rest, torque_low, face_sleepy]

@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 910d80b02bfbb5a172795826be66183b5252bb27c023d8d4b9d731818c7e2199   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: inchworm
   name: Inchworm
@@ -76,13 +76,13 @@ hardware: |
     - { name: glow,       part: sk6812_2020, gpio: 38, count: 66, map: { seg1: 0-11, seg2: 12-23, seg3: 24-35, seg4: 36-47, antennae: 48-49, base_ring: 50-65 }, max_brightness_pct: 40 }
     - { name: display,    part: gc9a01, host: head, bus: head_spi, dc: 8, rst: 1, bl: tied_on, cs: tied_low, size: 240x240 }
     - { name: mics,       part: ics43434, host: head, bus: head_i2s, count: 2, sel: [gnd, 3v3] }
-    - { name: lidar_fwd,  part: vl53l1x, host: head, bus: head_i2c, addr: 0x29, location: chin }
+    - { name: lidar_fwd,  part: vl53l1x, host: head, bus: head_i2c, addr: 0x29, location: chin, role: obstacle }
     - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
     - { name: speaker_amp, part: max98357a, host: audio, bus: pi_i2s, sd: 16 }
   sensing_rule: { drives: false, forward_lidar: lidar_fwd, drop_off: not_applicable_fixed_base }
   reflexes:
     near:    { sensor: lidar_fwd, stop_mm: 60, action: [stop, back_off_20mm] }
-    contact: { sensors: servo_load, action: [stop, torque_30] }
+    contact: { sensors: [servo_load], action: [stop, torque_30] }
   safety:
     triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, contact]
     routine:  [stop, brake, wait_2s, bow_to_rest, torque_low, face_sleepy]

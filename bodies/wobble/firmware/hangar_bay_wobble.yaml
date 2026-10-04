@@ -18,7 +18,7 @@ buses:
   spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }
   i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }
 balance:
-  imu: { part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line }
+  imu: { name: imu, part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line, role: imu }
   loop_hz: 400
   controller: lqr_cascade
   com_above_axle_mm: 63

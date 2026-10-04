@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 6bc0cb3369298fc3d5126ffc6f2a77032c75580e214c9936051a070b92e6dfc7   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: dial
   name: Dial
@@ -29,7 +29,7 @@ pairing:
 calibration_wizard:
   - { step: servo_ids, prompt: "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest", auto: true }
   - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: "servos[].offset_deg" }
-  - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [lidar_fwd] }
+  - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [tof_front] }
   - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; the body must go to its rest pose", required: true }
 calibration:                      # filled in by the wizard; safe defaults below
   servo_offsets_deg: {}
@@ -54,7 +54,7 @@ hardware: |
     - { id: 2, name: tilt, model: sts3215, center: 2048, min: 1707, max: 2503, rest: 1764 }
   servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
   peripherals:
-    - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5 }
+    - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5, role: presence }
     - { name: charger,    part: bq25798,   bus: i2c0, addr: 0x6B, int: 6, ce: 7 }
     - { name: gauge,      part: sbs_pack,  bus: i2c1_smb, addr: 0x0B }
     - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }
@@ -64,6 +64,7 @@ hardware: |
     - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 92 }
     - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
     - { name: camera,     part: imx708,    bus: csi }
+  sensing_rule: { drives: false, forward_lidar: tof_front, drop_off: not_applicable_fixed_base }
   safety:
     triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]
     routine:  [stop, brake, wait_2s, slow_to_rest, torque_low, face_sleepy]

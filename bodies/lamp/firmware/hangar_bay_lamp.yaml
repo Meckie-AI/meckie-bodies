@@ -30,6 +30,7 @@ peripherals:
   - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 89 }
   - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
   - { name: camera,     part: ov3660,    host: head_cam, bus: dvp_onboard, stream: mjpeg_wifi, res: 1024x768, fps: 15 }
+sensing_rule: { drives: false, forward_lidar: none, drop_off: not_applicable_fixed_base }
 poses:
   asleep:    { yaw: 0, shoulder: -15, elbow: 140, head: -60, light_pct: 10 }
   attentive: { yaw: 0, shoulder: 15,  elbow: 95,  head: -35 }

@@ -5,7 +5,7 @@ template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 5baf3dd7f2a548b38828b82e029006ad0752eb9ebb7af1fe80897056affd3fcb   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 69f482c86c8c12e86b258fe828c301086a54f2a0c06ae3a9cc74044b80527e16   # Hangar Bay can confirm the manifest is unmodified
 body:
   id: wobble
   name: Wobble
@@ -55,7 +55,7 @@ hardware: |
     spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }
     i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }
   balance:
-    imu: { part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line }
+    imu: { name: imu, part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line, role: imu }
     loop_hz: 400
     controller: lqr_cascade
     com_above_axle_mm: 63
