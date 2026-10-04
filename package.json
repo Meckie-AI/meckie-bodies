@@ -7,8 +7,10 @@
   "scripts": {
     "validate": "node tools/validate.js",
     "emit": "node tools/emit-json.js",
-    "hash": "node tools/hash.js",
-    "meshcheck": "node tools/meshcheck.js"
+    "sync": "node tools/sync-template.js",
+    "clean-mesh": "node tools/meshclean.js",
+    "selftest": "bash tools/selftest.sh",
+    "check": "node tools/validate.js && node tools/sync-template.js --check && node tools/emit-json.js --check && bash tools/selftest.sh"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

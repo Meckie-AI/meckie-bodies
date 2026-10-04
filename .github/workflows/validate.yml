@@ -1,0 +1,39 @@
+name: validate
+
+# Committed and ready, but this repo has no remote yet: the public call has not
+# been made. Nothing here depends on GitHub-only features, so `npm run check`
+# reproduces the whole job locally.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm ci
+
+      # The pack standard: catalog, layout, mesh, parts, glue, yaml, generated.
+      - name: Validate every pack
+        run: npm run validate
+
+      # Generated artifacts must be the committed ones, or a reviewer is reading
+      # a manifest that does not match the YAML it claims to come from.
+      - name: Templates match their manifests
+        run: node tools/sync-template.js --check
+
+      - name: Generated JSON is current
+        run: node tools/emit-json.js --check
+
+      # And the gates themselves must still be able to fail.
+      - name: Gates fire on broken input
+        run: bash tools/selftest.sh
