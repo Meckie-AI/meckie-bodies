@@ -1,0 +1,55 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "rover",
+    "name": "Scout",
+    "vendor": "Meckie bodies",
+    "model": "scout",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "drive": {
+      "deadman_ms": 500
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    }
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "onboard_pdm"
+    },
+    "state": {},
+    "depth": {
+      "sensors": 3
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/scout/firmware/hangar_bay_scout.yaml",
+    "hardware_sha256": "9af9ae5d92fd0da5a93e4dfabedc4918dcbab288a6bca63bf9e1a16b16d5bb4e",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "arm",
+    "name": "Inchworm",
+    "vendor": "Meckie bodies",
+    "model": "inchworm",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "look_at": {
+      "actuated": true
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 16000,
+      "direction": true
+    },
+    "state": {},
+    "depth": {
+      "sensors": 1
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/inchworm/firmware/hangar_bay_inchworm.yaml",
+    "hardware_sha256": "b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

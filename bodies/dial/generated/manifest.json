@@ -1,0 +1,58 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "desk",
+    "name": "Dial",
+    "vendor": "Meckie bodies",
+    "model": "dial",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "look_at": {
+      "actuated": true
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 320,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 48000,
+      "direction": true
+    },
+    "state": {},
+    "depth": {
+      "sensors": 1
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/dial/firmware/hangar_bay_dial.yaml",
+    "hardware_sha256": "13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

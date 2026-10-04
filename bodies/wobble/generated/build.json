@@ -1,0 +1,94 @@
+{
+  "model": "wobble",
+  "board": "esp32-s3-devkitc-1",
+  "body_platform": "espressif32@6.6.0",
+  "flash_size": "16MB",
+  "arduino": {
+    "memory_type": "qio_opi"
+  },
+  "display": {
+    "controller": "gc9a01",
+    "width": 240,
+    "height": 240,
+    "pins": {
+      "mosi": 9,
+      "sclk": 7,
+      "dc": 8,
+      "rst": 1,
+      "bl": 2
+    }
+  },
+  "motors": {
+    "driver": "drv8833",
+    "type": "two_wheel_balancing",
+    "pins": {
+      "ain1": 38,
+      "ain2": 39,
+      "bin1": 40,
+      "bin2": 41
+    }
+  },
+  "servo": {
+    "pan": 14,
+    "axes": 1,
+    "part": "mg90s",
+    "role": "kickstand"
+  },
+  "led": {
+    "pin": 48,
+    "part": "ws2812"
+  },
+  "mic_type": "ics43434",
+  "speaker": "max98357a",
+  "camera": true,
+  "topology": {
+    "boards": [
+      {
+        "role": "body",
+        "mcu": "esp32s3",
+        "board": "esp32-s3-devkitc-1",
+        "pack_mcu_key": "reflex"
+      },
+      {
+        "role": "head",
+        "mcu": "esp32s3",
+        "board": "seeed_xiao_esp32s3",
+        "pack_mcu_key": "head"
+      }
+    ],
+    "neck": {
+      "declared_in_pack": {
+        "base_head": {
+          "reflex": {
+            "uart": 2,
+            "tx": 17,
+            "rx": 18
+          },
+          "head": {
+            "tx": 43,
+            "rx": 44
+          },
+          "baud": 921600
+        }
+      }
+    }
+  },
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "display cs",
+      "value": "cs=tied_low",
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin; firmware-gen expects a pin number"
+    },
+    {
+      "what": "motor enable pins (ena/enb)",
+      "value": "n/a on a DRV8833",
+      "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/wobble/hangar-bay/wobble.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}

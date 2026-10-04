@@ -1,0 +1,58 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "walker",
+    "name": "Biped Mini",
+    "vendor": "Meckie bodies",
+    "model": "biped-mini",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "look_at": {
+      "actuated": true
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 48000,
+      "direction": true
+    },
+    "state": {},
+    "depth": {
+      "sensors": 3
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/biped-mini/firmware/hangar_bay_biped_mini.yaml",
+    "hardware_sha256": "850531b253e417eb88e6fbf971eb69c1d15d4a504efc7f2bc47b8870ad93b6e9",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

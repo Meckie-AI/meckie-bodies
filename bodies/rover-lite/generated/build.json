@@ -1,0 +1,90 @@
+{
+  "model": "rover-lite",
+  "board": "esp32-s3-devkitc-1",
+  "body_platform": "espressif32@6.6.0",
+  "flash_size": "16MB",
+  "arduino": {
+    "memory_type": "qio_opi"
+  },
+  "display": {
+    "controller": "gc9a01",
+    "width": 240,
+    "height": 240,
+    "pins": {
+      "mosi": 10,
+      "sclk": 11,
+      "cs": 8,
+      "dc": 25,
+      "rst": 24,
+      "bl": 13
+    }
+  },
+  "motors": {
+    "driver": "drv8833",
+    "type": "tracked_skid_steer",
+    "pins": {
+      "ain1": 38,
+      "ain2": 39,
+      "bin1": 40,
+      "bin2": 41
+    }
+  },
+  "servo_bus": [
+    {
+      "name": "servo_bus",
+      "uart": 1,
+      "tx": 17,
+      "rx": 18,
+      "baud": 1000000,
+      "half_duplex": true,
+      "servos": [
+        {
+          "id": 1,
+          "name": "pan",
+          "model": "sts3215",
+          "min_deg": -150,
+          "max_deg": 150,
+          "rest_deg": 0
+        },
+        {
+          "id": 2,
+          "name": "tilt",
+          "model": "sts3215",
+          "min_deg": -25,
+          "max_deg": 35,
+          "rest_deg": -25
+        }
+      ]
+    }
+  ],
+  "led": {
+    "pin": 48,
+    "part": "ws2812"
+  },
+  "mic_type": "ics43434",
+  "speaker": "max98357a",
+  "camera": true,
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "motor enable pins (ena/enb)",
+      "value": "n/a on a DRV8833",
+      "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+    },
+    {
+      "what": "2 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "fw-templates.js implements PWM hobby servos only (ESP32Servo.h, panServo.write(0..180)). No Feetech/STS serial protocol exists in lib/bodies/, so look_at cannot be generated for this body yet"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): face",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/rover-lite/hangar-bay/rover-lite.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meckie.ai/body-sdk/manifest.schema.json",
+  "title": "Meckie Body Manifest",
+  "description": "What a body declares about itself. Every intent and sense is optional; Central adapts to what is present. additionalProperties stays true everywhere on purpose: unknown fields are the additive-only versioning promise, not an error.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["protocol_version", "body"],
+  "properties": {
+    "protocol_version": { "const": 1 },
+    "body": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["kind"],
+      "properties": {
+        "id": { "type": "string", "description": "body_id once paired; omit before pairing" },
+        "name": { "type": "string", "maxLength": 64 },
+        "kind": { "type": "string", "description": "freeform: rover | desk | panel | ...", "maxLength": 32 },
+        "vendor": { "type": "string", "maxLength": 64 },
+        "model": { "type": "string", "maxLength": 64 },
+        "versions": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "firmware": { "type": "string" },
+            "hardware": { "type": "string" }
+          }
+        }
+      }
+    },
+    "modes": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "mode": { "enum": ["vehicle", "companion"] },
+        "max_occupancy": {
+          "type": "integer", "minimum": 0, "maximum": 8,
+          "description": "companion only; 0 = surface-only body (renders routed output, never hosts a residency); vehicle is always exactly 1"
+        }
+      }
+    },
+    "intents": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "stop": { "type": "object", "additionalProperties": true },
+        "drive": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["deadman_ms"],
+          "properties": {
+            "deadman_ms": { "type": "integer", "minimum": 50, "maximum": 1000 },
+            "max_vx": { "type": "number", "exclusiveMinimum": 0 },
+            "max_vy": { "type": "number", "minimum": 0 },
+            "max_vyaw": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "look_at": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "actuated": { "type": "boolean", "description": "false = gaze rendered on the face only, no motors" },
+            "image_target": { "type": "boolean", "description": "accepts {image:{u,v}} targets; requires senses.frames.fov" },
+            "yaw_range": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+            "pitch_range": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+            "max_rate_hz": { "type": "number", "exclusiveMinimum": 0 }
+          }
+        },
+        "say": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "formats": {
+              "type": "array",
+              "items": { "enum": ["pcm_s16le", "opus"] },
+              "contains": { "const": "pcm_s16le" },
+              "description": "pcm_s16le is required wherever say is declared; opus optional"
+            },
+            "rates": { "type": "array", "items": { "type": "integer" } },
+            "max_chunk": { "type": "integer", "minimum": 512, "maximum": 16384 },
+            "playback_done": { "type": "boolean", "default": true },
+            "mouth_source": { "enum": ["body", "central", "none"] }
+          }
+        },
+        "show_face": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["render"],
+          "properties": {
+            "render": { "enum": ["url", "states"] },
+            "w": { "type": "integer", "minimum": 1 },
+            "h": { "type": "integer", "minimum": 1 },
+            "mouth_source": {
+              "enum": ["body", "central", "none"],
+              "description": "states render only: body = the body drives the mouth from the audio it plays (Central sends no face_mouth); central = Central sends a face_mouth envelope; none = no mouth"
+            }
+          }
+        },
+        "led": { "type": "object", "additionalProperties": true },
+        "go_to": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "declared-not-certified in v1",
+          "properties": {
+            "waypoints": { "type": "boolean" },
+            "coordinates": { "type": "boolean" }
+          }
+        },
+        "sound": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": { "tags": { "type": "array", "items": { "type": "string" } } }
+        }
+      }
+    },
+    "senses": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "frames": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "fov": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": { "h_deg": { "type": "number" }, "v_deg": { "type": "number" } }
+            },
+            "min_interval_ms": { "type": "integer", "minimum": 100 },
+            "coarse_read": { "type": "boolean", "description": "body attaches its own coarse scene summary (objects/scene, never identity)" }
+          }
+        },
+        "audio_up": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "format": { "enum": ["pcm_s16le"] },
+            "rate": { "type": "integer" },
+            "direction": { "type": "boolean", "description": "mic array reports direction-of-arrival" },
+            "mic_type": { "type": "string" }
+          }
+        },
+        "state": { "type": "object", "additionalProperties": true },
+        "depth": { "type": "object", "additionalProperties": true }
+      }
+    },
+    "control": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "url": { "type": "string", "description": "control-plane base URL; may be filled by Central at pairing from the announce source" },
+        "extensions": {
+          "type": "array",
+          "items": { "enum": ["frame.jpg", "state.json", "lease", "event", "rpc"] }
+        }
+      }
+    },
+    "streams": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "transports": {
+          "type": "array",
+          "items": { "enum": ["ws", "webrtc"] }
+        },
+        "max_frame_bytes": { "type": "integer", "minimum": 512, "maximum": 16384 }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$comment": "Mode-forcing: physical agency means vehicle. Declaring drive or go_to forbids companion mode.",
+      "if": {
+        "properties": { "intents": { "required": ["drive"] } },
+        "required": ["intents"]
+      },
+      "then": {
+        "properties": { "modes": { "properties": { "mode": { "const": "vehicle" } } } }
+      }
+    },
+    {
+      "if": {
+        "properties": { "intents": { "required": ["go_to"] } },
+        "required": ["intents"]
+      },
+      "then": {
+        "properties": { "modes": { "properties": { "mode": { "const": "vehicle" } } } }
+      }
+    },
+    {
+      "$comment": "An actuated look_at is physical agency too. actuated:false stays companion-legal.",
+      "if": {
+        "properties": {
+          "intents": {
+            "properties": { "look_at": { "properties": { "actuated": { "const": true } }, "required": ["actuated"] } },
+            "required": ["look_at"]
+          }
+        },
+        "required": ["intents"]
+      },
+      "then": {
+        "properties": { "modes": { "properties": { "mode": { "const": "vehicle" } } } }
+      }
+    },
+    {
+      "$comment": "image_target needs a camera with declared FOV to convert against.",
+      "if": {
+        "properties": {
+          "intents": {
+            "properties": { "look_at": { "properties": { "image_target": { "const": true } }, "required": ["image_target"] } },
+            "required": ["look_at"]
+          }
+        },
+        "required": ["intents"]
+      },
+      "then": {
+        "properties": {
+          "senses": {
+            "properties": { "frames": { "required": ["fov"] } },
+            "required": ["frames"]
+          }
+        },
+        "required": ["senses"]
+      }
+    },
+    {
+      "$comment": "max_occupancy is a companion concept; vehicle occupancy is fixed at 1.",
+      "if": {
+        "properties": { "modes": { "properties": { "mode": { "const": "vehicle" } }, "required": ["mode"] } },
+        "required": ["modes"]
+      },
+      "then": {
+        "properties": { "modes": { "not": { "required": ["max_occupancy"] } } }
+      }
+    }
+  ]
+}

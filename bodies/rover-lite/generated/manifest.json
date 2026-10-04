@@ -1,0 +1,69 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "rover",
+    "name": "Rover Lite",
+    "vendor": "Meckie bodies",
+    "model": "rover-lite",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "drive": {
+      "deadman_ms": 500
+    },
+    "look_at": {
+      "actuated": true,
+      "yaw_range": [
+        -150,
+        150
+      ],
+      "pitch_range": [
+        -25,
+        35
+      ]
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 48000,
+      "direction": true
+    },
+    "state": {},
+    "depth": {
+      "sensors": 3
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml",
+    "hardware_sha256": "f2584376d1f5c28fcd89be67fed324eb4b25d86475afc094f253422f58cc5831",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "arm",
+    "name": "Lamp",
+    "vendor": "Meckie bodies",
+    "model": "lamp",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "look_at": {
+      "actuated": true
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 48000,
+      "direction": true
+    },
+    "state": {}
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/lamp/firmware/hangar_bay_lamp.yaml",
+    "hardware_sha256": "3fca258d2ea9cbe6f538373eec77fd85ccd004651641aaf99b5153af66c2d94a",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

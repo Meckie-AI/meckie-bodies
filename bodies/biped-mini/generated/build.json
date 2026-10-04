@@ -1,0 +1,141 @@
+{
+  "model": "biped-mini",
+  "board": "esp32-s3-devkitc-1",
+  "body_platform": "espressif32@6.6.0",
+  "flash_size": "16MB",
+  "arduino": {
+    "memory_type": "qio_opi"
+  },
+  "display": {
+    "controller": "gc9a01",
+    "width": 240,
+    "height": 240,
+    "pins": {
+      "mosi": 10,
+      "sclk": 11,
+      "cs": 8,
+      "dc": 25,
+      "rst": 24,
+      "bl": 13
+    }
+  },
+  "servo_bus": [
+    {
+      "name": "servo_bus_6v",
+      "uart": 2,
+      "tx": 39,
+      "rx": 40,
+      "baud": 1000000,
+      "half_duplex": true,
+      "volts": 6,
+      "servos": [
+        {
+          "id": 1,
+          "name": "l_hip_roll",
+          "model": "sts3032",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 5,
+          "name": "l_ankle_roll",
+          "model": "sts3032",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 6,
+          "name": "r_hip_roll",
+          "model": "sts3032",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 10,
+          "name": "r_ankle_roll",
+          "model": "sts3032",
+          "min_deg": -12,
+          "max_deg": 12
+        }
+      ]
+    },
+    {
+      "name": "servo_bus",
+      "uart": 1,
+      "tx": 17,
+      "rx": 18,
+      "baud": 1000000,
+      "half_duplex": true,
+      "volts": 12,
+      "servos": [
+        {
+          "id": 2,
+          "name": "l_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -90,
+          "max_deg": 15
+        },
+        {
+          "id": 3,
+          "name": "l_knee",
+          "model": "sts3215",
+          "min_deg": 0,
+          "max_deg": 120
+        },
+        {
+          "id": 4,
+          "name": "l_ankle_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        },
+        {
+          "id": 7,
+          "name": "r_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -90,
+          "max_deg": 15
+        },
+        {
+          "id": 8,
+          "name": "r_knee",
+          "model": "sts3215",
+          "min_deg": 0,
+          "max_deg": 120
+        },
+        {
+          "id": 9,
+          "name": "r_ankle_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        }
+      ]
+    }
+  ],
+  "led": {
+    "pin": 48,
+    "part": "ws2812"
+  },
+  "mic_type": "ics43434",
+  "speaker": "max98357a",
+  "camera": true,
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "10 serial-bus servo(s) on 2 bus(es)",
+      "value": "sts3032, sts3215",
+      "reason": "fw-templates.js implements PWM hobby servos only (ESP32Servo.h, panServo.write(0..180)). No Feetech/STS serial protocol exists in lib/bodies/, so look_at cannot be generated for this body yet"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): face",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/biped-mini/hangar-bay/biped-mini.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}

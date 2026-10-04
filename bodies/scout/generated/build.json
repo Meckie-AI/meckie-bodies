@@ -1,0 +1,41 @@
+{
+  "model": "scout",
+  "board": "seeed_xiao_esp32s3",
+  "body_platform": "espressif32@6.6.0",
+  "display": {
+    "controller": "gc9a01",
+    "width": 240,
+    "height": 240,
+    "pins": {
+      "mosi": 9,
+      "sclk": 7,
+      "dc": 8
+    }
+  },
+  "motors": {
+    "driver": "drv8833",
+    "type": "differential",
+    "pins": {}
+  },
+  "mic_type": "onboard_pdm",
+  "speaker": "pam8302",
+  "camera": true,
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "display cs/rst/bl",
+      "value": "cs=tied_low rst=expander.p3 bl=expander.p4",
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin; firmware-gen expects a pin number"
+    },
+    {
+      "what": "drive pins",
+      "value": "{\"left\":{\"pwm\":3,\"dir\":\"expander.p0\",\"enc_a\":1,\"pcnt_unit\":0},\"right\":{\"pwm\":4,\"dir\":\"expander.p1\",\"enc_a\":2,\"pcnt_unit\":1}}",
+      "reason": "differential: motor direction runs through expander.p0 rather than a second MCU pin, so the ain1/ain2 + bin1/bin2 shape does not fit"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/scout/hangar-bay/scout.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}

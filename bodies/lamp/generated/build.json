@@ -1,0 +1,124 @@
+{
+  "model": "lamp",
+  "board": "esp32-s3-devkitc-1",
+  "body_platform": "espressif32@6.6.0",
+  "flash_size": "16MB",
+  "arduino": {
+    "memory_type": "qio_opi"
+  },
+  "display": {
+    "controller": "gc9a01",
+    "width": 240,
+    "height": 240,
+    "pins": {
+      "mosi": 10,
+      "sclk": 11,
+      "cs": 8,
+      "dc": 25,
+      "rst": 24,
+      "bl": 13
+    }
+  },
+  "servo_bus": [
+    {
+      "name": "servo_bus",
+      "uart": 1,
+      "tx": 17,
+      "rx": 18,
+      "baud": 1000000,
+      "half_duplex": true,
+      "servos": [
+        {
+          "id": 1,
+          "name": "yaw",
+          "model": "sts3215",
+          "min_deg": -150,
+          "max_deg": 150,
+          "rest_deg": 0
+        },
+        {
+          "id": 2,
+          "name": "shoulder",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 65,
+          "rest_deg": -15
+        },
+        {
+          "id": 3,
+          "name": "elbow",
+          "model": "sts3215",
+          "min_deg": 60,
+          "max_deg": 150,
+          "rest_deg": 140
+        },
+        {
+          "id": 4,
+          "name": "head",
+          "model": "sts3215",
+          "min_deg": -90,
+          "max_deg": 45,
+          "rest_deg": -60
+        }
+      ]
+    }
+  ],
+  "led": {
+    "pin": 48,
+    "part": "ws2812"
+  },
+  "mic_type": "ics43434",
+  "speaker": "max98357a",
+  "camera": true,
+  "topology": {
+    "boards": [
+      {
+        "role": "body",
+        "mcu": "esp32s3",
+        "board": "esp32-s3-devkitc-1",
+        "pack_mcu_key": "reflex"
+      },
+      {
+        "role": "head",
+        "mcu": "esp32s3",
+        "board": "seeed_xiao_esp32s3",
+        "pack_mcu_key": "head_cam"
+      }
+    ],
+    "neck": {
+      "declared_in_pack": {
+        "link": {
+          "reflex": {
+            "uart": 2,
+            "tx": 15,
+            "rx": 16
+          },
+          "face": {
+            "uart": 0,
+            "tx": 14,
+            "rx": 15
+          },
+          "baud": 921600
+        }
+      }
+    }
+  },
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "4 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "fw-templates.js implements PWM hobby servos only (ESP32Servo.h, panServo.write(0..180)). No Feetech/STS serial protocol exists in lib/bodies/, so look_at cannot be generated for this body yet"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): face",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/lamp/hangar-bay/lamp.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}
