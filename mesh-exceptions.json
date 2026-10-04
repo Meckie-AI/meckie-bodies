@@ -1,0 +1,42 @@
+{
+  "_why": [
+    "Every edge listed here is used by exactly four triangles: two surfaces that",
+    "touch along a line, or face-to-face over an area, because two features in the",
+    "generator abut exactly instead of overlapping by a few microns. Each mesh is",
+    "still closed, orientable, single-shell and printable - slicers handle this -",
+    "but it is not edge-manifold, so it is recorded rather than waved through.",
+    "",
+    "The fix is in the geometry, not the export: nudge the coincident features in",
+    "the part s build function in <Body> Print Parts.html so they overlap. Three",
+    "of these (camera_hood, 27 edges each) are the same shared part in scout,",
+    "wobble and inchworm, and the cradle/bezel family repeats the same small",
+    "defect, so a handful of generator edits clears most of the list.",
+    "",
+    "This is an exact allowlist, not a relaxed rule. Validation fails if a file",
+    "not listed here is non-manifold, if a count rises, OR if a count falls -",
+    "a fixed part must be removed from this file so the list cannot rot."
+  ],
+  "_rule": "path -> exact number of edges used by more than two triangles",
+  "nonmanifold": {
+    "bodies/dial/stl/dial-esp_cradle-x1.stl": 2,
+    "bodies/dial/stl/dial-front_shell-x1.stl": 1,
+    "bodies/scout/stl/scout-bumper_front-x1.stl": 68,
+    "bodies/scout/stl/scout-bumper_rear-x1.stl": 88,
+    "bodies/scout/stl/scout-camera_hood-x1.stl": 27,
+    "bodies/scout/stl/scout-face_bezel-x1.stl": 1,
+    "bodies/scout/stl/scout-xiao_bracket-x1.stl": 2,
+    "bodies/rover-lite/stl/rover-lite-esp_cradle-x1.stl": 2,
+    "bodies/rover-lite/stl/rover-lite-hull-x1.stl": 3,
+    "bodies/rover-lite/stl/rover-lite-porthole_bezel-x1.stl": 1,
+    "bodies/wobble/stl/wobble-camera_hood-x1.stl": 27,
+    "bodies/wobble/stl/wobble-esp_cradle-x1.stl": 2,
+    "bodies/wobble/stl/wobble-face_bezel-x1.stl": 1,
+    "bodies/wobble/stl/wobble-xiao_cradle-x1.stl": 2,
+    "bodies/lamp/stl/lamp-knuckle_half-x2.stl": 4,
+    "bodies/lamp/stl/lamp-xiao_cradle-x1.stl": 2,
+    "bodies/inchworm/stl/inchworm-camera_hood-x1.stl": 27,
+    "bodies/inchworm/stl/inchworm-face_bezel-x1.stl": 1,
+    "bodies/inchworm/stl/inchworm-link1_frame-x1.stl": 2,
+    "bodies/inchworm/stl/inchworm-xiao_cradle-x1.stl": 2
+  }
+}
