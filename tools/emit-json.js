@@ -28,6 +28,39 @@ const KIND = {
 };
 
 const peripheral = (hw, pred) => (hw.peripherals || []).find(pred);
+
+const hostOfBus = (hw) => Object.fromEntries(
+  Object.entries(hw.buses || {}).filter(([, b]) => b && b.host).map(([n, b]) => [n, b.host]));
+
+// GPIO -> what the pack uses it for, on one host MCU. Partitioning by host is
+// not optional: a two-board body has two independent GPIO spaces, and merging
+// them invents collisions that do not exist.
+const PIN_KEYS = new Set(['tx', 'rx', 'sda', 'scl', 'sclk', 'mosi', 'miso', 'cs', 'dc', 'rst',
+  'bl', 'bl_pwm', 'xshut', 'lpn', 'int', 'en', 'ce', 'fault', 'gpio', 'adc_gpio', 'pwm_gpio',
+  'nsleep', 'nfault', 'in1', 'in2', 'pwm', 'enc_a', 'enc_b', 'sd', 'dout', 'din', 'bclk',
+  'lrclk', 'ws', 'clk', 'data', 'power_en', 'pin']);
+
+function pinOwners(hw, host) {
+  const owners = {};
+  const hostOf = hostOfBus(hw);
+  const walk = (node, h, where) => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) return node.forEach(x => walk(x, h, where));
+    const here = node.host || h;
+    for (const [k, v] of Object.entries(node)) {
+      if (PIN_KEYS.has(k) && typeof v === 'number') {
+        if (here === host) (owners[v] = owners[v] || []).push(`${where}.${k}`);
+      } else if (v && typeof v === 'object') {
+        walk(v, ['reflex', 'face', 'head', 'audio', 'head_cam'].includes(k) ? k : here, `${where}.${k}`);
+      }
+    }
+  };
+  for (const [n, b] of Object.entries(hw.buses || {})) walk(b, (b && b.host) || 'reflex', `bus.${n}`);
+  for (const p of hw.peripherals || []) walk(p, p.host || hostOf[p.bus] || 'reflex', p.name);
+  if (hw.drive) walk(hw.drive, 'reflex', 'drive');
+  if (hw.kickstand) walk(hw.kickstand, 'reflex', 'kickstand');
+  return owners;
+}
 const size = (s) => {
   const m = /^(\d+)x(\d+)$/.exec(String(s || ''));
   return m ? { width: +m[1], height: +m[2] } : null;
@@ -132,13 +165,33 @@ function buildSpec(slug, tpl, hw) {
     for (const k of ['dc', 'rst', 'bl']) if (typeof display[k] === 'number') pins[k] = display[k];
     if (typeof display.bl_pwm === 'number') pins.bl = display.bl_pwm;
     build.display = Object.assign({ controller: display.part }, dim, { pins });
+
+    // A display pin the pack states symbolically ("tied_low", "expander.p4")
+    // is not a number, so firmware-gen falls back to its own default
+    // (resolveDisplay in droid lib/bodies/firmware-gen.js). On a single-MCU
+    // body that default can land on a pin the pack already uses for something
+    // else, and the generated firmware would then drive it. Worth naming the
+    // actual pin rather than warning in the abstract.
+    const FALLBACK = { mosi: 23, sclk: 18, cs: 5, dc: 16, rst: 17, bl: 4 };
     const sym = ['cs', 'rst', 'bl'].filter(k => typeof display[k] === 'string');
     if (sym.length) {
+      const owners = pinOwners(hw, display.host || hostOfBus(hw)[display.bus] || 'reflex');
+      const collisions = [];
+      for (const k of sym) {
+        const gpio = FALLBACK[k];
+        const owner = (owners[gpio] || []).filter(o => !o.startsWith(`display.`));
+        if (owner.length) collisions.push(`${k} would use GPIO ${gpio}, which this body uses for ${owner.join(' and ')}`);
+      }
       unsupported.push({
         what: `display ${sym.join('/')}`,
         value: sym.map(k => `${k}=${display[k]}`).join(' '),
-        reason: 'tied to a rail or behind the I2C GPIO expander, not an MCU pin; '
-              + 'firmware-gen expects a pin number',
+        reason: 'tied to a rail or behind the I2C GPIO expander, not an MCU pin, so '
+              + 'firmware-gen falls back to its default'
+              + (collisions.length
+                ? ` — and on this body that collides: ${collisions.join('; ')}`
+                : '; the defaults happen not to collide on this body, but they are '
+                  + 'still not the pins the hardware uses'),
+        collides: collisions.length > 0,
       });
     }
   }

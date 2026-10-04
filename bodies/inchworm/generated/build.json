@@ -127,7 +127,8 @@
     {
       "what": "display cs/bl",
       "value": "cs=tied_low bl=tied_on",
-      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin; firmware-gen expects a pin number"
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.head_i2s.din; bl would use GPIO 4, which this body uses for bus.head_i2s.ws",
+      "collides": true
     },
     {
       "what": "5 serial-bus servo(s) on 1 bus(es)",

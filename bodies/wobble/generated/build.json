@@ -78,7 +78,8 @@
     {
       "what": "display cs",
       "value": "cs=tied_low",
-      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin; firmware-gen expects a pin number"
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2s.din",
+      "collides": true
     },
     {
       "what": "motor enable pins (ena/enb)",

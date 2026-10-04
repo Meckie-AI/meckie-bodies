@@ -53,6 +53,13 @@ each body should measure it and record what it finds.
   on STS3215/STS3032 serial servos, so their `look_at` cannot be generated yet.
   Each pack's `generated/build.json` lists this and everything else Meckie OS
   cannot yet consume, under `unsupported`.
+- **Do not flash generated firmware for scout, wobble or inchworm yet.** These
+  three tie a display pin to a rail or run it through the I2C GPIO expander, so
+  it is not a pin number and the generator falls back to a default that lands on
+  a pin the body already uses. On scout the backlight default is GPIO 4, which
+  is the **right motor's PWM** — showing a face would spin a wheel. Each case is
+  named exactly, with the conflicting signal, in that pack's
+  `generated/build.json`.
 - **rover-lite shares reflex GPIO 21** between the DRV8833 nFAULT and the servo
   eFuse FLT, while its safety block lists `drv_fault` and `efuse_fault` as
   separate triggers. Its ESP32-S3 has only two unused pins and both are boot
