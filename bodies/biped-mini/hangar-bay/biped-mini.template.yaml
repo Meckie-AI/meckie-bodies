@@ -1,0 +1,108 @@
+# Hangar Bay template · Biped Mini
+# Known template for the official design. Pick this body in Hangar Bay, flash, go.
+# Built something of your own? Use Hangar Bay's builder instead; this file is only for prints of this design.
+template: meckie-hangar-bay/1
+known_template:
+  catalog: meckie-bodies
+  origin: official
+  hardware_sha256: 87de1fdf4f3d6e11426b541d54e827cfbf3a903902fb68109e026f8c85d10315   # Hangar Bay can confirm the manifest is unmodified
+body:
+  id: biped-mini
+  name: Biped Mini
+  version: 1.0.0
+  license: { hardware: CERN-OHL-S-2.0, code: MIT }
+  drives: true
+  pack: https://bodies.meckie.example/biped-mini
+targets:
+  reflex:
+    board: esp32s3_devkitc_n16r8
+    firmware: meckie-reflex@stable
+    flash: { method: usb_serial, tool: built_in, erase: true }
+  face:
+    board: rpi_zero_2w
+    image: meckie-face@stable
+    flash: { method: sd_card, tool: built_in_imager }
+pairing:
+  central: auto_discover          # finds your household Central on the LAN
+  wifi: from_meckie_app           # credentials pushed during flash, never stored in this file
+  brain: account_required         # the Meckie brain is a paid service; the body runs reflexes without it
+calibration_wizard:
+  - { step: servo_ids, prompt: "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest", auto: true }
+  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: servos[].offset_deg }
+  - { step: imu_level, prompt: "Place the body on a flat surface", writes: imu.offsets }
+  - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [lidar_fwd, drop_front, drop_rear] }
+  - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; the body must go to its rest pose", required: true }
+calibration:                      # filled in by the wizard; safe defaults below
+  servo_offsets_deg: {}
+  drive_invert: { left: false, right: false }
+hardware: |
+  body: biped_mini
+  doctrine: thin-client
+  central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+  mcu:
+    reflex: { chip: esp32s3, module: N16R8, location: chest, role: [gait, ik, sense, power] }
+    face:   { chip: rpi_zero_2w, os: bookworm-lite, location: chest }
+  power:
+    battery: { cells: 3, mah: 1000, smart: true, gauge: sbs, balance: true, location: pelvis }
+    charger: { part: bq25798, input: usb_c_pd, request_v: 15 }
+  buses:
+    servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true, volts: 12 }
+    servo_bus_6v: { host: reflex, uart: 2, tx: 39, rx: 40, baud: 1000000, half_duplex: true, volts: 6 }
+    i2c0:      { host: reflex, sda: 8, scl: 9, hz: 400000 }
+    i2c1_smb:  { host: reflex, sda: 1, scl: 2, hz: 100000 }
+    link:      { reflex: { uart: 0, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }
+    spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000 }
+    i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }
+    csi:       { host: face, port: cam0, ffc_mm: 60 }
+  legs:
+    config: ankle_roll
+    thigh_mm: 58
+    shin_mm: 56
+    ankle_h_mm: 44
+    hip_roll_above_pitch_mm: 26
+    hip_spacing_mm: 76
+    foot: { length_mm: 92, width_mm: 60, toe_offset_mm: 12 }
+  gait:
+    type: static_crouched
+    step_mm: 40
+    step_s: 1.3
+    lateral_shift_mm: 23
+    ik_hz: 100
+    turn: toe_heel_shuffle
+  servos:
+    - { id: 1, name: l_hip_roll, model: sts3032, bus: servo_bus_6v, min_deg: -12, max_deg: 12, stand_deg: 0 }
+    - { id: 2, name: l_hip_pitch, model: sts3215, bus: servo_bus, min_deg: -90, max_deg: 15, stand_deg: 0 }
+    - { id: 3, name: l_knee, model: sts3215, bus: servo_bus, min_deg: 0, max_deg: 120, stand_deg: 0 }
+    - { id: 4, name: l_ankle_pitch, model: sts3215, bus: servo_bus, min_deg: -20, max_deg: 20, stand_deg: 0 }
+    - { id: 5, name: l_ankle_roll, model: sts3032, bus: servo_bus_6v, min_deg: -12, max_deg: 12, stand_deg: 0 }
+    - { id: 6, name: r_hip_roll, model: sts3032, bus: servo_bus_6v, min_deg: -12, max_deg: 12, stand_deg: 0 }
+    - { id: 7, name: r_hip_pitch, model: sts3215, bus: servo_bus, min_deg: -90, max_deg: 15, stand_deg: 0 }
+    - { id: 8, name: r_knee, model: sts3215, bus: servo_bus, min_deg: 0, max_deg: 120, stand_deg: 0 }
+    - { id: 9, name: r_ankle_pitch, model: sts3215, bus: servo_bus, min_deg: -20, max_deg: 20, stand_deg: 0 }
+    - { id: 10, name: r_ankle_roll, model: sts3032, bus: servo_bus_6v, min_deg: -12, max_deg: 12, stand_deg: 0 }
+  servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, fall_torque_pct: 10 }
+  peripherals:
+    - { name: servo_pwr,  part: efuse, en: 14, fault: 21, bus: servo_bus }
+    - { name: servo_pwr_6v, part: efuse, en: 47, fault: 41, bus: servo_bus_6v, supply: buck_6v_5a }
+    - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, rst: 6, location: hips }
+    - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }
+    - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, look_ahead_mm: 80, pitch_comp: true }
+    - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, look_ahead_mm: 60, mount: tail_skid }
+    - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 12 }
+    - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
+    - { name: face_wake,  gpio: 46, to: face.gpio3 }
+    - { name: status_led, part: ws2812, gpio: 48 }
+    - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }
+    - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], location: head }
+    - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
+    - { name: camera,     part: imx708,    bus: csi, location: head }
+  poses:
+    sit: { hip_pitch: -66, knee: 100, ankle_pitch: -15, torso_back_deg: 19 }
+  reflexes:
+    edge:     { sensors: [drop_front, drop_rear], action: [finish_step_back, stop] }
+    obstacle: { sensor: lidar_fwd, stop_mm: 120 }
+    fall:     { sensor: imu, tilt_deg: 35, action: torque_10 }
+  safety:
+    triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault, swing_leg_snag]
+    routine:  [finish_step, stop, hold, wait_2s, crouch_slow, sit_on_skid, torque_low, face_sleepy]
+    resume:   fresh_command_only

@@ -1,0 +1,89 @@
+# Hangar Bay template · Inchworm
+# Known template for the official design. Pick this body in Hangar Bay, flash, go.
+# Built something of your own? Use Hangar Bay's builder instead; this file is only for prints of this design.
+template: meckie-hangar-bay/1
+known_template:
+  catalog: meckie-bodies
+  origin: official
+  hardware_sha256: a1ca6b4aabf58dbac95b252338eb3f18d81bde74551546838b982e8a314d649d   # Hangar Bay can confirm the manifest is unmodified
+body:
+  id: inchworm
+  name: Inchworm
+  version: 1.0.0
+  license: { hardware: CERN-OHL-S-2.0, code: MIT }
+  drives: false
+  pack: https://bodies.meckie.example/inchworm
+targets:
+  reflex:
+    board: esp32s3_devkitc_n16r8
+    firmware: meckie-reflex@stable
+    flash: { method: usb_serial, tool: built_in, erase: true }
+  head:
+    board: xiao_esp32s3_sense
+    firmware: meckie-head@stable
+    flash: { method: usb_serial, tool: built_in, erase: true }
+  face:
+    board: rpi_zero_2w
+    image: meckie-face@stable
+    flash: { method: sd_card, tool: built_in_imager }
+pairing:
+  central: auto_discover          # finds your household Central on the LAN
+  wifi: from_meckie_app           # credentials pushed during flash, never stored in this file
+  brain: account_required         # the Meckie brain is a paid service; the body runs reflexes without it
+calibration_wizard:
+  - { step: servo_ids, prompt: "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest", auto: true }
+  - { step: servo_center, prompt: "Hold each joint at its marked zero and confirm", writes: servos[].offset_deg }
+  - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [lidar_fwd] }
+  - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; the body must go to its rest pose", required: true }
+calibration:                      # filled in by the wizard; safe defaults below
+  servo_offsets_deg: {}
+  drive_invert: { left: false, right: false }
+hardware: |
+  body: inchworm
+  doctrine: thin-client
+  central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+  mcu:
+    reflex: { chip: esp32s3, module: N16R8, location: base, role: [ik, servo_bus, power, safety] }
+    audio:  { chip: rpi_zero_2w, os: bookworm-lite, location: base, role: [speech, motion_clips] }
+    head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: head, role: [camera, face, mics, lidar] }
+  power:  { source: usb_c_pd, request_v: 15, min_v: 13.0, battery: none }
+  links:
+    head: { reflex: { uart: 2, tx: 15, rx: 16 }, head: { tx: 43, rx: 44 }, baud: 921600, via: spine_harness }
+    pi:   { reflex: { uart: 0, tx: 43, rx: 44 }, pi: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }
+  buses:
+    servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }
+    head_spi:  { host: head, sclk: 7, mosi: 9, hz: 40000000 }
+    head_i2s:  { host: head, bclk: 3, ws: 4, din: 5, rate: 16000 }
+    head_i2c:  { host: head, sda: 6, scl: 2, hz: 400000 }
+    pi_i2s:    { host: audio, bclk: 18, lrclk: 19, dout: 21, rate: 48000 }
+  kinematics:
+    chain: [ { id: 1, axis: pitch, link_mm: 70 }, { id: 2, axis: yaw, link_mm: 65 }, { id: 3, axis: pitch, link_mm: 60 },
+             { id: 4, axis: yaw, link_mm: 60 }, { id: 5, axis: pitch, link_mm: 45 } ]
+    base_h_mm: 78
+    ik_hz: 100
+  servos:
+    - { id: 1, name: j1_pitch, model: sts3215, min_deg: -45, max_deg: 90, rest_deg: 85 }
+    - { id: 2, name: j2_yaw,   model: sts3215, min_deg: -85, max_deg: 30, rest_deg: 0 }
+    - { id: 3, name: j3_pitch, model: sts3215, min_deg: -85, max_deg: 35, rest_deg: -35 }
+    - { id: 4, name: j4_yaw,   model: sts3215, min_deg: -80, max_deg: 30, rest_deg: 0 }
+    - { id: 5, name: j5_pitch, model: sts3215, min_deg: -85, max_deg: 30, rest_deg: -30 }
+  servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, contact_torque_pct: 30, contact_err_deg: 6, j1_hold_max_s: 20 }
+  peripherals:
+    - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
+    - { name: pd_good,    gpio: 6 }
+    - { name: vin_sense,  adc_gpio: 1, divider: 100k_10k }
+    - { name: status_led, part: ws2812, gpio: 48 }
+    - { name: glow,       part: sk6812_2020, gpio: 38, count: 66, map: { seg1: 0-11, seg2: 12-23, seg3: 24-35, seg4: 36-47, antennae: 48-49, base_ring: 50-65 }, max_brightness_pct: 40 }
+    - { name: display,    part: gc9a01, host: head, bus: head_spi, dc: 8, rst: 1, bl: tied_on, cs: tied_low, size: 240x240 }
+    - { name: mics,       part: ics43434, host: head, bus: head_i2s, count: 2, sel: [gnd, 3v3] }
+    - { name: lidar_fwd,  part: vl53l1x, host: head, bus: head_i2c, addr: 0x29, location: chin }
+    - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
+    - { name: speaker_amp, part: max98357a, host: audio, bus: pi_i2s, sd: 16 }
+  sensing_rule: { drives: false, forward_lidar: lidar_fwd, drop_off: not_applicable_fixed_base }
+  reflexes:
+    near:    { sensor: lidar_fwd, stop_mm: 60, action: [stop, back_off_20mm] }
+    contact: { sensors: servo_load, action: [stop, torque_30] }
+  safety:
+    triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, contact]
+    routine:  [stop, brake, wait_2s, bow_to_rest, torque_low, face_sleepy]
+    resume:   fresh_command_only

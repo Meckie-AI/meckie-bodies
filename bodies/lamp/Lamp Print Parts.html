@@ -1,0 +1,269 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Lamp · print parts (STL)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,500;0,700;1,700&display=swap" rel="stylesheet">
+<script type="importmap">
+{"imports":{
+ "three":"https://unpkg.com/three@0.184.0/build/three.module.js",
+ "three/addons/controls/OrbitControls.js":"https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+ "three-mesh-bvh":"https://unpkg.com/three-mesh-bvh@0.8.3/build/index.module.js",
+ "three-bvh-csg":"https://unpkg.com/three-bvh-csg@0.0.16/build/index.module.js"
+}}
+</script>
+<style>
+html,body{margin:0;height:100%;background:#f1e8d2;color:#23292b;font-family:'Jost',sans-serif}
+#app{display:grid;grid-template-columns:minmax(300px,380px) 1fr;height:100vh}
+#side{overflow:auto;border-right:2px solid #23292b;background:#f7f0de;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font:italic 700 34px/1 'Jost'}h1 span{color:#c8463a}
+.sub{font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344}
+.part{border:2px solid #23292b;border-radius:14px;padding:10px 12px;cursor:pointer;background:#f1e8d2;display:flex;flex-direction:column;gap:3px}
+.part.on{background:#23292b;color:#f1e8d2}
+.part b{font:700 15px 'Jost'}.part i{font:400 11px/1.4 'IBM Plex Mono',monospace;font-style:normal;opacity:.85}
+.tag{display:inline-block;font:600 10px 'IBM Plex Mono',monospace;letter-spacing:.06em;text-transform:uppercase;border:1.5px solid currentColor;border-radius:999px;padding:1px 7px;margin-right:6px}
+button{font:700 13px 'Jost';letter-spacing:.06em;text-transform:uppercase;border:2px solid #23292b;background:#c8463a;color:#f7f0de;border-radius:999px;padding:9px 14px;cursor:pointer}
+button.alt{background:#f7f0de;color:#23292b}
+#view{position:relative}
+#cv{width:100%;height:100%;display:block}
+#hud{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;pointer-events:none}
+#hud>*{pointer-events:auto}
+#info{font:500 12px/1.5 'IBM Plex Mono',monospace;background:#f7f0de;border:1.5px solid #23292b;border-radius:14px;padding:8px 12px;max-width:520px}
+#busy{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font:600 14px 'IBM Plex Mono',monospace;background:rgba(241,232,210,.7)}
+.verify{border:2px solid #c8463a;border-radius:14px;padding:10px 12px;font:400 12px/1.5 'IBM Plex Mono',monospace}
+.verify b{font:700 13px 'Jost';color:#c8463a;display:block;margin-bottom:4px}
+</style></head><body>
+<div id="app">
+ <div id="side">
+  <h1>LAMP<span>.</span> print parts</h1>
+  <div class="sub">Print-ready STLs in millimetres, Z up, each in its print orientation. Every threaded joint has a heat-set insert bore. Joints that don't screw have snap hooks and matching windows. No glue anywhere.</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="one">Download STL</button><button id="all" class="alt">All STLs (.zip)</button></div>
+  <div class="verify"><b>Test-fit before a full print</b>Print the turret and one pod half first and seat a servo and the 6810 bearing. Interfaces from datasheets: STS3215 45.2 × 24.7 × 35 (shimmed along its length so the spline sits on each axis, 10–14 mm from the case end), 25T metal horn 4× M3 on 14 mm, 6810 50 × 65 × 7, 6802 15 × 24 × 5, 685ZZ 5 × 11 × 5, GC9A01 Ø39 module, XIAO ESP32-S3 Sense, Pi Zero 58 × 23. Steel ballast ring Ø150 / Ø82 × 8 is laser-cut. Inserts: M2 Ø3.2, M2.5 Ø3.6, M3 Ø4.0, M4 Ø5.6, M5 Ø6.4.</div>
+  <div id="list" style="display:flex;flex-direction:column;gap:8px"></div>
+ </div>
+ <div id="view"><canvas id="cv"></canvas>
+  <div id="hud"><div id="info">Loading geometry kernel…</div></div>
+  <div id="busy">Building geometry…</div>
+ </div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+const MF=await (await import('https://unpkg.com/manifold-3d@3.0.0/manifold.js')).default();MF.setup();const {Manifold,Mesh}=MF;
+THREE.Object3D.DEFAULT_UP.set(0,0,1);
+const P=Math.PI;
+function toM(g){if(g instanceof Manifold)return g;const pos=(g.index?g.toNonIndexed():g).attributes.position;const map=new Map(),vp=[],tv=[];
+ const id=k=>{const x=pos.getX(k),y=pos.getY(k),z=pos.getZ(k),key=Math.round(x*1e4)+','+Math.round(y*1e4)+','+Math.round(z*1e4);let v=map.get(key);if(v===undefined){v=vp.length/3;vp.push(x,y,z);map.set(key,v);}return v;};
+ for(let t=0;t<pos.count;t+=3){const a=id(t),b=id(t+1),c=id(t+2);if(a!==b&&b!==c&&a!==c)tv.push(a,b,c);}
+ const m=new Mesh({numProp:3,vertProperties:new Float32Array(vp),triVerts:new Uint32Array(tv)});m.merge();return new Manifold(m);}
+const B=toM;
+const U=(...a)=>Manifold.union(a.map(toM));
+const S=(a,...cut)=>toM(a).subtract(Manifold.union(cut.map(toM)));
+function toG(man){const m=man.getMesh(),np=m.numProp,vp=m.vertProperties,tv=m.triVerts,p=new Float32Array(tv.length*3);for(let t=0;t<tv.length;t++){const v=tv[t]*np;p[t*3]=vp[v];p[t*3+1]=vp[v+1];p[t*3+2]=vp[v+2];}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(p,3));return g;}
+// primitives (mm, Z up). z = bottom of the solid
+const CYL=(r,h,x=0,y=0,z=0,s=48)=>new THREE.CylinderGeometry(r,r,h,s).rotateX(P/2).translate(x,y,z+h/2);
+const CONE=(rb,rt,h,x=0,y=0,z=0,s=48)=>new THREE.CylinderGeometry(rt,rb,h,s).rotateX(P/2).translate(x,y,z+h/2);
+const CYLX=(r,l,x,y,z,s=40)=>new THREE.CylinderGeometry(r,r,l,s).rotateZ(P/2).translate(x,y,z);
+const CYLY=(r,l,x,y,z,s=40)=>new THREE.CylinderGeometry(r,r,l,s).translate(x,y,z);
+const BOX=(w,d,h,x=0,y=0,z=0)=>new THREE.BoxGeometry(w,d,h).translate(x,y,z+h/2);
+function rrS(w,h,r){const s=new THREE.Shape(),x=w/2-r,y=h/2-r;s.moveTo(-x,-h/2);s.lineTo(x,-h/2);s.absarc(x,-y,r,-P/2,0);s.lineTo(w/2,y);s.absarc(x,y,r,0,P/2);s.lineTo(-x,h/2);s.absarc(-x,y,r,P/2,P);s.lineTo(-w/2,-y);s.absarc(-x,-y,r,P,1.5*P);return s;}
+const EX=(shape,h,z=0,x=0,y=0)=>new THREE.ExtrudeGeometry(shape,{depth:h,bevelEnabled:false,curveSegments:28}).translate(x,y,z);
+const RR=(w,h,r,dep,x=0,y=0,z=0)=>EX(rrS(w,h,r),dep,z,x,y);
+function sectorS(r1,r2,a0,a1){const s=new THREE.Shape();s.absarc(0,0,r2,a0,a1,false);s.absarc(0,0,r1,a1,a0,true);s.closePath();return s;}
+const RING=(ro,ri,h,z=0,x=0,y=0)=>S(CYL(ro,h,x,y,z,96),CYL(ri,h+2,x,y,z-1,96));
+// fasteners
+const INS={M2:[1.6,4.5],M25:[1.8,5.5],M3:[2.0,6.5],M4:[2.8,8.5],M5:[3.2,9]};
+const CLR={M2:1.2,M25:1.45,M3:1.7,M4:2.25,M5:2.75};
+const insUp=(m,x,y,zTop)=>CYL(INS[m][0],INS[m][1]+.5,x,y,zTop-INS[m][1]);      // opens at zTop, goes down
+const insDn=(m,x,y,zBot)=>CYL(INS[m][0],INS[m][1]+.5,x,y,zBot-.5);              // opens at zBot, goes up
+const clr=(m,x,y,z0,h)=>CYL(CLR[m],h,x,y,z0);
+const csk=(m,x,y,zFace,up)=>{const r=CLR[m],R=r*2;return up?CONE(r,R+.2,R-r+.2,x,y,zFace-(R-r)):CONE(R+.2,r,R-r+.2,x,y,zFace-.2);}; // up: head on top face
+// cantilever snap hook rising +Z, outer face toward angle a
+function hook(x,y,z,a,{L=9,t=1.6,w=6,barb=1.1,root=6,gap=.3}={}){
+ const s=new THREE.Shape();const u0=-gap-t,u1=-gap;
+ s.moveTo(u0,-root);s.lineTo(u1+.6,-root);s.lineTo(u1+.6,-root+2);s.lineTo(u1,-root+2);s.lineTo(u1,L-3.2);s.lineTo(u1+barb,L-3.2);s.lineTo(u1,L);s.lineTo(u0,L);s.closePath();
+ return new THREE.ExtrudeGeometry(s,{depth:w,bevelEnabled:false}).translate(0,0,-w/2).rotateX(P/2).rotateZ(a).translate(x,y,z);
+}
+const I=(a,b)=>toM(a).intersect(toM(b));
+const HULL=(...g)=>Manifold.hull(g.map(toM));
+const ELL=(a,b,c,x=0,y=0,z=0)=>new THREE.SphereGeometry(1,56,28).scale(a,b,c).translate(x,y,z);
+function AXC(r,len,c,d,s=40){const g=new THREE.CylinderGeometry(r,r,len,s);const q=new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),new THREE.Vector3(...d).normalize());g.applyQuaternion(q);g.translate(...c);return g;}
+const along=(p,d,t)=>[p[0]+d[0]*t,p[1]+d[1]*t,p[2]+d[2]*t];
+// ---------- Lamp interfaces (X forward, Y lateral, Z up, mm) ----------
+const BR=86,BZ1=56,WT=2.4,FZ=4;
+const SVX=11;
+const SH=[0,0,90],L1=160,L2=160,RC=22;
+const CRAD=20.5,HPCD=7;
+const KR=28,KL=94,KX=40,KZ=58,KZc=-11,HX0=KX/2;
+const PARTS=[];const part=(key,name,qty,mat,orient,fn)=>PARTS.push({key,name,qty,mat,orient,fn});
+const bigOf=g=>g.decompose().reduce((a,b)=>b.volume()>a.volume()?b:a);
+const lathe=pts=>new THREE.LatheGeometry([new THREE.Vector2(0,pts[0][1]),...pts.map(p=>new THREE.Vector2(p[0],p[1]))],128).rotateX(P/2);
+const horn=(c,dir)=>{let g=toM(AXC(4,20,c,dir,24));for(let i=0;i<4;i++){const a=i*P/2+P/4;g=U(g,AXC(CLR.M3,20,[c[0]+HPCD*Math.cos(a),c[1]+HPCD*Math.sin(a),c[2]],dir,20));}return g;};
+
+part('base_shell','Base shell',1,'PETG sea foam','Top face down. No supports.',()=>{
+ let g=S(lathe([[BR-4,FZ+3],[BR,FZ+7],[BR,BZ1-10],[BR-6,BZ1-2],[44,BZ1],[0,BZ1]]),lathe([[BR-4-WT,FZ+2.9],[BR-WT,FZ+7],[BR-WT,BZ1-10.5],[BR-7,BZ1-WT-1.5],[44,BZ1-WT],[0,BZ1-WT]]));
+ g=I(g,CYL(BR+2,BZ1-FZ-3,0,0,FZ+3,128));
+ g=U(g,RING(41,30.5,BZ1-49,49));
+ for(let i=0;i<8;i++){const a=i*P/4+P/8;g=U(g,I(CYL(4,BZ1-FZ-6,(BR-WT-3)*Math.cos(a),(BR-WT-3)*Math.sin(a),FZ+3),CYL(BR,BZ1,0,0,0,128)));}
+ for(const[x,y]of [[SVX+11,-8],[SVX+11,8],[SVX+19,-8],[SVX+19,8]])g=U(g,BOX(6,6,BZ1-WT-41.8+.2,x,y,41.8));
+ g=S(g,CYL(30.5,20,0,0,40,96),CYL(32.6,7.1,0,0,BZ1-7,96));
+ for(let i=0;i<6;i++){const a=i*P/3;g=S(g,insUp('M3',37*Math.cos(a),37*Math.sin(a),BZ1));}
+ for(let i=0;i<8;i++){const a=i*P/4+P/8;g=S(g,insDn('M3',(BR-WT-3)*Math.cos(a),(BR-WT-3)*Math.sin(a),FZ+3));}
+ for(let i=0;i<4;i++)g=S(g,BOX(6,26,1.8,BR,0,12+i*3.5));
+ for(const y of [-17,17])g=U(g,BOX(4,5,14,BR-WT-3,y,FZ+3));for(const y of [-17,17])g=S(g,new THREE.CylinderGeometry(INS.M2[0],INS.M2[0],6,20).rotateZ(P/2).translate(BR-WT-3.5,y,18));
+ g=S(g,BOX(6,9.6,3.8,-BR,0,14),AXC(3.25,8,[-BR,-34,16],[1,0,0],32));
+ return bigOf(g);});
+
+part('base_floor','Base floor',1,'CF-nylon','Flat.',()=>{
+ let g=CYL(BR-WT-.4,3,0,0,0,128);
+ g=U(g,BOX(49.6,3,14,SVX+2,14.05,3),BOX(49.6,3,14,SVX+2,-14.05,3),BOX(3,31.1,14,SVX+28.3,0,3));
+ for(let i=0;i<4;i++){const a=i*P/2+P/4;g=U(g,CYL(3.5,18.6,55*Math.cos(a),55*Math.sin(a),3));}
+ for(let i=0;i<8;i++){const a=i*P/4+P/8;g=S(g,clr('M3',(BR-WT-3)*Math.cos(a),(BR-WT-3)*Math.sin(a),-1,5),csk('M3',(BR-WT-3)*Math.cos(a),(BR-WT-3)*Math.sin(a),0,false));}
+ for(let i=0;i<4;i++){const a=i*P/2;g=S(g,clr('M4',62*Math.cos(a),62*Math.sin(a),-1,5),csk('M4',62*Math.cos(a),62*Math.sin(a),0,false));}
+ for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,insUp('M25',55*Math.cos(a),55*Math.sin(a),21.6));}
+ return g;});
+
+part('tpu_foot','Foot',1,'TPU 95A','Flat.',()=>U(CYL(BR+1,2,0,0,0,128),RING(BR+1,BR-.2,6,0),RING(BR+1,BR-1.4,1.2,4.6)));
+
+part('tray','Electronics tray (ring, Pi bosses + M2 grid)',1,'CF-nylon','Flat.',()=>{
+ let g=S(CYL(76,4,0,0,0,128),RR(56,36,4,10,SVX+2,0,-1));
+ for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,clr('M25',55*Math.cos(a),55*Math.sin(a),-1,6),csk('M25',55*Math.cos(a),55*Math.sin(a),4,true));}
+ for(const[x,y]of [[-29,-11.5],[29,-11.5],[-29,11.5],[29,11.5]])g=U(g,CYL(3,4,x-10,y+42,4));
+ for(const[x,y]of [[-29,-11.5],[29,-11.5],[-29,11.5],[29,11.5]])g=S(g,insUp('M25',x-10,y+42,8));
+ for(let x=-50;x<=50;x+=10)for(let y=-60;y<=-20;y+=10){if(Math.hypot(x,y)<BR-14)g=S(g,CYL(INS.M2[0],6,x,y,-1));}
+ return bigOf(g);});
+
+part('clamp_ring','Bearing clamp ring',1,'CF-nylon','Flat.',()=>{let g=RING(42,31,3,0);for(let i=0;i<6;i++){const a=i*P/3,x=37*Math.cos(a),y=37*Math.sin(a);g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));}return g;});
+
+part('turret','Turret',1,'CF-nylon, brushed-alu finish','Disc down, spigot up. 6 walls, 60%.',()=>{
+ let g=U(CYL(36,6,0,0,0,96),CYL(24.95,9,0,0,6,96));
+ g=S(g,CYL(10.4,4.1,0,0,11),CYL(4.5,20,0,0,-1));
+ for(let i=0;i<4;i++){const a=i*P/2+P/4,x=HPCD*Math.cos(a),y=HPCD*Math.sin(a);g=S(g,clr('M3',x,y,-1,20),csk('M3',x,y,0,false));}
+ for(const[x,y]of [[-30,-24],[8,-24],[-30,24],[8,24]])g=S(g,clr('M3',x,y,-1,8),csk('M3',x,y,6,true));
+ for(const s of [-1,1])g=U(g,BOX(12,8,10,-30,s*31,0));for(const s of [-1,1])g=S(g,CYL(1.6,12,-30,s*31,-1));
+ return bigOf(g);});
+
+const podHalf=(key,name,sd)=>part(key,name,1,'PETG cream','Split face down. No supports.',()=>{
+ const W=74,H=50,X0=-11;
+ let g=S(RR(W,H,16,50,X0,0,0),RR(W-2*WT,H-2*WT,16-WT,47.6,X0,0,-.1));
+ g=U(g,S(BOX(53.6,31,42,-11,0,3.2),BOX(49.6,25.1,44,-13,0,3.1)));
+ g=S(g,CYL(11.5,10,0,0,45));
+ for(const[x,z]of [[-38,-16],[16,-16],[-38,16],[16,16]])g=U(g,I(CYL(3,47.6,x,z,0),RR(W-1,H-1,16,50,X0,0,0)));
+ for(const[x,z]of [[-38,-16],[16,-16],[-38,16],[16,16]])g=S(g,sd>0?insDn('M25',x,z,0):clr('M25',x,z,-1,52));
+ g=U(g,BOX(10,5,40,-30,-H/2+WT+2.5,4),BOX(10,5,40,8,-H/2+WT+2.5,4));
+ for(const x of [-30,8])g=S(g,AXC(INS.M3[0],7,[x,-H/2+3,24],[0,1,0],20));
+ g=S(g,BOX(14,8,10,-40,0,20));
+ return bigOf(g);});
+podHalf('pod_right','Shoulder pod, right half (shoulder servo ID 2)',1);
+podHalf('pod_left','Shoulder pod, left half (elbow-drive servo ID 3)',-1);
+
+part('pod_cap','Pod side cap (chrome)',2,'PETG, chrome paint','Flat.',()=>S(CYL(15,2,0,0,0,48),CYL(11.5,4,0,0,-1)));
+
+part('drive_crank','Elbow drive crank (on ID 3 horn)',1,'CF-nylon','Flat. 100% infill.',()=>{
+ let g=U(CYL(7.45,8.5,0,0,0,48),CYL(10,4,0,0,8.5,48),BOX(8,RC+8,4,0,-RC/2,8.5),CYL(5,4,0,-RC,8.5,32));
+ g=S(g,CYL(4.2,30,0,0,-1));for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,clr('M3',HPCD*Math.cos(a),HPCD*Math.sin(a),-1,20),CYL(3,3,HPCD*Math.cos(a),HPCD*Math.sin(a),10));}
+ g=S(g,insUp('M3',0,-RC,12.5));return g;});
+
+const rail=(key,name,L,lowCut,hiCut,rl=11)=>part(key,name,1,'CF-nylon, brushed-alu finish','Flat. 6 walls, 60%.',()=>{
+ let g=U(BOX(11,L,4,0,L/2,0),CYL(rl,5,0,0,0,48),CYL(10,5,0,L,0,48));
+ g=S(g,lowCut(),hiCut());
+ for(const y of [60,L*0.6])g=S(g,CYL(CLR.M3,10,0,y,-1));
+ for(const y of [30,L-30])g=S(g,CYL(INS.M2[0],6,0,y,-1));
+ return g;});
+rail('lower_rail_R','Lower arm rail, right (bolts to the shoulder horn)',L1,()=>horn([0,0,-5],[0,0,1]),()=>CYL(5.525,5.1,0,L1,-.05));
+rail('lower_rail_L','Lower arm rail, left (rides a 6802 on the drive crank)',L1,()=>CYL(12.05,5.1,0,0,-.05),()=>CYL(5.525,5.1,0,L1,-.05),16);
+rail('upper_rail_R','Upper arm rail, right (tilt horn side)',L2,()=>CYL(CLR.M5,10,0,0,-1),()=>horn([0,L2,-5],[0,0,1]));
+rail('upper_rail_L','Upper arm rail, left (elbow crank)',L2,()=>CYL(CLR.M5,10,0,0,-1),()=>CYL(CLR.M5,10,0,L2,-1));
+
+part('elbow_crank','Elbow crank (on the left upper rail)',1,'CF-nylon','Flat.',()=>{let g=U(CYL(9,4,0,0,0,40),BOX(8,RC+6,4,0,-RC/2,0),CYL(5,4,0,-RC,0,32));
+ g=S(g,CYL(CLR.M5,10,0,0,-1));for(const y of [-6,6])g=S(g,clr('M3',6,y,-1,6));g=S(g,insUp('M3',0,-RC,4));return bigOf(g);});
+
+part('rail_tie','Arm cross tie',2,'CF-nylon','Flat.',()=>{let g=BOX(8,117,6,0,0,0);for(const y of [-56,56])g=S(g,clr('M3',0,y,-1,8),csk('M3',0,y,6,true));return g;});
+
+part('knuckle_half','Head knuckle half (holds tilt servo ID 4)',2,'PETG signal red','Split face down.',()=>{
+ // print coords: x = head X, y = head Z (up), z = |Y| from the split plane; tilt axis at (0,0)
+ let g=S(RR(KX,KZ,12,KL/2,0,KZc,0),RR(KX-2*WT,KZ-2*WT,12-WT,KL/2-WT,0,KZc,-.1));
+ g=U(g,S(BOX(31,55.6,40,0,-11,0),BOX(25.1,49.6,42,0,-11,-.1)));
+ g=S(g,CYL(11.5,10,0,0,KL/2-5));
+ for(const z of [-14,14])for(const y of [8,30])g=S(g,AXC(INS.M3[0],7,[HX0-3,z-11,y],[1,0,0],20));
+ g=U(g,I(BOX(4,40,KL/2-4,HX0-WT-2,-11,2),RR(KX,KZ,12,KL/2,0,KZc,0)));
+ for(const z of [-14,14])for(const y of [8,30])g=S(g,AXC(INS.M3[0],7,[HX0-3,z-11,y],[1,0,0],20));
+ for(const[x,z]of [[-15,-37],[15,-37],[-15,15],[15,15]])g=U(g,I(CYL(2.8,KL/2,x,z,0),RR(KX-.5,KZ-.5,12,KL/2,0,KZc,0)));
+ for(const[x,z]of [[-15,-37],[15,-37],[-15,15],[15,15]])g=S(g,insDn('M25',x,z,0));
+ return bigOf(g);});
+
+part('hood','Hood',1,'PETG sea foam','Rim down. Under 45° all the way; no supports.',()=>{
+ const prof=[[24,0],[26.5,8],[40,40],[50,66],[53.5,74]];
+ let g=S(new THREE.LatheGeometry([new THREE.Vector2(0,0),...prof.map(p=>new THREE.Vector2(p[0],p[1])),new THREE.Vector2(0,74)],96),new THREE.LatheGeometry([new THREE.Vector2(0,2),...prof.slice(1).map(p=>new THREE.Vector2(p[0]-WT,p[1])),new THREE.Vector2(0,74.1)],96));
+ g=new THREE.Group?g:g;
+ g=toM(g).rotate([90,0,0]);
+ for(const z of [-14,14])for(const y of [-3,19])g=S(g,AXC(CLR.M3,6,[y,0,z-11],[0,1,0],20));
+ for(const s of [-1,1])g=S(g,AXC(.8,10,[0,48,s*44],[0,0,s],16));
+ g=U(g,BOX(10,6,8,0,40,36));for(const x of [-3.5,3.5])g=S(g,AXC(INS.M2[0],6,[x,40,40],[0,0,1],20));
+ return bigOf(g);});
+
+part('liner','Reflector liner (LED ring + display carrier)',1,'PETG white','Small end down.',()=>{
+ const prof=[[22,6],[36,38],[46,64],[50,71]];
+ let g=S(new THREE.LatheGeometry([new THREE.Vector2(0,6),...prof.map(p=>new THREE.Vector2(p[0]-WT-.5,p[1])),new THREE.Vector2(0,71)],96),new THREE.LatheGeometry([new THREE.Vector2(0,7.6),...prof.map(p=>new THREE.Vector2(p[0]-WT-2.1,p[1]+.1)),new THREE.Vector2(0,71.2)],96));
+ g=toM(g).rotate([90,0,0]);
+ g=U(g,S(CYL(22,4,0,0,6,64),CYL(16.5,6,0,0,5,64)));
+ g=U(g,RING(23,19.8,14,6));g=S(g,RING(20.6,19.8,1.6,12.4));
+ g=U(g,RING(34,29,2,30));g=S(g,RING(32.2,28.2,2,32));
+ return bigOf(g);});
+
+part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
+ for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
+part('led_diffuser','LED ring diffuser',1,'PETG natural (translucent)','Flat.',()=>RING(33.9,28.3,1.6,0));
+part('face_bezel','Face bezel',1,'PETG, chrome paint','Face down.',()=>RING(23.4,16.2,2.4,0));
+part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
+ for(const s of [-1,1])g=U(g,BOX(23,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
+ for(const y of [-3.5,3.5])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
+part('mic_clamp','Mic retainer plate',2,'PETG','Flat.',()=>{let g=S(RR(8,20,2,2),BOX(4,4,4,0,0,-1));for(const y of [-6,6])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
+part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
+part('finial','Finial',1,'PETG, brass paint','Ball up.',()=>U(CYL(1.9,8,0,0,0,20),new THREE.SphereGeometry(4.2,24,16).translate(0,0,10)));
+part('ballast_note','Steel ballast ring (laser-cut, not printed)',1,'Mild steel 14 mm','Preview only: Ø150 / Ø90 × 14, 4× M4 tapped at R62, 4× Ø9 standoff holes at R55.',()=>{let g=RING(75,45,14,0);for(let i=0;i<4;i++){const a=i*P/2;g=S(g,CYL(1.65,10,62*Math.cos(a),62*Math.sin(a),-1));}for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,CYL(4.5,10,55*Math.cos(a),55*Math.sin(a),-1));}return g;});
+
+// ---------- viewer ----------
+const cv=document.getElementById('cv'),info=document.getElementById('info'),busy=document.getElementById('busy');
+const R=new THREE.WebGLRenderer({canvas:cv,antialias:true});R.setPixelRatio(devicePixelRatio);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xebe2cb);
+const cam=new THREE.PerspectiveCamera(30,1,1,5000);cam.position.set(260,-320,240);
+const ctl=new OrbitControls(cam,cv);
+scene.add(new THREE.HemisphereLight(0xffffff,0x8a7f66,1.6));const dl=new THREE.DirectionalLight(0xffffff,2.2);dl.position.set(200,-150,400);scene.add(dl);
+const bed=new THREE.GridHelper(256,16,0x23292b,0xb8ad93);bed.rotation.x=P/2;scene.add(bed);
+const edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(256,256,.1)),new THREE.LineBasicMaterial({color:0xc8463a}));scene.add(edge);
+const mat=new THREE.MeshStandardMaterial({color:0x5ea49b,roughness:.55,flatShading:false});
+let cur=null;const cache={};
+function fit(){const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+addEventListener('resize',fit);
+function build(k){if(cache[k])return cache[k];const p=PARTS.find(q=>q.key===k);const g=toG(B(p.fn()));g.computeVertexNormals();g.computeBoundingBox();const bb=g.boundingBox;g.translate(-(bb.min.x+bb.max.x)/2,-(bb.min.y+bb.max.y)/2,-bb.min.z);g.computeBoundingBox();cache[k]=g;return g;}
+async function show(k){busy.style.display='flex';await new Promise(r=>setTimeout(r,30));
+ try{const g=build(k);if(cur)scene.remove(cur);cur=new THREE.Mesh(g,mat);scene.add(cur);
+  const s=new THREE.Vector3();g.boundingBox.getSize(s);const p=PARTS.find(q=>q.key===k);
+  info.innerHTML=`<b style="font-family:Jost;font-size:15px">${p.name}</b> ×${p.qty} · ${p.mat}<br>${s.x.toFixed(1)} × ${s.y.toFixed(1)} × ${s.z.toFixed(1)} mm · ${(g.attributes.position.count/3)|0} triangles<br>${p.orient}`;
+  const r=Math.max(s.x,s.y,s.z);ctl.target.set(0,0,s.z/2);cam.position.set(r*1.4,-r*1.8,r*1.3+s.z/2);ctl.update();
+  document.querySelectorAll('.part').forEach(e=>e.classList.toggle('on',e.dataset.k===k));sel=k;
+ }catch(e){info.textContent='Geometry error in '+k+': '+e.message;console.error(e);}
+ busy.style.display='none';}
+let sel=PARTS[0].key;
+const list=document.getElementById('list');
+for(const p of PARTS){const d=document.createElement('div');d.className='part';d.dataset.k=p.key;d.innerHTML=`<b>${p.name}</b><i><span class="tag">×${p.qty}</span><span class="tag">${p.mat}</span></i><i>${p.orient}</i>`;d.onclick=()=>show(p.key);list.appendChild(d);}
+function stl(g){const pos=g.attributes.position,n=pos.count/3,buf=new ArrayBuffer(84+n*50),dv=new DataView(buf);dv.setUint32(80,n,true);let o=84;const a=new THREE.Vector3(),b=new THREE.Vector3(),c=new THREE.Vector3(),nn=new THREE.Vector3();
+ for(let i=0;i<n;i++){a.fromBufferAttribute(pos,i*3);b.fromBufferAttribute(pos,i*3+1);c.fromBufferAttribute(pos,i*3+2);nn.subVectors(c,b).cross(new THREE.Vector3().subVectors(a,b)).normalize();
+  for(const v of [nn,a,b,c]){dv.setFloat32(o,v.x,true);dv.setFloat32(o+4,v.y,true);dv.setFloat32(o+8,v.z,true);o+=12;}dv.setUint16(o,0,true);o+=2;}return new Uint8Array(buf);}
+const CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c;}return t;})();
+const crc32=u=>{let c=~0;for(let i=0;i<u.length;i++)c=CRC[(c^u[i])&255]^(c>>>8);return(~c)>>>0;};
+function zip(files){const enc=new TextEncoder(),out=[],cen=[];let off=0;
+ for(const[name,d]of files){const nm=enc.encode(name),c=crc32(d),L=new Uint8Array(30+nm.length),lv=new DataView(L.buffer);lv.setUint32(0,0x04034b50,true);lv.setUint16(4,20,true);lv.setUint32(14,c,true);lv.setUint32(18,d.length,true);lv.setUint32(22,d.length,true);lv.setUint16(26,nm.length,true);L.set(nm,30);out.push(L,d);
+  const C=new Uint8Array(46+nm.length),cv2=new DataView(C.buffer);cv2.setUint32(0,0x02014b50,true);cv2.setUint16(4,20,true);cv2.setUint16(6,20,true);cv2.setUint32(16,c,true);cv2.setUint32(20,d.length,true);cv2.setUint32(24,d.length,true);cv2.setUint16(28,nm.length,true);cv2.setUint32(42,off,true);C.set(nm,46);cen.push(C);off+=L.length+d.length;}
+ const cs=cen.reduce((s,c)=>s+c.length,0),E=new Uint8Array(22),evw=new DataView(E.buffer);evw.setUint32(0,0x06054b50,true);evw.setUint16(8,files.length,true);evw.setUint16(10,files.length,true);evw.setUint32(12,cs,true);evw.setUint32(16,off,true);
+ return new Blob([...out,...cen,E],{type:'application/zip'});}
+const dlb=(blob,name)=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);};
+const fname=p=>`lamp-${p.key}-x${p.qty}.stl`;
+document.getElementById('one').onclick=()=>{const p=PARTS.find(q=>q.key===sel);dlb(new Blob([stl(build(sel))],{type:'model/stl'}),fname(p));};
+document.getElementById('all').onclick=async()=>{busy.style.display='flex';busy.textContent='Building all parts…';await new Promise(r=>setTimeout(r,30));
+ const files=PARTS.filter(p=>!p.key.includes('note')).map(p=>[fname(p),stl(build(p.key))]);
+ files.push(['README.txt',new TextEncoder().encode(['Lamp print parts','Units: mm. Z up. Each file is in its print orientation.','No glue anywhere: every joint is a screw into a heat-set insert or a snap.',...PARTS.map(p=>`${fname(p)}  qty ${p.qty}  ${p.mat}  ${p.orient}`)].join('\n'))]);
+ dlb(zip(files),'lamp-print-parts.zip');busy.style.display='none';busy.textContent='Building geometry…';};
+fit();(function loop(){R.render(scene,cam);requestAnimationFrame(loop);})();
+window.lampParts={keys:PARTS.map(p=>p.key),build,tris:k=>build(k).attributes.position.count/3};
+show(sel);
+</script>
+</body></html>

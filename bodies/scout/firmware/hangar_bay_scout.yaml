@@ -1,0 +1,44 @@
+body: scout
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500, antenna: ufl_external }
+mcu:
+  reflex: { chip: esp32s3, module: xiao_esp32s3_sense, psram: 8MB, role: [reflex, face, camera, mic] }
+power:
+  battery: { cells: 1, chem: lipo, mah: 1000, protected: true }
+  charger: { part: bq24074_class, input: usb_c_5v, ichg_ma: 1000, power_path: true }
+  rail_3v3: { part: buck_boost, en: main_switch }
+  low_soc_pct: 15
+  low_v: 3.45
+buses:
+  i2c0: { sda: 5, scl: 6, hz: 400000 }
+  spi2: { sclk: 7, mosi: 9, hz: 40000000 }
+expander: { part: tca9554, bus: i2c0, addr: 0x20,
+  pins: { p0: motor_l_dir, p1: motor_r_dir, p2: drv_nsleep, p3: disp_rst, p4: disp_bl, p5: tof_rear_xshut, p6: amp_sd, p7: chg_pg_in } }
+drive:
+  type: differential
+  wheel_d_mm: 40
+  track_mm: 108
+  motor: { part: n20_6v, ratio: 100, driver: drv8833, mode: pwm_in1_dir_in2, pwm_hz: 20000 }
+  left:  { pwm: 3, dir: expander.p0, enc_a: 1, pcnt_unit: 0 }
+  right: { pwm: 4, dir: expander.p1, enc_a: 2, pcnt_unit: 1 }
+  enc_cpr_wheel: 1400
+  limits: { accel_mps2: 2.5, brake_mps2: 3.5, v_table_mps: 0.4, v_reverse_mps: 0.15, yaw_dps: 360 }
+peripherals:
+  - { name: lidar_fwd, part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 44, fov: 27, role: obstacle }
+  - { name: tof_front, part: vl53l0x, bus: i2c0, addr: 0x30, tilt_deg: 25, role: drop_off }
+  - { name: tof_rear,  part: vl53l0x, bus: i2c0, addr: 0x29, xshut: expander.p5, tilt_deg: -25, role: drop_off }
+  - { name: imu,       part: lsm6dsox, bus: i2c0, addr: 0x6A, location: com }
+  - { name: gauge,     part: max17048, bus: i2c0, addr: 0x36 }
+  - { name: display,   part: gc9a01, bus: spi2, dc: 8, cs: tied_low, rst: expander.p3, bl: expander.p4, size: 240x240 }
+  - { name: mic,       part: onboard_pdm, clk: 42, data: 41 }
+  - { name: speaker,   part: pam8302, input: pdm_tx, pin: 43, sd: expander.p6 }
+  - { name: camera,    part: ov3660, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
+reflexes:
+  obstacle: { sensor: lidar_fwd, stop_mm: 80, slow_mm: 250 }
+  edge:  { sensors: [tof_front, tof_rear], drop_mm: 25, action: [brake, back_off_20mm] }
+  lift:  { sensors: [imu, tof_front, tof_rear], action: motors_off }
+  bump:  { sensors: [imu, encoders], decel_g: 1.5, stall_ms: 300, action: [stop, back_off_30mm] }
+safety:
+  triggers: [heartbeat_lost, soc_below_15, vbat_below_3v45, drv_fault, stall_1s, overcurrent]
+  routine:  [stop, brake, wait_2s, edge_clear_creep, motors_coast, face_sleepy]
+  resume:   fresh_command_only

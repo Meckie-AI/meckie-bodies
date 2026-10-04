@@ -1,0 +1,54 @@
+body: rover_lite
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, location: hull, reserved_gpio: [19, 20, 26-37, 43, 44] }
+  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: hull }
+power:
+  battery: { cells: 3, mah: 1500, smart: true, gauge: sbs, balance: true }
+  charger: { part: bq25798, input: usb_c_pd, request_v: 15 }
+  rails:   { servo: vbat_via_efuse, motor_6v: buck_3a, logic_5v: buck_5a }
+buses:
+  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }
+  i2c0:      { host: reflex, sda: 8,  scl: 9,  hz: 400000 }
+  i2c1_smb:  { host: reflex, sda: 12, scl: 13, hz: 100000 }
+  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }
+  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000, cable_mm: 300 }
+  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }
+  csi:       { host: face, port: cam0, ffc_mm: 300 }
+drive:
+  type: tracked_skid_steer
+  sprocket_pitch_r_mm: 20
+  gauge_mm: 120
+  contact_len_mm: 160
+  motor: { part: n20_6v, ratio: 298, driver: drv8833, pwm_hz: 20000, vm: 6.0 }
+  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }
+  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }
+  driver: { nsleep: 42, nfault: 21 }
+  limits: { accel_mps2: 1.5, brake_mps2: 2.5, v_mps: 0.2, v_reverse_mps: 0.12 }
+servos:
+  - { id: 1, name: pan,  model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }
+  - { id: 2, name: tilt, model: sts3215, min_deg: -25,  max_deg: 35,  rest_deg: -25 }
+  limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
+peripherals:
+  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
+  - { name: tof_fwd,    part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }
+  - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30 }
+  - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30 }
+  - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, location: com }
+  - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 6 }
+  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
+  - { name: face_wake,  gpio: 46, to: face.gpio3 }
+  - { name: status_led, part: ws2812, gpio: 48 }
+  - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }
+  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 84 }
+  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
+  - { name: camera,     part: imx708,    bus: csi }
+reflexes:
+  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_30mm] }
+  obstacle: { sensor: tof_fwd, stop_mm: 60 }
+  tilt:     { sensor: imu, max_deg: 35, action: tracks_off }
+safety:
+  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault, drv_fault, stall_1s]
+  routine:  [stop, brake, wait_2s, edge_clear_creep, head_to_rest_slow, torque_low, face_sleepy]
+  resume:   fresh_command_only

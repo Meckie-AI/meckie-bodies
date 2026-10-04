@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f1e8d2;color:#23292b;-webkit-font-smoothing:antialiased}
+a{color:#c8463a;text-decoration:none}
+a:hover{color:#23292b;text-decoration:underline}
+</style>
+</helmet>
+<div style="font-family:'Jost',sans-serif;max-width:1240px;margin:0 auto;padding:48px 32px 80px;display:flex;flex-direction:column;gap:56px">
+
+  <header data-screen-label="Masthead" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:40px;align-items:end;border-bottom:3px double #23292b;padding-bottom:32px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase">
+        <span style="background:#23292b;color:#f1e8d2;padding:4px 10px;border-radius:999px">Design brief · Rev A</span>
+        <span>2 Oct 2026</span>
+        <span style="border:1.5px solid #23292b;padding:3px 10px;border-radius:999px">Meckie shared core</span>
+      </div>
+      <h1 style="margin:0;font:italic 700 clamp(64px,9vw,112px)/1.02 'Jost',sans-serif;letter-spacing:-.02em;color:#23292b;white-space:nowrap">WOBBLE<span style="color:#c8463a">.</span></h1>
+      <p style="margin:0;font:500 22px/1.35 'Jost',sans-serif;max-width:580px;text-wrap:pretty">A self-balancing two-wheeled Meckie body. Personality: a bouncy, slightly clumsy friend who rocks and sways while it talks.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#f7f0de">
+      <div style="padding:14px 18px;border-right:1px solid #23292b;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Est. mass</div><div style="font:700 26px 'Jost'">{{ totalStr }} g</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">CoM {{ comAxleStr }} mm above axle</div></div>
+      <div style="padding:14px 18px;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Envelope</div><div style="font:700 26px 'Jost'">74 × 157 × 232</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">mm D × W × H · to antenna tips</div></div>
+      <div style="padding:14px 18px;border-right:1px solid #23292b;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Recoverable lean</div><div style="font:700 26px 'Jost';color:{{ recCol }}">{{ recStr }}°</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">{{ motorShort }} · need ≥ 15°</div></div>
+      <div style="padding:14px 18px;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Runtime</div><div style="font:700 26px 'Jost'">≈ {{ runStr }} h</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">balancing · {{ runSitStr }} h sitting</div></div>
+      <div style="padding:14px 18px;border-right:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Est. BOM</div><div style="font:700 26px 'Jost';color:#c8463a">${{ costTotal }}</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">target ≈ $150 · see 05b</div></div>
+      <div style="padding:14px 18px"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Brains</div><div style="font:700 26px 'Jost'">2 × ESP32-S3</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">N16R8 balance · XIAO Sense head</div></div>
+    </div>
+  </header>
+
+  <section data-screen-label="01 Concept views" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">01</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Concept views</h2>
+      <a href="Wobble Viewer.html" style="font:500 13px 'IBM Plex Mono',monospace;margin-left:auto">Open full 3D viewer + GLB/OBJ export →</a>
+    </div>
+    <p style="margin:0;max-width:800px;font:400 17px/1.5 'Jost';text-wrap:pretty">A wide, squared-off body like a 1950s table radio, 120 mm across and only 74 mm deep, with a sea-foam belly tub and a cream upper split by two chrome bands. It rides on two red TPU wheels with cream hubs and chrome caps, set wide at 136 mm. The face sits in a chrome-bezelled collar, with the camera in a chrome hood above it. Red TPU bumpers round off both top corners, and two spring antennae with red balls bob as it sways. Two brushed-finish kickstand legs with red feet fold flat against the belly front and back. The head harness runs up the back in red braid. Each view can be dragged to orbit.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:16px">
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Wobble Viewer.html?view=iso&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:420px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">3/4 · {{ poseLabel }}</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Wobble Viewer.html?view=side&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:420px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Side · kickstand legs, harness</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Wobble Viewer.html?view=front&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:420px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Front · face, camera, grille, lidar, drop ToF</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Wobble Viewer.html?view=top&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:420px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Top</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative;grid-column:1/-1">
+        <iframe src="Wobble Viewer.html?view=rear&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:420px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Rear · battery door, USB-C, brass toggle, harness, rear drop ToF</figcaption>
+      </figure>
+    </div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;font:400 13px 'IBM Plex Mono',monospace;color:#3d4344">
+      <span>Body 120 W × 74 D × 200 H · wheels Ø64, track 140</span>
+      <span>Axle 32 above floor · face centre 148</span>
+      <span>Legs reach ±70 mm from the axle</span>
+      <span>Ground clearance 16</span>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Mechanism exploded" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">02</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Drive &amp; kickstand · exploded</h2>
+    </div>
+    <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+      <iframe src="Wobble Viewer.html?view=exploded&amp;embed=1" style="display:block;width:100%;height:720px;border:0"></iframe>
+      <figcaption style="position:absolute;bottom:12px;left:12px;font:500 12px 'IBM Plex Mono',monospace;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Belly down, upper shell and bumpers up, wheels and motors outward, legs pulled clear</figcaption>
+    </figure>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr));gap:24px">
+      <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto;align-self:start">
+        <div style="min-width:560px">
+          <div style="display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
+            <div style="padding:10px 16px">Joint</div><div style="padding:10px 16px">Drive</div><div style="padding:10px 16px">Support</div>
+          </div>
+          <sc-for list="{{ joints }}" as="j" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);border-top:1px solid #c9bfa6;font:400 14px/1.4 'Jost'">
+              <div style="padding:12px 16px;font-weight:600">{{ j.joint }}</div>
+              <div style="padding:12px 16px">{{ j.drive }}</div>
+              <div style="padding:12px 16px">{{ j.support }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;font:400 15px/1.5 'Jost'">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Balance stack</div>
+          <div style="text-wrap:pretty">The two N20s lie end to end on the axle line in a CF-nylon motor block, encoders facing inward. The BNO085 stands on a bracket between the two encoders, on the axle line itself, so it reads pitch with no lever-arm acceleration from wheel moves. The ESP32-S3 runs the balance loop at 400 Hz from the IMU's 400 Hz gyro and game-rotation reports.</div>
+        </div>
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Battery high</div>
+          <div style="text-wrap:pretty">The 2S pack sits behind the face, {{ battYStr }} mm above the floor. That lifts the centre of mass to {{ comAxleStr }} mm above the axle, which slows the fall (time constant {{ tauStr }} ms) and gives the loop more time per correction. The torque needed to hold a lean does not change with height, so the motors are not penalised.</div>
+        </div>
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Kickstands</div>
+          <div style="text-wrap:pretty">One MG90S micro servo in the belly drives both legs through two pushrods. Each leg swings 118° from flat against the shell to down-and-out, and the linkage goes 4° over centre at full deploy, so the robot's weight locks the legs open instead of loading the servo. Feet land 70 mm ahead of and behind the axle.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02b Behaviour modes" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">02b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Behaviour modes</h2>
+    </div>
+    <p style="margin:0;max-width:820px;font:400 17px/1.5 'Jost';text-wrap:pretty">Wobble's body language comes from the balance setpoint. Shifting the target pitch makes it lean, rock or bob; the balance loop does the rest and keeps it upright.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <sc-for list="{{ modes }}" as="m" hint-placeholder-count="6">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font:700 18px 'Jost'">{{ m.n }}</span><span style="font:500 12px 'IBM Plex Mono',monospace;text-align:right">{{ m.q }}</span></div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ m.d }}</div>
+        </div>
+      </sc-for>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#23292b;color:#f1e8d2;display:flex;flex-direction:column;gap:8px">
+        <div style="font:700 18px 'Jost'">Control split</div>
+        <div style="font:400 14px/1.5 'IBM Plex Mono',monospace;text-wrap:pretty">Central: who is there, where to go, what to say, behaviour. XIAO Sense (head): camera and mic streams over Wi-Fi, face render, speech playback, speech envelope to the base. ESP32-S3 (base): 400 Hz balance loop, wheel speed and yaw, sway from the speech envelope, lidar and drop-off reflexes, kickstand, heartbeat watchdog, power guard.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Body layout" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">03</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Body layout</h2>
+    </div>
+    <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+      <iframe src="Wobble Viewer.html?view=xray&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:700px;border:0"></iframe>
+      <figcaption style="position:absolute;bottom:12px;left:12px;font:500 12px 'IBM Plex Mono',monospace;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">X-ray: shells at 13% opacity</figcaption>
+    </figure>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Bus &amp; power topology</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:500 13px 'IBM Plex Mono',monospace">
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">USB-C PD · rear</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">PD sink · 9 V</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">BQ25798 · 2S charger</span><span>↔</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#37598a;color:#f7f0de">2S 1000 smart pack</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#c29a48">Brass toggle · 5 A fuse</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;align-items:center;font:500 13px 'IBM Plex Mono',monospace">
+        <div style="color:#c8463a;font-weight:600">VBAT 6.4–8.4 V</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">DRV8833 VM → N20 L + R (duty capped to 6.5 V)</span>
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">5 V / 3 A buck → ESP32-S3, harness to head, amp</span>
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">Load switch → MG90S</span>
+        </div>
+        <div style="font-weight:600">Balance brain · belly</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#2e6a46;color:#f7f0de">ESP32-S3 N16R8</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">PCNT · 2 quadrature encoders</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²C0 · BNO085, VL53L1X, 2 × VL53L0X, BQ25798</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²C1 · pack gauge SMBus</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">LEDC · motors 20 kHz, servo 50 Hz</span>
+        </div>
+        <div style="font-weight:600">Head brain · top</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#6a3f8e;color:#f7f0de">XIAO ESP32-S3 Sense</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">Onboard camera · Wi-Fi to Central</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">SPI · GC9A01</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²S · 2 mics in, amp out</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#e9a79f">UART · base link 921 600</span>
+        </div>
+        <div style="font-weight:600">Head harness</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:1.5px dashed #23292b;border-radius:999px;padding:4px 10px;font-size:12px">5 V · GND · TX · RX</span><span>4 conductors, 24 AWG, outside up the back in red braid</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <sc-for list="{{ bodyNotes }}" as="b" hint-placeholder-count="9">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em">{{ b.t }}</div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ b.d }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="03b Wiring" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">03b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Wiring diagram</h2>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;padding:16px;overflow-x:auto">
+      <svg viewBox="0 0 1100 600" width="100%" style="min-width:760px;display:block" font-family="IBM Plex Mono, monospace">
+        <line x1="850" y1="110" x2="850" y2="590" stroke="#23292b" stroke-width="1.5" stroke-dasharray="8 5"></line>
+        <text x="856" y="586" font-size="10" fill="#23292b">HEAD HARNESS · 4c</text>
+        <text x="30" y="24" font-size="11" fill="#c8463a" letter-spacing="1.5">BELLY · POWER</text>
+        <text x="330" y="24" font-size="11" fill="#c8463a" letter-spacing="1.5">BELLY · BALANCE BRAIN</text>
+        <text x="620" y="124" font-size="11" fill="#c8463a" letter-spacing="1.5">DRIVE · SENSE · LEGS</text>
+        <text x="880" y="124" font-size="11" fill="#c8463a" letter-spacing="1.5">HEAD</text>
+        <g fill="none">
+          <path d="M130,96 V130 M130,186 V220 M130,276 V310" stroke="#c8463a" stroke-width="3"></path>
+          <path d="M230,338 H270 V428 H620" stroke="#c8463a" stroke-width="3"></path>
+          <path d="M230,338 H260 V518 H230" stroke="#c8463a" stroke-width="3"></path>
+          <path d="M230,518 H290 V100 H330" stroke="#c29a48" stroke-width="3"></path>
+          <path d="M290,560 H840 V158 H880" stroke="#c29a48" stroke-width="3"></path>
+          <path d="M290,518 V560" stroke="#c29a48" stroke-width="3"></path>
+          <path d="M290,540 H600 V518 H620" stroke="#c29a48" stroke-width="2"></path>
+          <path d="M560,80 H600 V428 H620" stroke="#c8463a" stroke-width="2"></path>
+          <path d="M560,110 H590 V338 H620" stroke="#e9a79f" stroke-width="2" stroke-dasharray="6 3"></path>
+          <path d="M560,140 H610 V68 H620 M610,140 V158 H620 M610,158 V248 H620" stroke="#37598a" stroke-width="2.5"></path>
+          <path d="M230,158 H250 V75 H330" stroke="#37598a" stroke-width="2"></path>
+          <path d="M560,200 H580 V505 H620" stroke="#23292b" stroke-width="1.5"></path>
+          <path d="M560,230 H596 V293 H834 V188 H880" stroke="#23292b" stroke-width="1.5" stroke-dasharray="6 4"></path>
+          <path d="M980,186 V220 M980,276 V310 M980,366 V400" stroke="#37598a" stroke-width="2"></path>
+          <path d="M440,40 V12 H1080 V130" stroke="#5ea49b" stroke-width="2" stroke-dasharray="2 5"></path>
+        </g>
+        <g font-size="9" fill="#23292b">
+          <text x="138" y="117">PD 9 V</text><text x="138" y="207">2S</text><text x="138" y="297">VBAT</text>
+          <text x="420" y="424">VBAT → VM</text><text x="264" y="470">VBAT</text><text x="300" y="300">5 V</text><text x="600" y="556">5 V → head</text><text x="460" y="536">5 V → servo</text>
+          <text x="564" y="76">PWM ×4</text><text x="562" y="106">ENC A/B ×2</text><text x="564" y="136">I²C0</text><text x="236" y="152">I²C1 SMB</text>
+          <text x="564" y="196">SERVO PWM 14</text><text x="636" y="290">UART 921k6 TX17 RX18</text>
+          <text x="986" y="206">SPI</text><text x="986" y="296">I²S in</text><text x="986" y="386">I²S out</text>
+          <text x="880" y="9">Wi-Fi · Central</text>
+        </g>
+        <g font-family="Jost, sans-serif" font-size="14" fill="#23292b" font-weight="700">
+          <rect x="30" y="40" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="64">USB-C PD SINK</text><text x="46" y="82" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">9 V request · rear</text>
+          <rect x="30" y="130" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="154">BQ25798</text><text x="46" y="172" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">2S charger · 0x6B</text>
+          <rect x="30" y="220" width="200" height="56" rx="14" fill="#37598a" stroke="#23292b" stroke-width="2"></rect><text x="46" y="244" fill="#f7f0de">2S SMART PACK</text><text x="46" y="262" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">gauge 0x0B · balance</text>
+          <rect x="30" y="310" width="200" height="56" rx="14" fill="#c29a48" stroke="#23292b" stroke-width="2"></rect><text x="46" y="334">MAIN TOGGLE</text><text x="46" y="352" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">brass, rear · 5 A fuse</text>
+          <rect x="30" y="490" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="514">5 V / 3 A BUCK</text><text x="46" y="532" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">logic, head, amp, servo</text>
+          <rect x="330" y="40" width="230" height="200" rx="14" fill="#2e6a46" stroke="#23292b" stroke-width="2"></rect><text x="346" y="66" fill="#f7f0de">ESP32-S3 N16R8</text>
+          <g font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace"><text x="346" y="88">balance loop 400 Hz</text><text x="346" y="106">wheel speed + yaw</text><text x="346" y="124">sway from speech envelope</text><text x="346" y="142">lidar + drop-off reflex</text><text x="346" y="160">kickstand · heartbeat</text><text x="346" y="178">power guard</text></g>
+          <rect x="620" y="40" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="64">BNO085 · 0x4A</text><text x="636" y="82" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">on axle line · INT 7 RST 6</text>
+          <rect x="620" y="130" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="154">VL53L1X · 0x2A</text><text x="636" y="172" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">forward lidar · XSHUT 10</text>
+          <rect x="620" y="220" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="244">VL53L0X ×2</text><text x="636" y="262" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">drop 0x30 / 0x31 · XSHUT 11 12</text>
+          <rect x="620" y="310" width="200" height="56" rx="14" fill="#23292b" stroke="#23292b" stroke-width="2"></rect><text x="636" y="334" fill="#f7f0de">N20 ENCODERS</text><text x="636" y="352" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">L 1/2 · R 47/3</text>
+          <rect x="620" y="400" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#c8463a" stroke-width="2"></rect><text x="636" y="424">DRV8833 → N20 ×2</text><text x="636" y="442" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">IN 38 39 40 41 · nSLEEP 42</text>
+          <rect x="620" y="490" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="514">MG90S KICKSTAND</text><text x="636" y="532" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">load switch EN 15</text>
+          <rect x="880" y="130" width="200" height="56" rx="14" fill="#6a3f8e" stroke="#23292b" stroke-width="2"></rect><text x="896" y="154" fill="#f7f0de">XIAO S3 SENSE</text><text x="896" y="172" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">camera · all 11 pins used</text>
+          <rect x="880" y="220" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="244">GC9A01 Ø32</text><text x="896" y="262" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">SCK D8 MOSI D10 DC D9</text>
+          <rect x="880" y="310" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="334">ICS-43434 ×2</text><text x="896" y="352" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">BCLK D2 WS D3 DIN D4</text>
+          <rect x="880" y="400" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="424">MAX98357A → Ø28</text><text x="896" y="442" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">DOUT D5 · chest grille</text>
+        </g>
+      </svg>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace;padding:12px 8px 4px">
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#c8463a"></span>VBAT</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#c29a48"></span>5 V</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#37598a"></span>I²C / I²S / SPI</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dashed #e9a79f"></span>Encoders</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#23292b"></span>Servo PWM</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dashed #23292b"></span>UART link</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dotted #5ea49b"></span>Wi-Fi</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Balance check" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">04</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Balance, edge &amp; load check</h2>
+    </div>
+    <p style="margin:0;max-width:820px;font:400 16px/1.5 'Jost';text-wrap:pretty">Motors: {{ motorName }}, duty capped so they see at most 6.5 V from the 2S pack. Robot {{ totalStr }} g with the centre of mass {{ comAxleStr }} mm above the axle; wheel radius 32 mm. Transient budget is 60% of stall per motor, continuous 30%. Reflected rotor inertia through the gearbox is added to the robot's effective mass. A balancing robot cannot brake straight away: it must first roll forward to lean back, modelled as 250 ms plus 30 ms reaction, then decelerate at 2 m/s².</p>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:640px">
+        <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
+          <div style="padding:10px 16px">Case</div><div style="padding:10px 16px;text-align:right">Need</div><div style="padding:10px 16px;text-align:right">Have</div><div style="padding:10px 16px;text-align:right">Result</div>
+        </div>
+        <sc-for list="{{ checks }}" as="r" hint-placeholder-count="11">
+          <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr);border-top:1px solid #c9bfa6;font:500 14px 'IBM Plex Mono',monospace">
+            <div style="padding:12px 16px;font-family:'Jost';font-size:15px">{{ r.c }}</div>
+            <div style="padding:12px 16px;text-align:right">{{ r.need }}</div>
+            <div style="padding:12px 16px;text-align:right">{{ r.have }}</div>
+            <div style="padding:12px 16px;text-align:right;font-weight:600;color:{{ r.col }}">{{ r.res }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Recoverable lean is the angle at which the motors can still drive the wheels under the centre of mass faster than it falls (base acceleration above g·tanθ). 15° covers the ±8° talking sway plus a light nudge. The 30:1 N20 fails on torque; the 50:1 N20 passes with a small margin; the N30 (same footprint, longer motor) roughly doubles it. Switch motors in Tweaks to compare.</p>
+  </section>
+
+  <section data-screen-label="05 Mass budget" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Parts list &amp; mass budget</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="height:36px;border:2px solid #23292b;border-radius:999px;overflow:hidden;display:flex;background:#f7f0de">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+          <div style="width:{{ c.pct }};background:{{ c.col }};border-right:1.5px solid #23292b"></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+          <span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #23292b;background:{{ c.col }}"></span>{{ c.name }} · {{ c.g }} g</span>
+        </sc-for>
+        <span style="margin-left:auto;font-weight:600">Bar = {{ totalStr }} g total</span>
+      </div>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:820px">
+        <div style="display:grid;grid-template-columns:44px minmax(0,2.4fr) minmax(0,1.1fr) 50px 70px 76px 70px 90px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 12px">#</div><div style="padding:10px 12px">Part</div><div style="padding:10px 12px">Group</div><div style="padding:10px 8px;text-align:right">Qty</div><div style="padding:10px 8px;text-align:right">Each g</div><div style="padding:10px 8px;text-align:right">Line g</div><div style="padding:10px 8px;text-align:right">Height</div><div style="padding:10px 12px;text-align:right">Running</div>
+        </div>
+        <sc-for list="{{ parts }}" as="p" hint-placeholder-count="31">
+          <div style="display:grid;grid-template-columns:44px minmax(0,2.4fr) minmax(0,1.1fr) 50px 70px 76px 70px 90px;border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+            <div style="padding:8px 12px;color:#c8463a;font-weight:600">{{ p.n }}</div>
+            <div style="padding:8px 12px;font:500 14px 'Jost'">{{ p.name }}</div>
+            <div style="padding:8px 12px;display:flex;gap:6px;align-items:center;color:#3d4344"><span style="width:9px;height:9px;border-radius:50%;flex:none;background:{{ p.col }}"></span>{{ p.cat }}</div>
+            <div style="padding:8px 8px;text-align:right">{{ p.qty }}</div>
+            <div style="padding:8px 8px;text-align:right">{{ p.unit }}</div>
+            <div style="padding:8px 8px;text-align:right">{{ p.sub }}</div>
+            <div style="padding:8px 8px;text-align:right;color:#3d4344">{{ p.y }}</div>
+            <div style="padding:8px 12px;text-align:right;font-weight:600">{{ p.run }}</div>
+          </div>
+        </sc-for>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;border-top:2px solid #23292b;background:#ebe2cb;font:600 15px 'IBM Plex Mono',monospace">
+          <div style="padding:14px 16px;font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.06em">Total</div>
+          <div style="padding:14px 16px;text-align:right">{{ totalStr }} g · CoM {{ comFloorStr }} mm above floor</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0;font:400 14px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Height is each part's centre above the floor, used for the centre-of-mass figure. The pack is the heaviest single part and sits high on purpose. The motors and wheels at the bottom are the next heaviest; keeping them light keeps the reflected inertia low.</p>
+  </section>
+
+  <section data-screen-label="05b Cost" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">BOM cost</h2>
+      <span style="margin-left:auto;font:500 13px 'IBM Plex Mono',monospace;color:#3d4344">Single unit · retail estimates, USD · Oct 2026</span>
+    </div>
+    <div style="border:2px solid #2e6a46;border-radius:20px;padding:16px 20px;background:#f7f0de;font:400 15px/1.5 'Jost';text-wrap:pretty;max-width:900px"><span style="font-weight:700;color:#2e6a46">Near target.</span> The spec build comes to ${{ costTotal }} against about $150. Two choices hold it there: a micro servo for the kickstands instead of an STS3215, and a XIAO ESP32-S3 Sense in the head instead of a Pi Zero 2 W with Camera Module 3. The BNO085 is the single most expensive part.</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="height:36px;border:2px solid #23292b;border-radius:999px;overflow:hidden;display:flex;background:#f7f0de">
+        <sc-for list="{{ costCats }}" as="c" hint-placeholder-count="4">
+          <div style="width:{{ c.pct }};background:{{ c.col }};border-right:1.5px solid #23292b"></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace">
+        <sc-for list="{{ costCats }}" as="c" hint-placeholder-count="4">
+          <span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #23292b;background:{{ c.col }}"></span>{{ c.name }} · ${{ c.sum }} · {{ c.share }}</span>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,640px),1fr));gap:24px;align-items:start">
+      <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+        <div style="min-width:640px">
+          <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.1fr) 44px 64px 84px 84px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+            <div style="padding:10px 12px">Item</div><div style="padding:10px 12px">Group</div><div style="padding:10px 8px;text-align:right">Qty</div><div style="padding:10px 8px;text-align:right">Each</div><div style="padding:10px 8px;text-align:right">Line</div><div style="padding:10px 12px;text-align:right">Running</div>
+          </div>
+          <sc-for list="{{ costs }}" as="p" hint-placeholder-count="22">
+            <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.1fr) 44px 64px 84px 84px;border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+              <div style="padding:8px 12px;font:500 14px 'Jost'">{{ p.name }}</div>
+              <div style="padding:8px 12px;display:flex;gap:6px;align-items:center;color:#3d4344"><span style="width:9px;height:9px;border-radius:50%;flex:none;background:{{ p.col }}"></span>{{ p.cat }}</div>
+              <div style="padding:8px 8px;text-align:right">{{ p.qty }}</div>
+              <div style="padding:8px 8px;text-align:right">${{ p.unit }}</div>
+              <div style="padding:8px 8px;text-align:right">${{ p.line }}</div>
+              <div style="padding:8px 12px;text-align:right;font-weight:600">${{ p.run }}</div>
+            </div>
+          </sc-for>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;border-top:2px solid #23292b;background:#ebe2cb;font:600 15px 'IBM Plex Mono',monospace">
+            <div style="padding:14px 16px;font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.06em">Total · single unit</div>
+            <div style="padding:14px 16px;text-align:right">${{ costTotal }} <span style="font-weight:400;color:#3d4344">· range {{ costRange }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:10px">
+        <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Where to save</div>
+        <sc-for list="{{ savings }}" as="s" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;font:400 14px/1.4 'Jost';border-top:1px solid #d8cfb7;padding-top:8px">
+            <span style="text-wrap:pretty">{{ s.t }}</span><span style="font:600 13px 'IBM Plex Mono',monospace;color:{{ s.col }};white-space:nowrap">{{ s.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Prices are typical single-quantity retail and have not been checked against current listings; confirm them before ordering. Excludes the USB-C PD charger, tools, shipping and printer time.</p>
+  </section>
+
+  <section data-screen-label="05c Assembly" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05c</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Assembly · no glue</h2>
+      <span style="margin-left:auto;font:500 13px 'IBM Plex Mono',monospace;color:#3d4344">Every joint screws or snaps · fully reversible with a 2 mm and a 1.5 mm hex</span>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:640px">
+        <div style="display:grid;grid-template-columns:minmax(0,1.1fr) 120px minmax(0,2.2fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 14px">Joint</div><div style="padding:10px 14px">Method</div><div style="padding:10px 14px">Detail</div>
+        </div>
+        <sc-for list="{{ assembly }}" as="a" hint-placeholder-count="20">
+          <div style="display:grid;grid-template-columns:minmax(0,1.1fr) 120px minmax(0,2.2fr);border-top:1px solid #d8cfb7;align-items:center">
+            <div style="padding:9px 14px;font:600 14px 'Jost'">{{ a.j }}</div>
+            <div style="padding:9px 14px"><span style="font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;border:1.5px solid #23292b;border-radius:999px;padding:3px 9px;background:{{ a.bg }};white-space:nowrap">{{ a.m }}</span></div>
+            <div style="padding:9px 14px;font:400 14px/1.45 'Jost';text-wrap:pretty">{{ a.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">No glue, tape, epoxy or adhesive cable mounts anywhere. Screws into plastic always land in a heat-set insert. No visible fastener heads: shell screws enter from inside the battery bay, under the corner bumpers or behind the hubcaps.</p>
+  </section>
+
+  <section data-screen-label="06 Print orientation" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">06</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Print orientation</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px">
+      <sc-for list="{{ prints }}" as="q" hint-placeholder-count="12">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+            <div style="font:700 17px 'Jost'">{{ q.part }}</div>
+            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #23292b;border-radius:999px;padding:3px 10px;white-space:nowrap;background:{{ q.bg }}">{{ q.mat }}</span>
+          </div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ q.how }}</div>
+          <div style="font:400 12px 'IBM Plex Mono',monospace;color:#3d4344">{{ q.settings }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Every part fits a 256 × 256 bed; the largest are the 124 × 128 mm upper shell halves. Chrome parts: gloss black base, chrome-effect paint, gloss clear. Brushed finish on the legs: metallic silver, one-direction Scotch-Brite pass, satin clear.</p>
+  </section>
+
+  <section data-screen-label="07 Safety reflex" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">07</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Safety reflex · rolls to a stop and sits</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+      <sc-for list="{{ reflex }}" as="s" hint-placeholder-count="6">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:16px 18px;background:#f7f0de;display:flex;flex-direction:column;gap:6px">
+          <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#c8463a">{{ s.t }}</span>
+          <span style="font:700 18px 'Jost'">{{ s.h }}</span>
+          <span style="font:400 14px/1.45 'Jost';text-wrap:pretty">{{ s.d }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#23292b;color:#f1e8d2;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;font:400 14px/1.5 'IBM Plex Mono',monospace">
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Triggers</div>No Central heartbeat for 500 ms · pack below 20% or 6.8 V (sits with margin to spare) · DRV8833 fault · motor stall over 1 s · XIAO link lost for 2 s.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Always-on local reflexes</div>Edge: a drop ToF reads more than 25 mm past its pitch-corrected floor distance → stop and back off 40 mm. Obstacle: lidar under 200 mm → stop. Fall: pitch past 35° → motors off at once, oops face.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Rest pose</div>Upright on both wheels and both kickstand feet, legs locked over centre, motors off, servo unpowered. Stable to 36° of push before it would tip over a foot.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Resume</div>Stands up only on a fresh command from Central: balance loop engages on the legs, then the legs fold away. Restoring the heartbeat alone does not wake it.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="08 Hangar Bay" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">08</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Hangar Bay manifest</h2>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:760px">
+        <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) 90px minmax(0,1.8fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 12px">Peripheral</div><div style="padding:10px 12px">Host</div><div style="padding:10px 12px">Bus</div><div style="padding:10px 12px">Addr / ID</div><div style="padding:10px 12px">Pins</div>
+        </div>
+        <sc-for list="{{ manifest }}" as="m" hint-placeholder-count="19">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) 90px minmax(0,1.8fr);border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+            <div style="padding:8px 12px;font:600 14px 'Jost'">{{ m.dev }}</div>
+            <div style="padding:8px 12px;color:#3d4344">{{ m.host }}</div>
+            <div style="padding:8px 12px">{{ m.bus }}</div>
+            <div style="padding:8px 12px;color:#c8463a;font-weight:600">{{ m.addr }}</div>
+            <div style="padding:8px 12px">{{ m.pins }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase">hangar_bay/wobble.yaml</div>
+<pre style="margin:0;border:2px solid #23292b;border-radius:20px;background:#23292b;color:#e6dcc3;padding:20px 22px;font:400 12.5px/1.6 'IBM Plex Mono',monospace;overflow-x:auto;white-space:pre">body: wobble
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, location: belly, role: [balance, drive, sense, legs, power] }
+  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: top, role: [camera, face, mics, speaker] }
+power:
+  battery: { cells: 2, mah: 1000, smart: true, gauge: sbs, balance: true }
+  charger: { part: bq25798, input: usb_c_pd, request_v: 9 }
+  rails:   { motor: vbat_direct, logic_5v: buck_3a, servo: 5v_load_switch }
+  sit_soc_pct: 20
+  sit_v: 6.8
+links:
+  base_head: { reflex: { uart: 2, tx: 17, rx: 18 }, head: { tx: 43, rx: 44 }, baud: 921600 }
+buses:
+  i2c0:     { host: reflex, sda: 8, scl: 9, hz: 400000 }
+  i2c1_smb: { host: reflex, sda: 4, scl: 5, hz: 100000 }
+  spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }
+  i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }
+balance:
+  imu: { part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line }
+  loop_hz: 400
+  controller: lqr_cascade
+  com_above_axle_mm: 63
+  pitch_trim_deg: 0.0
+  sway: { source: head.speech_envelope, max_deg: 8, max_hz: 2 }
+  fall_deg: 35
+drive:
+  type: two_wheel_balancing
+  wheel_d_mm: 64
+  track_mm: 140
+  motor: { part: n20_6v, ratio: 50, driver: drv8833, pwm_hz: 20000, max_duty_pct: 78 }
+  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }
+  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }
+  driver: { nsleep: 42, nfault: 21 }
+  enc_cpr_wheel: 1400
+  limits: { v_mps: 0.3, v_reverse_mps: 0.15, decel_mps2: 2.0 }
+kickstand:
+  servo: { part: mg90s, pwm_gpio: 14, hz: 50, power_en: 15 }
+  stowed_us: 2350
+  deployed_us: 650
+  over_centre_deg: 4
+peripherals:
+  - { name: lidar_fwd,  part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 10, role: obstacle }
+  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, xshut: 11, tilt_deg: 35, role: drop_off, pitch_comp: true }
+  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x31, xshut: 12, tilt_deg: -35, role: drop_off, pitch_comp: true }
+  - { name: charger,    part: bq25798, bus: i2c0, addr: 0x6B, int: 13 }
+  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
+  - { name: status_led, part: ws2812, gpio: 48 }
+  - { name: display,    part: gc9a01, host: head, bus: spi, dc: 8, rst: 1, bl: 2, cs: tied_low, size: 240x240 }
+  - { name: mics,       part: ics43434, host: head, bus: i2s, count: 2, sel: [gnd, 3v3] }
+  - { name: speaker,    part: max98357a, host: head, bus: i2s, sd: tied_high }
+  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
+reflexes:
+  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [stop, back_off_40mm] }
+  obstacle: { sensor: lidar_fwd, slow_mm: 400, stop_mm: 200 }
+  fall:     { sensor: imu, pitch_deg: 35, action: motors_off }
+safety:
+  triggers: [heartbeat_lost, soc_below_20, vbat_below_6v8, drv_fault, stall_1s, head_link_lost]
+  routine:  [stop, hold_position, wait_2s, legs_deploy, settle_on_legs, motors_off, servo_off, face_sleepy]
+  resume:   fresh_command_only</pre>
+    </div>
+  </section>
+
+  <section data-screen-label="09 Open items" style="border-top:3px double #23292b;padding-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+    <div style="font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.08em">Verify before CAD freeze</div>
+    <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font:400 15px/1.5 'Jost';grid-column:span 3">
+      <li>N20 gearbox backlash: measure it on the chosen motors. More than about 2° at the wheel makes the balance loop buzz; the N30 or a different gearbox may be needed even if torque passes.</li>
+      <li>Balance tuning on real hardware with the pack high; confirm the CoM height and trim the pitch offset.</li>
+      <li>Drop-off ToF with pitch correction while swaying: the floor reading moves several mm with each rock. Test table edges at full cruise speed.</li>
+      <li>Kickstand over-centre lock: check it holds with the robot pushed 20° and that the MG90S can unlock it from the resting load.</li>
+      <li>Total power loss means a fall from 200 mm. Drop-test the corner bumpers and face bezel onto a hard floor and check the display survives.</li>
+      <li>Motor overvolt: N20 6 V motors on 2S with the duty capped; check winding temperature after 30 min of balancing.</li>
+      <li>XIAO pins: all 11 are used. Confirm the camera, SPI and both I²S directions coexist without conflicts.</li>
+      <li>IMU noise from motor PWM and magnet fields at the axle; the BNO085 game-rotation vector ignores the magnetometer, but check gyro noise.</li>
+      <li>Shared-core deviations to sign off: micro servo instead of STS3215, 2S instead of 3S (DRV8833 is limited to 10.8 V), XIAO Sense instead of Pi Zero 2 W with Camera Module 3.</li>
+    </ul>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pose&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;balance&quot;,&quot;talk&quot;,&quot;sit&quot;],&quot;default&quot;:&quot;balance&quot;,&quot;tsType&quot;:&quot;'balance'|'talk'|'sit'&quot;,&quot;section&quot;:&quot;Concept views&quot;},&quot;motor&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;n20_30&quot;,&quot;n20_50&quot;,&quot;n30_50&quot;],&quot;default&quot;:&quot;n20_50&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Drive&quot;},&quot;batteryHigh&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Balance&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const pose = this.props.pose ?? 'balance';
+    const mk = this.props.motor ?? 'n20_50';
+    const high = this.props.batteryHigh ?? true;
+    const MOT = {
+      n20_30: { name: 'N20 6 V 30:1 high-speed', short: 'N20 30:1', rpm6: 1000, stall6: 0.0235, J: 2.4e-8, N: 30, mass: 10, cost: 6, I: 0.8 },
+      n20_50: { name: 'N20 6 V 50:1 high-speed', short: 'N20 50:1', rpm6: 600, stall6: 0.039, J: 2.4e-8, N: 50, mass: 10, cost: 6, I: 0.8 },
+      n30_50: { name: 'N30 6 V 50:1', short: 'N30 50:1', rpm6: 600, stall6: 0.07, J: 3.6e-8, N: 50, mass: 14, cost: 8, I: 1.4 },
+    };
+    const mo = MOT[mk] || MOT.n20_50;
+    const battY = high ? 142 : 60;
+    const C = {
+      drv: ['Drive', '#c8463a'], act: ['Kickstand', '#e0a83e'], prt: ['Printed parts', '#5ea49b'],
+      elec: ['Brains & power', '#37598a'], bat: ['Battery', '#2b3f63'], sens: ['Face & sensors', '#6a3f8e'], misc: ['Wiring & fasteners', '#efe3c8'],
+    };
+    const raw = [
+      [mo.name + ' + hall encoder', 'drv', 2, mo.mass, 32], ['Motor block + IMU bracket · CF-nylon', 'prt', 1, 14, 28],
+      ['Wheel hub · PETG', 'prt', 2, 8, 32], ['Tyre · TPU 95A', 'prt', 2, 9, 32], ['Hubcap · PETG', 'prt', 2, 2, 32],
+      ['Belly tub · PETG', 'prt', 1, 42, 45], ['Upper shell front half · PETG', 'prt', 1, 46, 137], ['Upper shell rear half · PETG', 'prt', 1, 40, 137],
+      ['Battery door · PETG', 'prt', 1, 5, 142], ['Spine · CF-nylon', 'prt', 1, 20, 110], ['Corner bumpers · TPU 95A', 'prt', 2, 6, 181], ['Spring antennae + TPU balls', 'prt', 2, 2, 212],
+      ['Face bezel + display retainer', 'prt', 1, 5, 146], ['Kickstand leg + TPU foot · CF-nylon', 'prt', 2, 5, 45],
+      ['Pushrods + clevises', 'act', 1, 3, 40], ['MG90S metal-gear micro servo', 'act', 1, 14, 58],
+      ['2S 1000 mAh smart pack · gauge + balance', 'bat', 1, 62, battY],
+      ['ESP32-S3 N16R8 dev board', 'elec', 1, 10, 82], ['XIAO ESP32-S3 Sense', 'elec', 1, 4, 168], ['DRV8833 driver', 'elec', 1, 2, 82],
+      ['BQ25798 charger board', 'elec', 1, 6, 103], ['USB-C PD sink + port + bezel', 'elec', 1, 3, 55], ['5 V / 3 A buck', 'elec', 1, 6, 82],
+      ['Brass toggle + 5 A fuse', 'elec', 1, 8, 55],
+      ['BNO085 IMU breakout', 'sens', 1, 3, 32], ['1.28" GC9A01 round display', 'sens', 1, 8, 146], ['VL53L1X forward lidar', 'sens', 1, 1.5, 86],
+      ['VL53L0X drop-off ToF', 'sens', 2, 1, 21], ['ICS-43434 I²S mic', 'sens', 2, 1, 146], ['Ø28 speaker + MAX98357A', 'sens', 1, 8, 110],
+      ['Harness, braid, JST', 'misc', 1, 10, 110], ['Fasteners, inserts, P-clips', 'misc', 1, 16, 90],
+    ];
+    const fmt = (v) => (Math.round(v * 10) / 10).toLocaleString('en-US');
+    let run = 0, mom = 0; const catSum = {};
+    const parts = raw.map(([name, cat, qty, unit, y], i) => {
+      const sub = qty * unit; run += sub; mom += sub * y; catSum[cat] = (catSum[cat] || 0) + sub;
+      return { n: String(i + 1).padStart(2, '0'), name, cat: C[cat][0], col: C[cat][1], qty, unit: fmt(unit), sub: fmt(sub), y: y + ' mm', run: Math.round(run).toLocaleString('en-US') };
+    });
+    const total = run, comFloor = mom / total, comAxle = comFloor - 32;
+    const cats = Object.keys(C).filter((k) => catSum[k]).map((k) => ({ name: C[k][0], col: C[k][1], g: Math.round(catSum[k]), pct: (catSum[k] / total * 100).toFixed(2) + '%' }));
+
+    const g = 9.81, r = 0.032, M = total / 1000, k = 6.5 / 6;
+    const stall = mo.stall6 * k, rpm = mo.rpm6 * k, vMax = rpm / 60 * 2 * Math.PI * r;
+    const Meff = M + 2 * mo.J * mo.N * mo.N / (r * r);
+    const aMax = 2 * 0.6 * stall / r / Meff;
+    const rec = Math.atan(aMax / g) * 180 / Math.PI;
+    const tauSway = M * g * Math.tan(8 * Math.PI / 180) * r / 2, tauCont = 0.3 * stall;
+    const tau = Math.sqrt(comAxle / 1000 / g) * 1000;
+    const iPeak = 0.6 * mo.I * k;
+    const stop = (v) => v * 0.28 + v * v / (2 * 2.0);
+    const lookF = 0.12, lookR = 0.06;
+    const ok = '#2e6a46', bad = '#c8463a';
+    const mm = (x) => Math.round(x * 1000) + ' mm';
+    const tipLegs = Math.atan(70 / comFloor) * 180 / Math.PI;
+    const wh = 7.4, runH = wh * 0.9 / 2.2, runSit = wh * 0.9 / 1.3;
+    const checks = [
+      { c: 'Recoverable lean · ' + mo.short, need: '≥ 15°', have: rec.toFixed(1) + '°', res: rec >= 15 ? 'OK · ' + (rec - 15).toFixed(1) + '° margin' : 'Too weak', col: rec >= 15 ? ok : bad },
+      { c: 'Hold an 8° talking sway · per motor', need: (tauSway * 1000).toFixed(1) + ' mN·m', have: (tauCont * 1000).toFixed(1) + ' mN·m (30%)', res: tauSway <= tauCont ? Math.round(tauSway / tauCont * 100) + '% of budget' : 'Over budget', col: tauSway <= tauCont ? ok : bad },
+      { c: 'Wheel speed headroom', need: '≥ 1.0 m/s', have: vMax.toFixed(2) + ' m/s', res: vMax >= 1 ? 'OK' : 'Too slow to recover', col: vMax >= 1 ? ok : bad },
+      { c: 'Fall time constant · CoM ' + Math.round(comAxle) + ' mm above axle', need: '≥ 60 ms', have: Math.round(tau) + ' ms', res: tau >= 60 ? 'OK · ' + Math.round(tau * 0.4) + ' loop ticks' : 'Fast · harder to tune', col: tau >= 60 ? ok : bad },
+      { c: 'DRV8833 current · 60% stall per channel', need: iPeak.toFixed(2) + ' A', have: '1.5 A RMS', res: iPeak <= 1.5 ? 'OK' : 'Over', col: iPeak <= 1.5 ? ok : bad },
+      { c: 'Front edge stop · cruise 0.3 m/s', need: mm(stop(0.3)), have: '120 mm look-ahead', res: stop(0.3) + 0.01 <= lookF ? 'OK · ' + mm(lookF - stop(0.3)) + ' spare' : 'Too fast', col: stop(0.3) + 0.01 <= lookF ? ok : bad },
+      { c: 'Rear edge stop · reverse 0.15 m/s', need: mm(stop(0.15)), have: '60 mm look-ahead', res: stop(0.15) + 0.01 <= lookR ? 'OK · ' + mm(lookR - stop(0.15)) + ' spare' : 'Tight', col: stop(0.15) + 0.01 <= lookR ? ok : bad },
+      { c: 'Lidar obstacle stop · trigger at 200 mm', need: mm(stop(0.3)) + ' + 60 gap', have: '200 mm', res: stop(0.3) + 0.06 <= 0.2 ? 'OK' : 'Raise trigger', col: stop(0.3) + 0.06 <= 0.2 ? ok : bad },
+      { c: 'Kickstand deploy · MG90S at 5 V', need: '0.02 N·m', have: '0.18 N·m stall', res: '11% · weight held over centre', col: ok },
+      { c: 'Stance on kickstands · feet ±70 mm', need: '≥ 25° push', have: Math.round(tipLegs) + '° to tip', res: tipLegs >= 25 ? 'OK' : 'Tippy', col: tipLegs >= 25 ? ok : bad },
+      { c: 'Runtime · 2S 1000 at 2.2 W balancing', need: '≥ 2 h', have: runH.toFixed(1) + ' h', res: runH >= 2 ? 'OK' : 'Short', col: runH >= 2 ? ok : bad },
+    ];
+
+    const CC = { drv: ['Drive & legs', '#c8463a'], brain: ['Brains, face & sensors', '#6a3f8e'], pwr: ['Power', '#37598a'], mech: ['Print & hardware', '#5ea49b'] };
+    const craw = [
+      [mo.name + ' + encoder', 'drv', 2, mo.cost], ['DRV8833 breakout', 'drv', 1, 2], ['MG90S metal-gear micro servo', 'drv', 1, 4],
+      ['ESP32-S3 N16R8 dev board', 'brain', 1, 9], ['XIAO ESP32-S3 Sense', 'brain', 1, 14], ['BNO085 IMU breakout', 'brain', 1, 20],
+      ['VL53L1X forward lidar', 'brain', 1, 7], ['VL53L0X drop-off ToF', 'brain', 2, 3], ['1.28" GC9A01 round display', 'brain', 1, 6],
+      ['ICS-43434 mic breakout', 'brain', 2, 4], ['Ø28 speaker + MAX98357A', 'brain', 1, 7],
+      ['2S 1000 mAh smart pack', 'pwr', 1, 16], ['BQ25798 charger board', 'pwr', 1, 12], ['USB-C PD sink (9 V)', 'pwr', 1, 4], ['5 V / 3 A buck', 'pwr', 1, 4], ['Brass toggle + fuse', 'pwr', 1, 6], ['Servo load switch', 'pwr', 1, 1],
+      ['Filament: PETG, CF-nylon, TPU', 'mech', 1, 8], ['Fasteners + heat-set inserts', 'mech', 1, 5], ['Wire, braid, JST connectors', 'mech', 1, 5],
+    ];
+    const cs = {}; let ct = 0;
+    const money = (v) => v % 1 ? v.toFixed(2) : String(v);
+    const costs = craw.map(([name, kk, qty, unit]) => { const line = qty * unit; ct += line; cs[kk] = (cs[kk] || 0) + line; return { name, cat: CC[kk][0], col: CC[kk][1], qty, unit: money(unit), line: money(line), run: Math.round(ct).toLocaleString('en-US') }; });
+    const costCats = Object.keys(CC).filter((kk) => cs[kk]).map((kk) => ({ name: CC[kk][0], col: CC[kk][1], sum: Math.round(cs[kk]), share: Math.round(cs[kk] / ct * 100) + '%', pct: (cs[kk] / ct * 100).toFixed(2) + '%' }));
+    const r5 = (v) => '$' + Math.round(v / 5) * 5;
+    const save = '#2e6a46', add = '#c8463a';
+
+    const aS = '#5ea49b', aC = '#e9a79f', aP = '#efe3c8';
+    const assembly = [
+      { j: 'Motors → belly', m: 'Clamp', bg: aP, d: 'Each N20 sits on a saddle moulded into the belly floor under a CF-nylon strap (two M2 into inserts); the gearbox passes through the side wall.' },
+      { j: 'Wheel hub → shaft', m: 'Screw', bg: aS, d: 'D-bore hub (Ø3, 2.5 flat); one M2 set screw into a radial insert.' },
+      { j: 'Tyre → hub', m: 'Snap', bg: aC, d: 'Red TPU tyre has an inner rib that snaps into the hub groove.' },
+      { j: 'Hubcap', m: 'Snap', bg: aC, d: 'Three split pins click into sockets in the hub face.' },
+      { j: 'BNO085 → belly', m: 'Clamp', bg: aP, d: 'Board clamped to two posts on the axle line by a printed plate (two M2 into inserts).' },
+      { j: 'Spine → shells', m: 'Screw', bg: aS, d: 'CF-nylon spine drops into a socket in the belly floor and one under the upper-shell roof; two M3 through each socket into inserts.' },
+      { j: 'Boards → spine', m: 'Screw / snap', bg: aS, d: 'The spine carries an M2 insert grid on both faces: ESP32-S3 in a snap cradle, charger, buck and driver on two small-board plates.' },
+      { j: 'Battery', m: 'Snap', bg: aC, d: '2S pack (up to 56 × 30 × 14) clicks into a lipped cradle screwed to the spine, mounted high; reached through the rear door.' },
+      { j: 'Battery door', m: 'Latch', bg: aC, d: 'Hinge tab at the bottom edge, cantilever snap latch at the top.' },
+      { j: 'Upper ↔ belly', m: 'Screw', bg: aS, d: 'Four M2.5 × 50 up through tubes in the belly into upper-shell inserts, heads underneath.' },
+      { j: 'Chrome bands', m: 'Snap', bg: aC, d: 'Split rings snap into grooves at the seam and at head height.' },
+      { j: 'Kickstand legs', m: 'Screw', bg: aS, d: 'Each leg pivots on an M3 shoulder screw between two lugs on the belly, into an insert in one lug. Its crank stub passes through a wall slot to the pushrod.' },
+      { j: 'Kickstand servo + pushrods', m: 'Screw', bg: aS, d: 'MG90S in a printed bracket (two M2 through its tabs into inserts), bracket on the belly post; Z-bend steel pushrods to the leg cranks.' },
+      { j: 'Feet, bumpers, antenna balls', m: 'Snap', bg: aC, d: 'TPU feet push over the leg pins; corner bumpers have split pegs that click into the roof; balls push onto the spring antennae, which thread into M3 brass inserts.' },
+      { j: 'Display + bezel', m: 'Snap', bg: aC, d: 'Ø39 GC9A01 module in the face collar, held by a snap ring; the chrome bezel clicks on over three nubs.' },
+      { j: 'XIAO + camera', m: 'Snap + screw', bg: aC, d: 'XIAO Sense clicks into a cradle that screws to the camera mount disc (two M2 into inserts); chrome hood over the lens.' },
+      { j: 'Sensors, mics, speaker', m: 'Clamp', bg: aP, d: 'Lidar, drop-off ToF and mic boards clamped behind their windows by printed plates (two M2 each into wall inserts); Ø28 speaker under a screw-down ring.' },
+    ];
+
+    const pm = { pe: ['PETG', '#efe3c8'], ps: ['PETG', '#5ea49b'], cf: ['CF-nylon', '#d7d4cf'], tpu: ['TPU 95A', '#e9a79f'] };
+    const P = (part, kk, how, settings) => ({ part, mat: pm[kk][0], bg: pm[kk][1], how, settings });
+    const prints = [
+      P('Belly tub', 'ps', 'Floor on the bed.', '3 walls · 20% · 0.16 mm · no supports'),
+      P('Upper shell', 'pe', 'Rim on the bed; the roof chamfer stays under 45°.', '3 walls · 15% · 0.16 mm · no supports'),
+      P('Spine, small-board plates, motor straps, legs', 'cf', 'Flat (legs on their side).', '4 walls · 40% · 0.2 mm · dry filament · no supports'),
+      P('Wheel hubs ×2', 'pe', 'Outer face down.', '4 walls · 100% · 0.12 mm · no supports'),
+      P('Tyres ×2, feet, bumpers, antenna balls', 'tpu', 'Flat.', '3 walls · 30% gyroid · 20 mm/s · no supports'),
+      P('Cradles, servo bracket, clamps, rings', 'pe', 'Base down.', '3 walls · 50% · 0.15 mm · no supports'),
+      P('Bezel, hubcaps, hood, bands', 'pe', 'Face down; pins and nubs print upright.', '100% · 0.12 mm · no supports'),
+      P('Battery door', 'ps', 'Outer face down; latch prints upright.', '3 walls · 20% · 0.16 mm · no supports'),
+    ];
+
+    const poseLabel = { balance: 'Balancing', talk: 'Talking · 6° sway', sit: 'Sitting on kickstands' }[pose] || 'Balancing';
+    return {
+      pose, poseLabel, parts, cats, checks, costs, costCats, assembly, prints,
+      totalStr: Math.round(total), comAxleStr: Math.round(comAxle), comFloorStr: Math.round(comFloor), battYStr: String(battY),
+      recStr: rec.toFixed(1), recCol: rec >= 15 ? '#23292b' : '#c8463a', motorShort: mo.short, motorName: mo.name,
+      tauStr: Math.round(tau), runStr: runH.toFixed(1), runSitStr: runSit.toFixed(1),
+      costTotal: Math.round(ct), costRange: r5(ct * 0.88) + '–' + r5(ct * 1.12),
+      savings: [
+        { t: 'Battery ADC divider plus a plain 2S pack and BMS instead of a smart pack', v: '−$6', col: save },
+        { t: 'Generic 2S PD charge board instead of BQ25798', v: '−$5', col: save },
+        { t: 'Generic display, mic and amp breakouts', v: '−$5', col: save },
+        { t: 'Onboard XIAO PDM mic only, drop the two ICS-43434 (loses voice bearing)', v: '−$8', col: save },
+        { t: 'N30 motors for torque margin', v: '+$4', col: add },
+        { t: 'STS3215 for the kickstand, with position feedback (needs 3S and a different motor driver)', v: '+$30', col: add },
+      ],
+      joints: [
+        { joint: 'Left wheel', drive: mo.short + ' + hall encoder; D-bore hub, M3 set screw', support: 'Motor shaft and gearbox bushing; motor clamped in CF block' },
+        { joint: 'Right wheel', drive: 'Mirror of left', support: 'Same' },
+        { joint: 'Front leg', drive: 'MG90S → pushrod → leg crank', support: 'M3 shoulder screw into belly insert; 4° over-centre at deploy' },
+        { joint: 'Rear leg', drive: 'Same servo, second pushrod', support: 'Mirror of front' },
+        { joint: 'Pitch', drive: 'Balance loop on both wheels', support: 'BNO085 on the axle line, 400 Hz' },
+        { joint: 'Antennae', drive: 'Passive spring stalks', support: 'Bob with every sway; M3 insert at the base' },
+      ],
+      modes: [
+        { n: 'Talk sway', q: '±8° · up to 2 Hz', d: 'The head sends a speech envelope; the base turns it into a gentle fore-aft rock in time with the words.' },
+        { n: 'Bounce', q: 'quick ±4° bob', d: 'Short forward-back bobs when it is excited or hears its name, like a toddler bouncing on its toes.' },
+        { n: 'Oops', q: 'lean 12° then catch', d: 'A deliberate stumble forward and a quick catch, with a surprised face. Used for jokes and when it gets something wrong.' },
+        { n: 'Approach', q: '≤ 0.3 m/s', d: 'Rolls up to a person Central picks out, stops 250 mm short and leans in 5°.' },
+        { n: 'Look', q: 'spin on the spot', d: 'Turns its whole body toward a voice; no neck, so the body does the looking.' },
+        { n: 'Sit', q: 'kickstands down', d: 'Deploys the legs and rests with the motors off. Idle, night mode and the safety reflex all end here.' },
+      ],
+      bodyNotes: [
+        { t: 'Balance brain', d: 'ESP32-S3 N16R8 on the spine in the belly. It owns both motors, both encoders, the IMU, every ranging sensor, the kickstand servo and the power path, and runs the heartbeat watchdog.' },
+        { t: 'Head brain', d: 'XIAO ESP32-S3 Sense at the top behind the face: camera, display, both mics and the speaker. It streams to Central over Wi-Fi and talks to the base over UART.' },
+        { t: 'IMU', d: 'BNO085 between the two encoders on the axle line, on a CF-nylon bracket from the motor block.' },
+        { t: 'Battery', d: '2S 1000 mAh smart pack behind the face, under a snap door in the rear shell. Charged over rear USB-C PD by a BQ25798.' },
+        { t: 'Why 2S', d: 'The DRV8833 tops out at 10.8 V, so 3S is out without a different driver. 2S feeds it directly, and the 5 V buck runs the logic and the micro servo.' },
+        { t: 'Face & camera', d: 'Ø32 GC9A01 in a collar moulded into the upper shell, held by a snap ring, with a chrome bezel, 148 mm up. The XIAO camera looks out from a chrome hood just above it.' },
+        { t: 'Microphones & speaker', d: 'Two ICS-43434 either side of the face, 64 mm apart, for a voice bearing. Ø28 speaker behind the chest grille under the face.' },
+        { t: 'Sensing', d: 'VL53L1X forward lidar in the belly front. VL53L0X drop-off sensors front and rear at the base, angled 35° down, with pitch correction from the IMU.' },
+        { t: 'Fall protection', d: 'If it falls with power on, the motors cut at 35°. Red TPU corner bumpers and the chrome bezel take the hit; the wide-set wheels stop it rolling onto a side.' },
+      ],
+      reflex: [
+        { t: 'T+0', h: 'Stop', d: 'Wheel speed target to zero; the balance loop rolls to a stop and holds position.' },
+        { t: 'T+0', h: 'Brake', d: 'Encoder position hold while still balancing.' },
+        { t: 'T+0 → 2 s', h: 'Wait', d: 'Face shows a listening ellipsis while it waits for Central.' },
+        { t: 'T+2 s', h: 'Legs down', d: 'Kickstands swing out and lock over centre while it keeps balancing.' },
+        { t: 'At rest', h: 'Settle', d: 'Pitch setpoint eases until both feet carry load, then motors off and servo unpowered.' },
+        { t: 'At rest', h: 'Sleepy face', d: 'Half-closed eyes, lost-connection glyph, speaker muted.' },
+      ],
+      manifest: [
+        { dev: 'N20 left', host: 'ESP32-S3', bus: 'DRV8833 · LEDC 20 kHz', addr: '—', pins: 'IN1 38 · IN2 39' },
+        { dev: 'N20 right', host: 'ESP32-S3', bus: 'DRV8833 · LEDC 20 kHz', addr: '—', pins: 'IN1 40 · IN2 41' },
+        { dev: 'Encoder L / R', host: 'ESP32-S3', bus: 'PCNT quadrature', addr: 'unit 0 / 1', pins: 'L 1/2 · R 47/3' },
+        { dev: 'DRV8833 control', host: 'ESP32-S3', bus: 'GPIO', addr: '—', pins: 'nSLEEP 42 · nFAULT 21' },
+        { dev: 'BNO085 IMU', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x4A', pins: 'SDA8 SCL9 · INT 7 · RST 6' },
+        { dev: 'VL53L1X forward lidar', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x2A', pins: 'XSHUT 10' },
+        { dev: 'VL53L0X drop front', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x30', pins: 'XSHUT 11' },
+        { dev: 'VL53L0X drop rear', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x31', pins: 'XSHUT 12' },
+        { dev: 'BQ25798 charger', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x6B', pins: 'INT 13' },
+        { dev: '2S pack gauge', host: 'ESP32-S3', bus: 'I²C1 SMBus 100k', addr: '0x0B', pins: 'SDA4 SCL5' },
+        { dev: 'MG90S kickstand', host: 'ESP32-S3', bus: 'LEDC 50 Hz', addr: '—', pins: 'PWM 14 · power EN 15' },
+        { dev: 'Head link', host: 'ESP32-S3 ↔ XIAO', bus: 'UART 921600', addr: '—', pins: 'S3 TX17 RX18 · XIAO D6/D7' },
+        { dev: 'Status LED', host: 'ESP32-S3', bus: 'RMT', addr: '—', pins: 'GPIO48' },
+        { dev: 'GC9A01 display', host: 'XIAO S3', bus: 'SPI 40M', addr: 'CS low', pins: 'SCK D8 · MOSI D10 · DC D9 · RST D0 · BL D1' },
+        { dev: 'ICS-43434 ×2', host: 'XIAO S3', bus: 'I²S1 in', addr: 'L / R', pins: 'BCLK D2 · WS D3 · DIN D4' },
+        { dev: 'MAX98357A', host: 'XIAO S3', bus: 'I²S1 out', addr: '—', pins: 'DOUT D5 · SD tied high' },
+        { dev: 'Camera OV3660', host: 'XIAO S3', bus: 'Onboard DVP', addr: '—', pins: 'Sense board' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

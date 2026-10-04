@@ -1,0 +1,61 @@
+body: wobble
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, location: belly, role: [balance, drive, sense, legs, power] }
+  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: top, role: [camera, face, mics, speaker] }
+power:
+  battery: { cells: 2, mah: 1000, smart: true, gauge: sbs, balance: true }
+  charger: { part: bq25798, input: usb_c_pd, request_v: 9 }
+  rails:   { motor: vbat_direct, logic_5v: buck_3a, servo: 5v_load_switch }
+  sit_soc_pct: 20
+  sit_v: 6.8
+links:
+  base_head: { reflex: { uart: 2, tx: 17, rx: 18 }, head: { tx: 43, rx: 44 }, baud: 921600 }
+buses:
+  i2c0:     { host: reflex, sda: 8, scl: 9, hz: 400000 }
+  i2c1_smb: { host: reflex, sda: 4, scl: 5, hz: 100000 }
+  spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }
+  i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }
+balance:
+  imu: { part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line }
+  loop_hz: 400
+  controller: lqr_cascade
+  com_above_axle_mm: 63
+  pitch_trim_deg: 0.0
+  sway: { source: head.speech_envelope, max_deg: 8, max_hz: 2 }
+  fall_deg: 35
+drive:
+  type: two_wheel_balancing
+  wheel_d_mm: 64
+  track_mm: 140
+  motor: { part: n20_6v, ratio: 50, driver: drv8833, pwm_hz: 20000, max_duty_pct: 78 }
+  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }
+  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }
+  driver: { nsleep: 42, nfault: 21 }
+  enc_cpr_wheel: 1400
+  limits: { v_mps: 0.3, v_reverse_mps: 0.15, decel_mps2: 2.0 }
+kickstand:
+  servo: { part: mg90s, pwm_gpio: 14, hz: 50, power_en: 15 }
+  stowed_us: 2350
+  deployed_us: 650
+  over_centre_deg: 4
+peripherals:
+  - { name: lidar_fwd,  part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 10, role: obstacle }
+  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, xshut: 11, tilt_deg: 35, role: drop_off, pitch_comp: true }
+  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x31, xshut: 12, tilt_deg: -35, role: drop_off, pitch_comp: true }
+  - { name: charger,    part: bq25798, bus: i2c0, addr: 0x6B, int: 13 }
+  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
+  - { name: status_led, part: ws2812, gpio: 48 }
+  - { name: display,    part: gc9a01, host: head, bus: spi, dc: 8, rst: 1, bl: 2, cs: tied_low, size: 240x240 }
+  - { name: mics,       part: ics43434, host: head, bus: i2s, count: 2, sel: [gnd, 3v3] }
+  - { name: speaker,    part: max98357a, host: head, bus: i2s, sd: tied_high }
+  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }
+reflexes:
+  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [stop, back_off_40mm] }
+  obstacle: { sensor: lidar_fwd, slow_mm: 400, stop_mm: 200 }
+  fall:     { sensor: imu, pitch_deg: 35, action: motors_off }
+safety:
+  triggers: [heartbeat_lost, soc_below_20, vbat_below_6v8, drv_fault, stall_1s, head_link_lost]
+  routine:  [stop, hold_position, wait_2s, legs_deploy, settle_on_legs, motors_off, servo_off, face_sleepy]
+  resume:   fresh_command_only

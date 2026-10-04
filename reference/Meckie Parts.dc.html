@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f1e8d2;color:#23292b;-webkit-font-smoothing:antialiased}
+a{color:#c8463a;text-decoration:none}
+a:hover{color:#23292b;text-decoration:underline}
+</style>
+</helmet>
+<div style="font-family:'Jost',sans-serif;max-width:1100px;margin:0 auto;padding:48px 28px 80px;display:flex;flex-direction:column;gap:40px">
+
+  <header data-screen-label="Masthead" style="display:flex;flex-direction:column;gap:14px;border-bottom:3px double #23292b;padding-bottom:28px">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase">
+      <span style="background:#23292b;color:#f1e8d2;padding:4px 10px;border-radius:999px">Parts list</span>
+      <span>Links added Oct 2026 · 6 Amazon listings confirmed, the rest are searches</span>
+    </div>
+    <h1 style="margin:0;font:italic 700 clamp(48px,7vw,88px)/1.02 'Jost',sans-serif;letter-spacing:-.02em">MECKIE PARTS<span style="color:#c8463a">.</span></h1>
+    <p style="margin:0;font:400 18px/1.5 'Jost';max-width:720px;text-wrap:pretty">Links to every part for each Meckie body. This is a convenience: the links point to one good option, not the only one. Source your own parts wherever you like, as long as they match the spec in the body's brief. Pre-packed Meckie kits are coming one day.</p>
+  </header>
+
+  <section data-screen-label="Pick a body" style="display:flex;flex-direction:column;gap:14px">
+    <div style="font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase">Pick a body</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px">
+      <sc-for list="{{ bodies }}" as="b" hint-placeholder-count="9">
+        <button onClick="{{ b.pick }}" style="font:600 15px 'Jost';border:2px solid #23292b;border-radius:999px;padding:8px 16px;cursor:pointer;background:{{ b.bg }};color:{{ b.fg }}">{{ b.name }}</button>
+      </sc-for>
+    </div>
+    <div style="font:400 14px 'IBM Plex Mono',monospace;color:#3d4344">{{ bodyNote }}</div>
+  </section>
+
+  <section data-screen-label="Amazon" style="display:flex;flex-direction:column;gap:16px">
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;padding:22px 24px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div style="font:700 26px 'Jost'">{{ bodyName }} · Amazon</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ cartNote }}</div>
+      </div>
+      <a href="{{ cartUrl }}" target="_blank" rel="noopener" style="font:700 16px 'Jost';letter-spacing:.04em;text-transform:uppercase;background:#c8463a;color:#f7f0de;border:2px solid #23292b;border-radius:999px;padding:14px 22px;white-space:nowrap;text-decoration:none">Add to Amazon cart →</a>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow:hidden">
+      <div style="display:grid;grid-template-columns:minmax(0,2.4fr) 60px minmax(0,1.6fr) 130px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+        <div style="padding:10px 14px">Part</div><div style="padding:10px 8px;text-align:right">Qty</div><div style="padding:10px 14px">Notes</div><div style="padding:10px 14px">Link</div>
+      </div>
+      <sc-for list="{{ amazonRows }}" as="p" hint-placeholder-count="14">
+        <div style="display:grid;grid-template-columns:minmax(0,2.4fr) 60px minmax(0,1.6fr) 130px;border-top:1px solid #d8cfb7;align-items:center">
+          <div style="padding:10px 14px;font:600 15px 'Jost'">{{ p.name }}</div>
+          <div style="padding:10px 8px;text-align:right;font:600 14px 'IBM Plex Mono',monospace">{{ p.qty }}</div>
+          <div style="padding:10px 14px;font:400 13px/1.4 'Jost';color:#3d4344;text-wrap:pretty">{{ p.note }}</div>
+          <div style="padding:10px 14px;font:600 13px 'IBM Plex Mono',monospace;display:flex;flex-direction:column;gap:2px"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.linkLabel }}</a><span style="font:400 11px 'IBM Plex Mono',monospace;color:#5a5f60">{{ p.inCart }}</span></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="Other stores" style="display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="font:700 26px 'Jost'">{{ bodyName }} · not on Amazon</div>
+      <div style="font:400 15px/1.5 'Jost';max-width:760px;text-wrap:pretty">Amazon doesn't carry these well, or only well above list price. Buy them from the store linked, or any reseller you trust.</div>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow:hidden">
+      <div style="display:grid;grid-template-columns:minmax(0,2.4fr) 60px minmax(0,1.6fr) 160px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+        <div style="padding:10px 14px">Part</div><div style="padding:10px 8px;text-align:right">Qty</div><div style="padding:10px 14px">Notes</div><div style="padding:10px 14px">Where</div>
+      </div>
+      <sc-for list="{{ otherRows }}" as="p" hint-placeholder-count="6">
+        <div style="display:grid;grid-template-columns:minmax(0,2.4fr) 60px minmax(0,1.6fr) 160px;border-top:1px solid #d8cfb7;align-items:center">
+          <div style="padding:10px 14px;font:600 15px 'Jost'">{{ p.name }}</div>
+          <div style="padding:10px 8px;text-align:right;font:600 14px 'IBM Plex Mono',monospace">{{ p.qty }}</div>
+          <div style="padding:10px 14px;font:400 13px/1.4 'Jost';color:#3d4344;text-wrap:pretty">{{ p.note }}</div>
+          <div style="padding:10px 14px;font:600 13px 'IBM Plex Mono',monospace"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.linkLabel }}</a></div>
+        </div>
+      </sc-for>
+    </div>
+    <sc-if value="{{ noOther }}" hint-placeholder-val="{{ false }}">
+      <div style="font:400 14px 'IBM Plex Mono',monospace;color:#3d4344">Everything for this body is on Amazon.</div>
+    </sc-if>
+  </section>
+
+  <section data-screen-label="Workshop kit" style="display:flex;flex-direction:column;gap:16px">
+    <div style="border:2px solid #23292b;border-radius:20px;background:#23292b;color:#f1e8d2;padding:22px 24px;display:flex;flex-direction:column;gap:6px">
+      <div style="font:700 26px 'Jost'">Workshop kit · buy once</div>
+      <div style="font:400 15px/1.5 'Jost';max-width:760px;text-wrap:pretty">Consumables and tools that every body shares. They come in packs big enough for several builds, so they are not in the per-body cart. You may already own most of them.</div>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow:hidden">
+      <sc-for list="{{ workshopRows }}" as="p" hint-placeholder-count="14">
+        <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.8fr) 130px;border-top:1px solid #d8cfb7;align-items:center">
+          <div style="padding:10px 14px;font:600 15px 'Jost'">{{ p.name }}</div>
+          <div style="padding:10px 14px;font:400 13px/1.4 'Jost';color:#3d4344;text-wrap:pretty">{{ p.note }}</div>
+          <div style="padding:10px 14px;font:600 13px 'IBM Plex Mono',monospace"><a href="{{ p.url }}" target="_blank" rel="noopener">{{ p.linkLabel }}</a></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="Notes" style="border-top:3px double #23292b;padding-top:20px;display:flex;flex-direction:column;gap:8px;font:400 13px/1.6 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">
+    <div>Amazon listings, prices and stock change often. If a link is dead or a listing has changed, search for the part name and match the spec in the body's brief.</div>
+    <div>"Amazon search" links open a search for that exact part, so you can pick the seller and pack size. Only parts with a confirmed Amazon listing go into the one-click cart. So far: the 12 V ST3215 servo (B0CFY52HVV), ESP32-S3-DevKitC-1 N16R8 (B0CDRM6BGQ), XIAO ESP32-S3 Sense (B0C69FFVHH), Waveshare bus servo adapter (B0CJBKQ8LJ), MAX98357A amp (B0CJMBMXMH) and USB-C PD trigger board (B0H1BYPQ1T), each found on amazon.com in October 2026. More are added as they are confirmed. Non-Amazon store links go to that store's search for the part.</div>
+    <div>Steel ballast discs are laser-cut to order from the DXF in the body's brief.</div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { body: 'dial' };
+  renderVals() {
+    const AZ = 'https://www.amazon.com';
+    const s = (q) => AZ + '/s?k=' + encodeURIComponent(q);
+    // a: amazon search query · asin: confirmed listing · v: [label, url] for non-Amazon parts
+    const P = {
+      servo: { n: 'STS3215 / ST3215 serial bus servo, 12 V 30 kg', a: 'Waveshare ST3215 serial bus servo 30kg 12V', asin: 'B0CFY52HVV', note: 'Get the 12 V / 30 kg version, not the 7.4 V one.' },
+      horn: { n: 'Metal servo horn for STS3215 (25T)', a: 'STS3215 metal servo horn aluminum', note: 'Some servos ship with a metal horn; check before buying.' },
+      bus: { n: 'Serial bus servo driver / adapter board', a: 'Waveshare bus servo adapter ST SC serial', asin: 'B0CJBKQ8LJ', note: 'TTL half-duplex adapter for ST/SC servos.' },
+      esp: { n: 'ESP32-S3-DevKitC-1 N16R8', a: 'ESP32-S3-DevKitC-1 N16R8', asin: 'B0CDRM6BGQ', note: 'Must be N16R8 (16 MB flash, 8 MB PSRAM).' },
+      xiao: { n: 'Seeed XIAO ESP32-S3 Sense (camera + mic)', a: 'Seeed Studio XIAO ESP32S3 Sense', asin: 'B0C69FFVHH', note: 'The Sense version, with the camera board.' },
+      pi: { n: 'Raspberry Pi Zero 2 W', v: ['raspberrypi.com', 'https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/'], note: 'Usually marked up on Amazon. Buy from an approved reseller at list price, with a 32 GB microSD.' },
+      cam3: { n: 'Raspberry Pi Camera Module 3', v: ['raspberrypi.com', 'https://www.raspberrypi.com/products/camera-module-3/'], note: 'Standard (not wide) lens, plus a Zero-size FFC cable.' },
+      ffc: { n: 'Pi Zero camera FFC cable, 300 mm', a: 'Raspberry Pi Zero camera cable 22 pin 15 pin 300mm', note: '22-pin to 15-pin, 300 mm.' },
+      round: { n: '1.28" GC9A01 round display, 240×240', a: 'GC9A01 1.28 inch round LCD 240x240', note: 'SPI version.' },
+      lcd28: { n: '2.8" 320×240 IPS SPI display', a: '2.8 inch IPS SPI display 320x240 ST7789', note: 'ST7789 driver, IPS panel.' },
+      mic: { n: 'ICS-43434 I²S MEMS mic breakout', v: ['Adafruit', 'https://www.adafruit.com/search?q=ICS-43434'], note: 'Rarely on Amazon. INMP441 boards on Amazon work as a substitute.' },
+      amp: { n: 'MAX98357A I²S amplifier breakout', a: 'MAX98357A I2S amplifier breakout', asin: 'B0CJMBMXMH', note: '' },
+      spk28: { n: 'Speaker, Ø28 mm, 8 Ω 1 W', a: '28mm speaker 8 ohm 1W', note: '' },
+      spk40: { n: 'Speaker, Ø40 mm, 4–8 Ω 3 W', a: '40mm speaker 4 ohm 3W', note: '' },
+      spk20: { n: 'Speaker, Ø20 mm + PAM8302 amp', a: '20mm speaker 8 ohm PAM8302 amplifier', note: '' },
+      bno: { n: 'BNO085 9-DoF IMU breakout', a: 'BNO085 IMU breakout', note: 'Adafruit or a clone.' },
+      lsm: { n: 'LSM6DSOX 6-DoF IMU breakout', v: ['Adafruit', 'https://www.adafruit.com/search?q=LSM6DSOX'], note: '' },
+      l8cx: { n: 'VL53L8CX 8×8 ToF lidar breakout', v: ['DigiKey', 'https://www.digikey.com/en/products/result?keywords=SATEL-VL53L8'], note: 'ST SATEL-VL53L8 board. A VL53L5CX board on Amazon is a close substitute.' },
+      l1x: { n: 'VL53L1X ToF lidar breakout', a: 'VL53L1X time of flight sensor breakout', note: 'Forward lidar, 4 m.' },
+      l0x: { n: 'VL53L0X ToF breakout', a: 'VL53L0X time of flight sensor breakout', note: 'Drop-off sensors.' },
+      bq: { n: 'BQ25798 charger breakout', v: ['Adafruit', 'https://www.adafruit.com/search?q=BQ25798'], note: 'Multi-cell USB-C charger with power path.' },
+      pd: { n: 'USB-C PD trigger board (sink)', a: 'USB C PD trigger board 9V 12V 15V 20V', asin: 'B0H1BYPQ1T', note: 'DIP-switch selectable voltage; set to the value in the brief.' },
+      b55: { n: '5 V / 5 A buck converter', a: '5V 5A buck converter module', note: '' },
+      b53: { n: '5 V / 3 A buck converter', a: '5V 3A mini buck converter module', note: '' },
+      b125: { n: '12 V / 5 A buck converter', a: '12V 5A step down buck converter module', note: '' },
+      b1220: { n: '12 V / 20 A buck converter', a: '12V 20A step down buck converter', note: '' },
+      b63: { n: '6 V / 3 A buck converter', a: 'adjustable buck converter 3A mini', note: 'Adjustable, set to 6 V.' },
+      bb33: { n: '3.3 V buck-boost regulator', a: '3.3V buck boost converter module', note: '' },
+      efuse: { n: 'eFuse / load switch breakout', v: ['DigiKey', 'https://www.digikey.com/en/products/result?keywords=TPS25947%20evaluation'], note: 'TPS2594x-class eFuse. A 10 A blade fuse plus MOSFET switch board works as a simpler alternative.' },
+      toggle: { n: 'Toggle switch + inline blade fuse holder', a: 'brass toggle switch SPST 10A', note: 'Pick a brass or chrome finish.' },
+      n20: { n: 'N20 6 V gearmotor with hall encoder', a: 'N20 gear motor encoder 6V', note: 'Ratio as in the brief.' },
+      drv: { n: 'DRV8833 dual motor driver', a: 'DRV8833 motor driver module', note: '' },
+      mg90: { n: 'MG90S metal-gear micro servo', a: 'MG90S micro servo metal gear', note: '' },
+      caster: { n: 'Steel bearing ball, Ø12 mm (caster)', a: '12mm steel bearing ball', note: '' },
+      b6810: { n: '6810-2RS bearing (50×65×7)', a: '6810-2RS bearing', note: '' },
+      b6806: { n: '6806-2RS bearing (30×42×7)', a: '6806-2RS bearing', note: '' },
+      b6802: { n: '6802-2RS bearing (15×24×5)', a: '6802-2RS bearing', note: '' },
+      b683: { n: '683ZZ bearing (3×7×3)', a: '683ZZ bearing', note: 'Comes in 10-packs; buy two.' },
+      spring: { n: 'Extension springs (sizes in brief)', a: 'extension spring assortment', note: 'An assortment covers the sizes.' },
+      pushrod: { n: 'M3 pushrod + ball rod ends', a: 'M3 ball link rod end', note: '' },
+      ledring: { n: 'Warm-white LED ring, 2700 K CRI 90', a: 'COB LED ring 2700K 12V', note: '' },
+      ccd: { n: 'Constant-current LED driver', a: 'constant current LED driver module PWM', note: '' },
+      sk6812: { n: 'SK6812 2020 addressable LED strip', a: 'SK6812 2020 LED strip', note: '' },
+      disc: { n: 'Steel ballast disc, laser-cut', v: ['SendCutSend', 'https://sendcutsend.com'], note: 'Upload the DXF from the brief; mild steel, thickness as listed.' },
+      pack3: { n: '3S Li-ion pack with BMS + balance lead', a: '3S 11.1V 18650 battery pack BMS balance', note: 'Capacity as in the brief.' },
+      pack2: { n: '2S Li-ion pack with BMS', a: '2S 7.4V 1000mAh battery pack BMS', note: '' },
+      pack1: { n: '1S LiPo cell with protection', a: '3.7V LiPo battery JST 1000mAh', note: 'Size as in the brief.' },
+      chg1: { n: '1S USB-C charger with power path', a: 'USB C lithium charger power path module 1S', note: '' },
+      gauge: { n: 'MAX17048 fuel gauge breakout', v: ['Adafruit', 'https://www.adafruit.com/search?q=MAX17048'], note: '' },
+      tca: { n: 'TCA9554 I²C GPIO expander', v: ['DigiKey', 'https://www.digikey.com/en/products/result?keywords=TCA9554'], note: 'Any TCA9554 / PCA9554 breakout.' },
+      ufl: { n: '2.4 GHz u.FL whip antenna', a: '2.4GHz u.FL IPEX antenna', note: '' },
+      slide: { n: 'Mini slide switch', a: 'mini slide switch SPDT', note: '' },
+      pulley: { n: 'HTD-3M aluminium pulleys (15/60T + 16/40T)', a: 'HTD 3M timing pulley aluminum 9mm', note: 'Per arm: 15T + 60T and 16T + 40T, 9 mm belt width.' },
+      belt: { n: 'HTD-3M closed belt, 9 mm', a: 'HTD 3M closed timing belt 9mm', note: 'Lengths as in the brief.' },
+      xt60: { n: 'XT60 Y-lead + inline fuse holder', a: 'XT60 Y splitter parallel cable', note: '' },
+    };
+    const B = {
+      scout: ['Scout', [['n20', 2], ['drv', 1], ['caster', 1], ['xiao', 1], ['round', 1], ['l1x', 1], ['l0x', 2], ['lsm', 1], ['spk20', 1], ['tca', 1], ['ufl', 1], ['pack1', 1], ['chg1', 1], ['gauge', 1], ['bb33', 1], ['slide', 1]]],
+      roverlite: ['Rover Lite', [['servo', 2], ['horn', 2], ['n20', 2], ['drv', 1], ['b683', 16], ['b6806', 1], ['pi', 1], ['esp', 1], ['bus', 1], ['cam3', 1], ['ffc', 1], ['round', 1], ['mic', 2], ['bno', 1], ['l8cx', 1], ['l0x', 2], ['amp', 1], ['spk28', 1], ['pack3', 1], ['bq', 1], ['pd', 1], ['b55', 1], ['b63', 1], ['efuse', 1], ['toggle', 1]]],
+      dial: ['Dial', [['servo', 2], ['horn', 2], ['b6810', 1], ['pi', 1], ['esp', 1], ['bus', 1], ['cam3', 1], ['lcd28', 1], ['l8cx', 1], ['mic', 2], ['amp', 1], ['spk40', 1], ['pack3', 1], ['bq', 1], ['pd', 1], ['b55', 1], ['efuse', 1], ['toggle', 1], ['disc', 1]]],
+      lamp: ['Lamp', [['servo', 4], ['horn', 4], ['b6810', 1], ['b6802', 1], ['spring', 1], ['pushrod', 1], ['pi', 1], ['esp', 1], ['bus', 1], ['xiao', 1], ['round', 1], ['mic', 2], ['amp', 1], ['spk28', 1], ['ledring', 1], ['ccd', 1], ['pd', 1], ['b125', 1], ['b55', 1], ['efuse', 1], ['toggle', 1], ['disc', 1]]],
+      wobble: ['Wobble', [['n20', 2], ['drv', 1], ['mg90', 1], ['esp', 1], ['xiao', 1], ['bno', 1], ['l1x', 1], ['l0x', 2], ['round', 1], ['mic', 2], ['amp', 1], ['spk28', 1], ['pack2', 1], ['bq', 1], ['pd', 1], ['b53', 1], ['efuse', 1], ['toggle', 1]]],
+      biped: ['Biped Mini', [['servo', 10], ['horn', 10], ['pi', 1], ['esp', 1], ['bus', 1], ['cam3', 1], ['round', 1], ['mic', 2], ['amp', 1], ['spk28', 1], ['bno', 1], ['l8cx', 1], ['l0x', 2], ['pack3', 1], ['bq', 1], ['pd', 1], ['b55', 1], ['efuse', 1], ['toggle', 1]]],
+      inchworm: ['Inchworm', [['servo', 5], ['horn', 5], ['esp', 1], ['bus', 1], ['xiao', 1], ['round', 1], ['mic', 2], ['l1x', 1], ['pi', 1], ['amp', 1], ['spk28', 1], ['sk6812', 1], ['pd', 1], ['b125', 1], ['b55', 1], ['efuse', 1], ['toggle', 1], ['disc', 1]]],
+      arms: ['Rover Arms', [['servo', 12], ['horn', 12], ['pulley', 2], ['belt', 4], ['b6802', 4], ['esp', 1], ['bus', 2], ['b1220', 1], ['efuse', 2], ['l0x', 2], ['xt60', 1]]],
+    };
+    const notes = {
+      scout: 'Two-wheeled floor runner · XIAO only, no Pi', roverlite: 'Small tracked explorer', dial: 'Dial with the portable-TV head',
+      lamp: 'Articulated desk lamp · wall powered', wobble: 'Self-balancer', biped: 'Ten-servo walker', inchworm: 'Five-servo desk caterpillar · wall powered', arms: 'Add-on kit for the full Rover · uses the Rover\'s battery',
+    };
+    const key = B[this.state.body] ? this.state.body : 'dial';
+    const [bodyName, list] = B[key];
+    const amazonRows = [], otherRows = [], cart = [];
+    for (const [k, q] of list) {
+      const p = P[k]; if (!p) continue;
+      if (p.v) { otherRows.push({ name: p.n, qty: q, note: p.note, url: p.v[1], linkLabel: p.v[0] + ' ↗' }); continue; }
+      const url = p.asin ? AZ + '/dp/' + p.asin : s(p.a);
+      if (p.asin) cart.push([p.asin, q]);
+      amazonRows.push({ name: p.n, qty: q, note: p.note, url, linkLabel: p.asin ? 'Amazon ↗' : 'Amazon search ↗', inCart: p.asin ? 'in one-click cart' : 'pick a listing' });
+    }
+    const cartUrl = cart.length ? AZ + '/gp/aws/cart/add.html?' + cart.map(([a, q], i) => 'ASIN.' + (i + 1) + '=' + a + '&Quantity.' + (i + 1) + '=' + q).join('&') : s(bodyName + ' robot parts');
+    const nSearch = amazonRows.length - cart.length;
+    const cartNote = 'The button adds ' + cart.length + ' of the ' + amazonRows.length + ' Amazon parts to your cart in one click. ' + (nSearch ? 'The other ' + nSearch + ' open as Amazon searches below, so you can pick the seller and pack size.' : '');
+    const W = [
+      ['Heat-set insert kit, M2–M5, with soldering-iron tips', 'heat set insert kit M2 M2.5 M3 M4 M5 brass', 'Every screw into plastic lands in one of these.'],
+      ['Metric screw assortment, M2–M4, hex socket', 'M2 M2.5 M3 M4 hex socket screw assortment kit', ''],
+      ['M5 shoulder bolts', 'M5 shoulder bolt 5mm', 'Pivot pins for the bearing joints.'],
+      ['685ZZ bearings (5×11×5), 10-pack', '685ZZ bearing 10 pack', 'Idler side of every joint.'],
+      ['M2.5 nylon standoff kit', 'M2.5 nylon standoff kit', 'Board mounts.'],
+      ['Brass P-clips, small', 'brass P clip cable clamp small', 'For the visible wire runs.'],
+      ['JST-PH / JST-SH connector kit', 'JST PH 2.0 SH 1.0 connector kit crimp', ''],
+      ['Silicone wire, 22–28 AWG', 'silicone wire kit 22 24 26 28 AWG', ''],
+      ['Braided cable sleeve, red, 3–6 mm', 'braided cable sleeve red 3mm 6mm', ''],
+      ['PETG filament: cream, sea foam, red', 'PETG filament 1.75mm', ''],
+      ['TPU 95A filament', 'TPU 95A filament 1.75mm', 'Bumpers, feet, grips.'],
+      ['CF-nylon filament', 'carbon fiber nylon filament 1.75mm', 'Structural parts. Dry before use.'],
+      ['Chrome-effect spray + gloss clear', 'chrome effect spray paint', 'Chrome parts: gloss black base, chrome, clear.'],
+      ['Metallic brass paint', 'metallic brass paint model', ''],
+      ['microSD card, 32 GB', 'microSD 32GB A1', 'Bodies with a Pi.'],
+      ['USB-C PD charger, 65 W', 'USB C PD charger 65W', 'Charges or powers every body.'],
+    ];
+    const workshopRows = W.map(([n, q, note]) => ({ name: n, note, url: s(q), linkLabel: 'Amazon search ↗' }));
+    const bodies = Object.keys(B).map((k) => ({ name: B[k][0], bg: k === key ? '#23292b' : '#f7f0de', fg: k === key ? '#f7f0de' : '#23292b', pick: () => this.setState({ body: k }) }));
+    return { bodies, bodyName, bodyNote: notes[key], amazonRows, otherRows, noOther: otherRows.length === 0, cartUrl, cartNote, workshopRows };
+  }
+}
+</script>
+</body>
+</html>

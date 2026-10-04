@@ -1,0 +1,271 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Dial · 3D viewer</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@500;700&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.184.0/build/three.module.js",
+    "three/addons/controls/OrbitControls.js": "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+    "three/addons/exporters/OBJExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js",
+    "three/addons/exporters/GLTFExporter.js": "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js"
+  },
+  "integrity": {
+    "https://unpkg.com/three@0.184.0/build/three.module.js": "sha384-8FCZ1eVO6it4+pbec2aDtnTrwjWXZLJRC+MAGCIPDgsYnUrl/E0A2YlF8ioMKI/J",
+    "https://unpkg.com/three@0.184.0/build/three.core.js": "sha384-dw2ooPewaEIrAgl6oFDBmmBWCE9oW9LxRGcfwZ0hLvEprzo202wXl7vCYHRlSnOT",
+    "https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js": "sha384-4rziNxOBZKQ69i+w+f89KJ55TCYquwchVbByQwmaOeIOXdOU2PLDn3kOfXHwIJC9",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/OBJExporter.js": "sha384-nbwtoZENJD3Vq+ACK0CuGQdPMuDWHkamC2KJD70EV5nfg6jQjfppKOea07YJN+N3",
+    "https://unpkg.com/three@0.184.0/examples/jsm/exporters/GLTFExporter.js": "sha384-VofkvpG6HERhFCYbsUOHeNXBCqID2nfqkQqnVzE1jc/oPcz+qJ13ADdXH08hE+cQ"
+  }
+}
+</script>
+<style>
+html,body{margin:0;height:100%;background:#ebe2cb;overflow:hidden}
+three-d-stage{display:block;width:100vw;height:100vh}
+three-d-stage:not(:defined){visibility:hidden}
+#ln{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#ov{position:fixed;inset:0;pointer-events:none}
+.lb{position:absolute;font:500 11px/1.2 'IBM Plex Mono',monospace;color:#23292b;background:#f6efdd;border:1.5px solid #23292b;border-radius:999px;padding:3px 9px;white-space:nowrap;transform:translateY(-50%)}
+.lb b{color:#c8463a;font-weight:500;margin-right:6px}
+#bar{position:fixed;top:14px;left:14px;display:flex;gap:6px;flex-wrap:wrap}
+#bar button{font:700 12px 'Jost',sans-serif;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #23292b;background:#f6efdd;border-radius:999px;padding:6px 12px;cursor:pointer;color:#23292b}
+#bar button.on{background:#23292b;color:#f6efdd}
+</style></head><body>
+<three-d-stage name="dial" background="#ebe2cb"></three-d-stage>
+<svg id="ln"></svg><div id="ov"></div><div id="bar"></div>
+<script src="three-d-stage.js"></script>
+<script type="module">
+const stage=document.querySelector('three-d-stage');
+const {THREE}=await stage.ready;
+const Q=new URLSearchParams(location.search);
+const embed=Q.get('embed')==='1';
+let view=Q.get('view')||'iso';
+const pose=Q.get('pose')||'attentive';
+const clamp=Q.get('clamp')==='1';
+if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
+const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
+const mat={
+ shell:M('PETG_cream',0xefe3c8,{r:0.42}),
+ teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ red:M('signal_red',0xc8463a,{r:0.38}),
+ chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
+ alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
+ brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
+ cf:M('CF_nylon',0x323438,{r:0.72}),
+ servo15:M('STS3215_black',0x232427,{r:0.5}),
+ steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
+ tpu:M('TPU_foot',0xb83e33,{r:0.85}),
+ glass:M('display_glass',0x163638,{r:0.12,e:0x0c2a2a,ei:0.7}),
+ crt:M('crt_lens_smoked',0x1d3a3c,{r:0.08,m:0.1}),
+ glow:M('eye_glow',0xa8f7ea,{e:0x7ff0dc,ei:1.5}),
+ batt:M('lipo_wrap',0x37598a,{r:0.6}),
+ pcb:M('pcb_green',0x2e6a46,{r:0.6}),
+ pcb2:M('pcb_purple',0x6a3f8e,{r:0.6}),
+ wire:M('bus_wire',0x2a2a2a,{r:0.7}),
+ power:M('power_wire',0xc23a2f,{r:0.6}),
+ shelf:M('shelf_context',0xb9b2a2,{r:0.8}),
+};
+for(const k of ['shell','teal','tealDeep','crt'])mat[k].side=THREE.DoubleSide;
+mat.shelf.transparent=true;mat.shelf.opacity=0.45;
+const V=(x,y,z)=>new THREE.Vector3(x,y,z);
+function add(p,name,geo,m,pos=[0,0,0],rot=[0,0,0],sc){const o=new THREE.Mesh(geo,m);o.name=name;o.position.set(...pos);o.rotation.set(...rot);if(sc)o.scale.set(...sc);p.add(o);return o;}
+function G(p,name,o={}){const g=new THREE.Group();g.name=name;if(o.pos)g.position.set(...o.pos);g.userData={label:o.label,ex:o.ex,base:g.position.clone()};p.add(g);return g;}
+const BX=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+const CZ=(r,t,s=32)=>new THREE.CylinderGeometry(r,r,t,s).rotateX(Math.PI/2);
+const CX=(r,t,s=32)=>new THREE.CylinderGeometry(r,r,t,s).rotateZ(Math.PI/2);
+const CY=(r,t,s=32)=>new THREE.CylinderGeometry(r,r,t,s);
+const lx=(o,t)=>{o.userData.lx=t;return o;};
+const tube=(p,n,pts,m,r=0.0015)=>add(p,n,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts.map(q=>V(...q))),48,r,8),m);
+function rr(s,hw,hh,r){s.moveTo(-hw+r,-hh);s.lineTo(hw-r,-hh);s.quadraticCurveTo(hw,-hh,hw,-hh+r);s.lineTo(hw,hh-r);s.quadraticCurveTo(hw,hh,hw-r,hh);s.lineTo(-hw+r,hh);s.quadraticCurveTo(-hw,hh,-hw,hh-r);s.lineTo(-hw,-hh+r);s.quadraticCurveTo(-hw,-hh,-hw+r,-hh);return s;}
+function halfShell(sign){const w=0.034,h=0.036,r=0.026,s=new THREE.Shape();
+ if(sign>0){s.moveTo(0,-h);s.lineTo(w-r,-h);s.absarc(w-r,-h+r,r,-Math.PI/2,0,false);s.lineTo(w,h-r);s.absarc(w-r,h-r,r,0,Math.PI/2,false);s.lineTo(0,h);s.lineTo(0,-h);}
+ else{s.moveTo(0,h);s.lineTo(-(w-r),h);s.absarc(-(w-r),h-r,r,Math.PI/2,Math.PI,false);s.lineTo(-w,-h+r);s.absarc(-(w-r),-h+r,r,Math.PI,Math.PI*1.5,false);s.lineTo(0,-h);s.lineTo(0,h);}
+ const g=new THREE.ExtrudeGeometry(s,{depth:0.08,bevelEnabled:true,bevelThickness:0.008,bevelSize:0.008,bevelSegments:6,curveSegments:24});g.translate(0,0,-0.04);return g;}
+const lathe=pts=>new THREE.LatheGeometry(pts.map(p=>new THREE.Vector2(p[0],p[1])),96);
+
+function slab(p,n,shape,depth,m,x,y,z=0,bev=[0.001,0.001,2]){const g=new THREE.ExtrudeGeometry(shape,{depth,bevelEnabled:true,bevelThickness:bev[0],bevelSize:bev[1],bevelSegments:bev[2],curveSegments:20});g.rotateY(Math.PI/2);return add(p,n,g,m,[x,y,z]);}
+function ring(hw,hh,r,t){const s=rr(new THREE.Shape(),hw,hh,r);s.holes.push(rr(new THREE.Path(),hw-t,hh-t,Math.max(r-t,0.002)));return s;}
+function cab(p,n,x0,x1,m){const s=rr(new THREE.Shape(),0.064,0.044,0.016);const g=new THREE.ExtrudeGeometry(s,{depth:(x1-x0)-0.012,bevelEnabled:true,bevelThickness:0.006,bevelSize:0.006,bevelSegments:5,curveSegments:20});g.translate(0,0,x0+0.006);g.rotateY(Math.PI/2);return add(p,n,g,m);}
+const model=new THREE.Group();model.name='Dial';
+const SZ=0.016;
+// ---------- pedestal (fixed) ----------
+const ped=G(model,'pedestal');
+const foot=G(ped,'tpu_foot',{label:'TPU foot · stretch-fit, hides 6× M3',ex:[0,-0.17,0]});
+add(foot,'foot',CY(0.073,0.004,72),mat.tpu,[0,0.002,0]);
+const basePan=G(ped,'base_pan',{label:'Base pan · CF-nylon, sea-foam paint',ex:[0,-0.12,0]});
+add(basePan,'base_wall',lathe([[0.066,0.004],[0.072,0.008],[0.072,0.034],[0.07,0.036],[0.056,0.036]]),mat.teal);
+add(basePan,'base_floor',CY(0.068,0.002,72),mat.tealDeep,[0,0.005,0]);
+add(basePan,'tof_bezel',BX(0.002,0.011,0.022),mat.red,[0.0725,0.02,0]);
+add(basePan,'tof_window',BX(0.002,0.007,0.016),mat.glass,[0.0735,0.02,0]);
+add(basePan,'usbc_bezel',BX(0.004,0.008,0.015),mat.chrome,[-0.072,0.018,0]);
+add(basePan,'usbc_port',BX(0.003,0.0034,0.0092),mat.servo15,[-0.0735,0.018,0]);
+add(basePan,'switch_base',CX(0.0045,0.004,20),mat.chrome,[-0.0715,0.026,-0.03]);
+add(basePan,'switch_lever',new THREE.CylinderGeometry(0.0013,0.0018,0.014,10),mat.brass,[-0.076,0.031,-0.03],[0,0,0.9]);
+const disc=G(ped,'steel_disc',{label:'Steel disc Ø130 · M4 ×3',ex:[0,-0.085,0]});
+lx(add(disc,'steel_disc',CY(0.065,0.004,64),mat.steel,[0,0.008,0]),'Steel ballast disc Ø130');
+const top=G(ped,'top_shell',{label:'Swivel tier · PETG cream, chrome rings',ex:[0,-0.02,0]});
+add(top,'tier',lathe([[0.056,0.036],[0.056,0.046],[0.054,0.048],[0.034,0.048]]),mat.shell);
+add(top,'tier_lid',lathe([[0.034,0.048],[0.0,0.048]]),mat.shell);
+add(top,'ring_low',new THREE.TorusGeometry(0.0715,0.0016,10,96).rotateX(Math.PI/2),mat.chrome,[0,0.0355,0]);
+add(top,'ring_high',new THREE.TorusGeometry(0.0555,0.0016,10,96).rotateX(Math.PI/2),mat.chrome,[0,0.048,0]);
+const hatch=G(ped,'battery_hatch',{label:'Battery hatch · hinge pins + snap latch',ex:[0,-0.03,0.07]});
+add(hatch,'hatch',new THREE.CylinderGeometry(0.0725,0.0725,0.022,24,1,true,-0.6,1.2),mat.shell,[0,0.021,0]);
+add(hatch,'hatch_latch',BX(0.008,0.004,0.003),mat.red,[0,0.03,0.073]);
+const brg=G(ped,'brg_6810',{label:'6810 thin-section bearing · takes tipping load',ex:[0,0.05,0]});
+add(brg,'brg_6810_outer',new THREE.TorusGeometry(0.0295,0.0035,12,64).rotateX(Math.PI/2),mat.steel,[0,0.046,0]);
+const panServo=G(ped,'pan_servo',{label:'STS3215 · pan · ID 1',ex:[0,0.012,0]});
+lx(add(panServo,'pan_case',BX(0.045,0.035,0.024),mat.servo15,[0.011,0.0295,0]),'STS3215 · pan · ID 1');
+add(panServo,'pan_spline',CY(0.0045,0.003),mat.steel,[0,0.0485,0]);
+const PIN=G(ped,'pedestal_internals');
+lx(add(PIN,'battery_3S',BX(0.087,0.024,0.034),mat.batt,[0,0.023,0.031]),'Smart pack 3S 1500 · gauge + balance');
+add(PIN,'tray',BX(0.08,0.002,0.036),mat.cf,[0,0.012,-0.032]);
+lx(add(PIN,'charger',BX(0.03,0.004,0.024),mat.pcb,[-0.022,0.016,-0.032]),'BQ25798 charger');
+lx(add(PIN,'buck_5v',BX(0.022,0.008,0.017),mat.servo15,[0.022,0.018,-0.032]),'5 V / 5 A buck');
+lx(add(PIN,'bus_adapter',BX(0.04,0.004,0.025),mat.pcb,[0,0.025,-0.034]),'Servo bus adapter');
+lx(add(PIN,'esp32_s3',BX(0.063,0.004,0.028),mat.pcb,[0,0.032,-0.032]),'ESP32-S3 N16R8 · reflex brain');
+lx(add(PIN,'pd_sink',BX(0.012,0.003,0.012),mat.pcb2,[-0.056,0.017,-0.008]),'USB-C PD sink');
+add(PIN,'efuse',BX(0.01,0.003,0.01),mat.pcb2,[0.046,0.016,-0.024]);
+lx(add(PIN,'tof_pcb',BX(0.002,0.013,0.013),mat.pcb,[0.0695,0.02,0]),'VL53L8CX front ToF');
+lx(add(PIN,'main_switch',BX(0.01,0.008,0.008),mat.servo15,[-0.065,0.026,-0.03]),'Brass main toggle');
+lx(add(PIN,'cable_clock',new THREE.TorusGeometry(0.02,0.0017,8,48).rotateX(Math.PI/2),mat.power,[0,0.043,0]),'Cable clock · 1.25 turns');
+add(PIN,'cable_clock2',new THREE.TorusGeometry(0.017,0.0017,8,48).rotateX(Math.PI/2),mat.power,[0,0.0405,0]);
+tube(PIN,'batt_lead',[[-0.035,0.023,0.016],[-0.045,0.02,0],[-0.034,0.018,-0.02]],mat.power,0.002);
+tube(PIN,'harness_ped',[[0.018,0.027,-0.022],[0.02,0.038,-0.014],[0.017,0.041,-0.008]],mat.power,0.002);
+tube(PIN,'tof_cable',[[0.068,0.02,0.002],[0.05,0.03,-0.016],[0.03,0.033,-0.022]],mat.wire,0.0011);
+tube(PIN,'usb_lead',[[-0.07,0.018,0],[-0.063,0.018,-0.006],[-0.056,0.017,-0.008]],mat.power,0.0012);
+
+// ---------- pan stage ----------
+const pan=G(model,'pan_stage',{pos:[0,0.05,0],ex:[0,0.1,0]});
+const tt=G(pan,'turntable',{label:'Swivel turntable · chrome, M3 ×6 clamp ring',ex:[0,-0.035,0]});
+add(tt,'turntable',CY(0.032,0.006,64),mat.chrome,[0,0.004,0]);
+const panHorn=G(pan,'pan_horn',{label:'Metal horn · pan',ex:[0,-0.06,0]});
+add(panHorn,'pan_horn',CY(0.011,0.003),mat.chrome,[0,-0.0015,0]);
+const yoke=G(pan,'yoke',{label:'Yoke · CF-nylon, brushed-alu finish'});
+const PV=0.0875,ZA=0.078;
+add(yoke,'yoke_base',BX(0.03,0.008,ZA*2+0.008),mat.alu,[0,0.0115,0]);
+for(const s of [-1,1]){add(yoke,'yoke_arm',BX(0.02,PV-0.0155,0.008),mat.alu,[0,(PV+0.0155)/2,s*ZA]);add(yoke,'yoke_boss',CZ(0.011,0.008,40),mat.alu,[0,PV,s*ZA]);add(yoke,'pivot_cap',CZ(0.0085,0.003,40),mat.brass,[0,PV,s*(ZA+0.0055)]);}
+const tb=G(pan,'tilt_bearing',{label:'685ZZ + M5 shoulder bolt',ex:[0,0,0.05]});
+lx(add(tb,'brg_685',CZ(0.0055,0.005,24),mat.steel,[0,PV,ZA]),'685ZZ tilt bearing');
+const harness=G(pan,'harness',{label:'Neck harness · 6c braided, brass P-clips',ex:[-0.04,0,0]});
+const hp=[[-0.016,0.006,0],[-0.034,0.014,0.02],[-0.052,0.034,0.04],[-0.06,0.058,0.05],[-0.06,0.076,0.04]];
+lx(tube(harness,'harness_braid',hp,mat.power,0.0032),'Neck harness · 6 conductors');
+tube(harness,'harness_trace',hp.map(p=>[p[0]-0.0006,p[1],p[2]+0.0029]),mat.shell,0.0009);
+for(const c of [hp[1],hp[3]])add(harness,'p_clip',new THREE.TorusGeometry(0.0042,0.0012,8,24).rotateX(Math.PI/2),mat.brass,c);
+
+// ---------- head (portable-TV cabinet) ----------
+const head=G(pan,'head',{pos:[0,PV,0],ex:[0,0.08,0]});
+const T={attentive:0,curious:15,sleepy:-25}[pose]??0;
+head.rotation.z=T*Math.PI/180;
+const front=G(head,'front_shell',{label:'Cabinet front shell · PETG cream',ex:[0.07,0,0]});
+cab(front,'front_shell',0.0005,0.038,mat.shell);
+add(front,'grille_slot_bg',BX(0.001,0.022,0.018),mat.servo15,[0.0383,-0.024,-0.047]);
+for(const z of [SZ-0.046,SZ+0.046])add(front,'mic_port',new THREE.TorusGeometry(0.0024,0.0008,8,24).rotateY(Math.PI/2),mat.chrome,[0.0384,-0.002,z]);
+const rear=G(head,'rear_shell',{label:'Rear cover + tube bell · vents, grommet',ex:[-0.09,0,0]});
+cab(rear,'rear_shell',-0.038,-0.0005,mat.shell);
+{const g=new THREE.CylinderGeometry(0.028,0.042,0.024,4,1);g.rotateY(Math.PI/4);g.rotateZ(Math.PI/2);add(rear,'tube_bell',g,mat.shell,[-0.05,0,0.008]);}
+for(let i=0;i<4;i++)add(rear,'vent',BX(0.002,0.003,0.03),mat.servo15,[-0.0625,0.012-i*0.008,0.008]);
+add(rear,'grommet',new THREE.TorusGeometry(0.004,0.0015,8,24).rotateY(Math.PI/2),mat.servo15,[-0.0385,-0.03,0.05]);
+const band=G(head,'seam_band',{label:'Chrome seam band · snap ring',ex:[0,0.13,0]});
+slab(band,'seam_band',ring(0.0705,0.0505,0.022,0.0025),0.003,mat.chrome,-0.0015,0,0,[0.0005,0.0005,1]);
+const scr=G(head,'lcd_frame',{label:'Screen surround · chrome, snap tabs',ex:[0.12,0,0]});
+slab(scr,'screen_surround',ring(0.037,0.029,0.006,0.0055),0.003,mat.chrome,0.0375,0,SZ,[0.0012,0.001,3]);
+const disp=G(head,'display',{label:'2.8" 320×240 IPS LCD · ST7789V',ex:[0.08,0,0]});
+const FX=0.0395,FY=0;
+add(disp,'lcd_glass',BX(0.0015,0.0464,0.0606),mat.glass,[FX,FY,SZ]);
+const es=pose==='sleepy'?[0.3,0.25,1]:[0.3,1,1];
+for(const z of [-0.012,0.012]){add(disp,'eye',new THREE.SphereGeometry(0.0085,28,18),mat.glow,[FX+0.001,FY+0.002,SZ+z],[0,0,0],es);if(pose!=='sleepy')add(disp,'pupil',new THREE.SphereGeometry(0.004,18,12),mat.servo15,[FX+0.0028,FY+0.002,SZ+z],[0,0,0],[0.3,1,1]);}
+lx(add(disp,'display_pcb',BX(0.003,0.05,0.069),mat.pcb,[0.036,FY,SZ]),'2.8" 320×240 IPS · ST7789V, SPI');
+const kp=G(head,'knob_panel',{label:'Knob panel · sea-foam, snap-in',ex:[0.1,0,-0.03]});
+slab(kp,'knob_panel',rr(new THREE.Shape(),0.012,0.036,0.008),0.0015,mat.teal,0.0375,0,-0.047);
+for(let i=0;i<5;i++)add(kp,'grille_slot',BX(0.002,0.0018,0.016),mat.chrome,[0.0405,-0.014-i*0.0045,-0.047]);
+const knobs=G(head,'knobs',{label:'Brass knobs ×2 · push-on D-shaft',ex:[0.14,0,-0.04]});
+for(const yy of [0.02,0.004]){add(knobs,'knob',CX(0.0062,0.006,32),mat.brass,[0.0425,yy,-0.047]);add(knobs,'knob_mark',BX(0.001,0.004,0.0012),mat.servo15,[0.0457,yy+0.003,-0.047]);}
+const cam=G(head,'camera',{label:'Camera pod · Module 3, M2 ×2',ex:[0.06,0.1,0]});
+add(cam,'cam_pod',BX(0.012,0.009,0.018),mat.chrome,[0.026,0.054,SZ]);
+add(cam,'cam_lens',CX(0.003,0.002,24),mat.glass,[0.0325,0.054,SZ]);
+lx(add(cam,'cam_pcb',BX(0.003,0.02,0.02),mat.pcb,[0.022,0.04,SZ]),'Camera Module 3');
+const handle=G(head,'handle',{label:'Carry handle · chrome, M3 into bosses',ex:[0,0.16,0]});
+add(handle,'handle',new THREE.TorusGeometry(0.044,0.0032,14,48,Math.PI).rotateY(Math.PI/2),mat.chrome,[-0.01,0.05,0],[0,0,0],[1,0.35,1]);
+for(const s of [-1,1])add(handle,'handle_boss',CY(0.0055,0.006,24),mat.brass,[-0.01,0.051,s*0.044]);
+const tilt=G(head,'tilt_servo',{label:'STS3215 · tilt · ID 2, rides in cabinet'});
+lx(add(tilt,'tilt_case',BX(0.045,0.024,0.035),mat.servo15,[-0.011,0,-0.0475]),'STS3215 · tilt · ID 2');
+add(tilt,'tilt_spline',CZ(0.0045,0.004),mat.steel,[0,0,-0.067]);
+const tiltHorn=G(head,'tilt_horn',{label:'Metal horn · tilt, M3 ×4 to yoke',ex:[0,0,-0.05]});
+add(tiltHorn,'tilt_horn',CZ(0.011,0.003),mat.chrome,[0,0,-0.0715]);
+const chassis=G(head,'head_chassis',{label:'Cabinet chassis · CF-nylon',ex:[0,-0.07,0]});
+lx(add(chassis,'chassis_plate',BX(0.07,0.003,0.124),mat.cf,[-0.004,-0.036,0]),'Cabinet chassis · CF-nylon');
+const HIN=G(head,'head_internals');
+lx(add(HIN,'pi_zero_2w',BX(0.004,0.03,0.065),mat.pcb,[0.022,-0.004,SZ+0.002]),'Pi Zero 2 W · face brain');
+lx(add(HIN,'amp',BX(0.018,0.003,0.018),mat.pcb2,[-0.012,-0.033,0.03]),'MAX98357A amp');
+lx(add(HIN,'speaker',CX(0.02,0.008,40),mat.servo15,[0.031,-0.02,-0.047]),'Ø40 speaker · knob-column grille');
+for(const z of [SZ-0.046,SZ+0.046]){const o=add(HIN,'mic_pcb',BX(0.002,0.009,0.009),mat.pcb,[0.0355,-0.002,z]);if(z>0)lx(o,'Mic ×2 · ICS-43434, 92 mm apart');}
+tube(HIN,'h_main',[[-0.0385,-0.03,0.05],[-0.02,-0.026,0.04],[0.0,-0.02,0.03],[0.022,-0.012,0.03]],mat.power,0.0016);
+tube(HIN,'h_servo',[[-0.02,-0.026,0.04],[-0.025,-0.02,-0.01],[-0.02,-0.012,-0.03]],mat.wire,0.0012);
+tube(HIN,'csi',[[0.024,0.012,SZ],[0.024,0.03,SZ],[0.022,0.036,SZ]],mat.glass,0.0011);
+tube(HIN,'spi',[[0.022,0.004,SZ-0.01],[0.028,0.004,SZ-0.008],[0.0345,0.002,SZ-0.006]],mat.wire,0.001);
+tube(HIN,'i2s',[[0.024,-0.014,SZ-0.02],[0.03,-0.012,-0.024],[0.034,-0.004,-0.03]],mat.wire,0.0009);
+tube(HIN,'spk',[[-0.003,-0.033,0.022],[0.01,-0.03,-0.02],[0.026,-0.022,-0.04]],mat.wire,0.001);
+
+// ---------- shelf clamp variant ----------
+if(clamp){const C=G(ped,'shelf_clamp',{label:'Shelf clamp · CF-nylon, M4 ×3',ex:[0,-0.22,0]});
+ add(C,'clamp_top',BX(0.07,0.005,0.04),mat.cf,[0.045,-0.0025,0]);
+ add(C,'clamp_spine',BX(0.008,0.034,0.04),mat.cf,[0.084,-0.019,0]);
+ add(C,'clamp_jaw',BX(0.042,0.006,0.04),mat.cf,[0.065,-0.039,0]);
+ add(C,'thumbscrew',CY(0.003,0.022),mat.brass,[0.06,-0.035,0]);
+ add(C,'knob',CY(0.009,0.006,24),mat.brass,[0.06,-0.048,0]);
+ add(C,'jaw_pad',BX(0.016,0.002,0.02),mat.tpu,[0.06,-0.0255,0]);
+ add(ped,'shelf',BX(0.26,0.02,0.2),mat.shelf,[-0.05,-0.0145,0]);
+ model.position.y=0.005;}
+
+stage.setObject(model);
+
+// ---------- views ----------
+const VIEWS={
+ side:{dir:[0,0.03,1],fov:16,label:'Side',pad:1.2},
+ front:{dir:[1,0.03,0],fov:16,label:'Front',pad:1.2},
+ top:{dir:[0.002,1,0],fov:16,label:'Top',pad:1.2},
+ iso:{dir:[1,0.5,1.1],fov:24,label:'3/4'},
+ rear:{dir:[-1,0.25,0.45],fov:16,label:'Rear',pad:1.2},
+ exploded:{dir:[0.85,0.35,1],fov:24,labels:'ex',pad:1.05,label:'Exploded'},
+ xray:{dir:[0.6,0.55,1],fov:24,labels:'x',pad:1.08,label:'X-ray'},
+};
+const camera=stage._camera,ctl=stage._controls;
+if(embed)ctl.enableZoom=false;
+let labels=[];
+const ov=document.getElementById('ov'),ln=document.getElementById('ln');
+const exGroups=[];model.traverse(o=>{if(o.userData&&o.userData.ex)exGroups.push(o);});
+function apply(v){
+ view=VIEWS[v]?v:'iso';const cfg=VIEWS[view],ex=view==='exploded',xr=view==='xray';
+ for(const g of exGroups){g.position.copy(g.userData.base);if(ex)g.position.add(V(...g.userData.ex));}
+ PIN.visible=!ex;HIN.visible=!ex;
+ for(const m of [mat.shell,mat.teal,mat.tealDeep]){m.transparent=xr;m.opacity=xr?0.13:1;m.depthWrite=!xr;m.needsUpdate=true;}
+ model.updateMatrixWorld(true);
+ const box=new THREE.Box3();model.traverseVisible(o=>{if(o.isMesh&&o.name!=='shelf')box.expandByObject(o);});
+ const c=box.getCenter(V()),dir=V(...cfg.dir).normalize(),fwd=dir.clone().negate();
+ const right=V().crossVectors(fwd,Math.abs(dir.y)>0.95?V(-1,0,0):V(0,1,0)).normalize(),up=V().crossVectors(right,fwd);
+ camera.fov=cfg.fov;camera.up.copy(Math.abs(dir.y)>0.95?V(-1,0,0):V(0,1,0));
+ const tV=Math.tan(camera.fov*Math.PI/360),tH=tV*camera.aspect*(cfg.labels?Math.max(0.42,1-440/innerWidth):1);
+ let d=0;for(let i=0;i<8;i++){const p=V(i&1?box.max.x:box.min.x,i&2?box.max.y:box.min.y,i&4?box.max.z:box.min.z).sub(c);const w=p.dot(dir);d=Math.max(d,w+Math.abs(p.dot(right))/tH,w+Math.abs(p.dot(up))/tV);}
+ d*=(cfg.pad||1.12);
+ camera.position.copy(c).addScaledVector(dir,d);camera.near=d/60;camera.far=d*30;camera.updateProjectionMatrix();ctl.target.copy(c);ctl.update();
+ ov.innerHTML='';ln.innerHTML='';labels=[];
+ if(cfg.labels){let n=0;
+  model.traverseVisible(o=>{const t=cfg.labels==='ex'?(o.isGroup&&o.userData.ex&&o.userData.label):o.userData.lx;if(!t)return;n++;
+   const b=new THREE.Box3().setFromObject(o);const el=document.createElement('div');el.className='lb';el.innerHTML='<b>'+String(n).padStart(2,'0')+'</b>'+t;ov.appendChild(el);labels.push({p:b.getCenter(V()),el});});}
+ document.querySelectorAll('#bar button').forEach(b=>b.classList.toggle('on',b.dataset.v===view));
+}
+const bar=document.getElementById('bar');
+for(const k in VIEWS){const b=document.createElement('button');b.textContent=VIEWS[k].label;b.dataset.v=k;b.onclick=()=>apply(k);bar.appendChild(b);}
+function layout(){
+ if(labels.length){const W=innerWidth,Hh=innerHeight,cx=W/2;const pts=labels.map(L=>{const q=L.p.clone().project(camera);return {L,x:(q.x+1)/2*W,y:(1-q.y)/2*Hh};});
+  let svg='';for(const side of [0,1]){const col=pts.filter(p=>(p.x>=cx)===!!side).sort((a,b)=>a.y-b.y);let prev=-1e9;const gap=25;
+   col.forEach(p=>{p.ly=Math.max(p.y,prev+gap);prev=p.ly;});const over=col.length?col[col.length-1].ly-(Hh-16):0;if(over>0)col.forEach(p=>p.ly-=over);
+   col.forEach(p=>{const el=p.L.el,w=el.offsetWidth;if(side){el.style.right='12px';el.style.left='';}else{el.style.left='12px';el.style.right='';}el.style.top=p.ly+'px';
+    const colX=side?W-12-w:12+w;const ex=side?colX-2:colX+2,el2=side?colX-14:colX+14;svg+=`<polyline points="${ex},${p.ly} ${el2},${p.ly} ${p.x},${p.y}" fill="none" stroke="#23292b" stroke-width="1.2"/><circle cx="${p.x}" cy="${p.y}" r="2.6" fill="#c8463a" stroke="#23292b" stroke-width="1"/>`;});}
+  ln.innerHTML=svg;}}
+function tick(){layout();requestAnimationFrame(tick);}
+window.dial={apply:v=>{apply(v);stage._renderer.render(stage._scene,camera);layout();}};
+apply(view);stage._renderer.render(stage._scene,camera);layout();tick();
+new ResizeObserver(()=>setTimeout(()=>apply(view),30)).observe(stage);
+</script>
+</body></html>

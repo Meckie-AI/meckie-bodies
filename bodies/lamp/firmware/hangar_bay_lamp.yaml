@@ -1,0 +1,39 @@
+body: lamp
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, location: base, reserved_gpio: [26-37] }
+  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: base }
+  head_cam: { chip: esp32s3, module: xiao_esp32s3_sense, location: hood_lip, power: harness_5v }
+power:  { source: usb_c_pd, request_v: 15, min_v: 13.0, battery: none }
+buses:
+  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }
+  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }
+  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 32000000, cable_mm: 520 }
+  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }
+kinematics: { l1_mm: 160, l2_mm: 160, head_mm: 86, shoulder_h_mm: 90, elbow: parallelogram_from_base }
+servos:
+  - { id: 1, name: yaw,      model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }
+  - { id: 2, name: shoulder, model: sts3215, min_deg: -20,  max_deg: 65,  rest_deg: -15, note: lower arm from vertical }
+  - { id: 3, name: elbow,    model: sts3215, min_deg: 60,   max_deg: 150, rest_deg: 140, note: upper arm absolute from vertical }
+  - { id: 4, name: head,     model: sts3215, min_deg: -90,  max_deg: 45,  rest_deg: -60, note: hood axis from horizontal }
+servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30, collision_err_deg: 6 }
+peripherals:
+  - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }
+  - { name: pd_good,    gpio: 6 }
+  - { name: vin_sense,  adc_gpio: 1, divider: 100k_10k }
+  - { name: v12_sense,  adc_gpio: 2, divider: 100k_10k }
+  - { name: desk_light, part: cc_led_driver, pwm_gpio: 38, pwm_hz: 20000, max_ma: 350, cct_k: 2700 }
+  - { name: face_wake,  gpio: 14, to: face.gpio3 }
+  - { name: status_led, part: ws2812,    gpio: 48 }
+  - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }
+  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 89 }
+  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
+  - { name: camera,     part: ov3660,    host: head_cam, bus: dvp_onboard, stream: mjpeg_wifi, res: 1024x768, fps: 15 }
+poses:
+  asleep:    { yaw: 0, shoulder: -15, elbow: 140, head: -60, light_pct: 10 }
+  attentive: { yaw: 0, shoulder: 15,  elbow: 95,  head: -35 }
+safety:
+  triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, collision]
+  routine:  [stop, brake, wait_2s, slow_to_asleep, torque_low, light_dim_10, face_sleepy]
+  resume:   fresh_command_only

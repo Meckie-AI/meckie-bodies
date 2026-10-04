@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f1e8d2;color:#23292b;-webkit-font-smoothing:antialiased}
+a{color:#c8463a;text-decoration:none}
+a:hover{color:#23292b;text-decoration:underline}
+</style>
+</helmet>
+<div style="font-family:'Jost',sans-serif;max-width:1240px;margin:0 auto;padding:48px 32px 80px;display:flex;flex-direction:column;gap:56px">
+
+  <header data-screen-label="Masthead" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:40px;align-items:end;border-bottom:3px double #23292b;padding-bottom:32px">
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;text-transform:uppercase">
+        <span style="background:#23292b;color:#f1e8d2;padding:4px 10px;border-radius:999px">Design brief · Rev A</span>
+        <span>2 Oct 2026</span>
+        <span style="border:1.5px solid #23292b;padding:3px 10px;border-radius:999px">Meckie shared core</span>
+      </div>
+      <h1 style="margin:0;font:italic 700 clamp(56px,8vw,104px)/1.02 'Jost',sans-serif;letter-spacing:-.02em;color:#23292b;white-space:nowrap">ROVER LITE<span style="color:#c8463a">.</span></h1>
+      <p style="margin:0;font:500 22px/1.35 'Jost',sans-serif;max-width:580px;text-wrap:pretty">A fully 3D-printed small tracked Meckie body. Personality: a little explorer, the desk-sized cousin of the full Rover.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#f7f0de">
+      <div style="padding:14px 18px;border-right:1px solid #23292b;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Est. mass</div><div style="font:700 26px 'Jost'">{{ totalStr }} g</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">3S {{ packStr }} mAh smart pack</div></div>
+      <div style="padding:14px 18px;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Envelope</div><div style="font:700 26px 'Jost'">212 × 152 × 190</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">mm L × W × H · to fin tip</div></div>
+      <div style="padding:14px 18px;border-right:1px solid #23292b;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Climbs</div><div style="font:700 26px 'Jost'">25 mm step</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">door thresholds are 10–20 mm</div></div>
+      <div style="padding:14px 18px;border-bottom:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Top speed</div><div style="font:700 26px 'Jost'">{{ vCapStr }} m/s</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">N20 {{ ratioStr }}:1 · runtime ≈ {{ runStr }} h</div></div>
+      <div style="padding:14px 18px;border-right:1px solid #23292b"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Est. BOM</div><div style="font:700 26px 'Jost';color:#c8463a">${{ costTotal }}</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">target ≈ $180 · see 05b</div></div>
+      <div style="padding:14px 18px"><div style="font:500 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:#5a5f60">Brains</div><div style="font:700 26px 'Jost'">ESP32-S3 + Pi</div><div style="font:400 12px 'IBM Plex Mono',monospace;color:#5a5f60">N16R8 reflexes · Zero 2 W face</div></div>
+    </div>
+  </header>
+
+  <section data-screen-label="01 Concept views" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">01</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Concept views</h2>
+      <a href="Rover Lite Viewer.html" style="font:500 13px 'IBM Plex Mono',monospace;margin-left:auto">Open full 3D viewer + GLB/OBJ export →</a>
+    </div>
+    <p style="margin:0;max-width:800px;font:400 17px/1.5 'Jost';text-wrap:pretty">A sea-foam hull under a cream deck, riding on black TPU tracks with sea-foam fenders, chrome edges and a red pinstripe. The head is a cream helmet drum that tilts about its own axis inside a brushed-aluminium-finish yoke. The face looks out of a chrome porthole ringed with brass rivets, under a chrome camera "lamp" with a red ring and a small red fin. The neck harness runs up the back in red braid. Each view can be dragged to orbit.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:16px">
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Rover Lite Viewer.html?view=iso&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:380px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">3/4 · {{ poseLabel }}</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Rover Lite Viewer.html?view=side&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:380px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Side · raised front idler, rear drive</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Rover Lite Viewer.html?view=front&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:380px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Front · face, VL53L8CX, drop ToF</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+        <iframe src="Rover Lite Viewer.html?view=top&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:380px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Top</figcaption>
+      </figure>
+      <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative;grid-column:1/-1">
+        <iframe src="Rover Lite Viewer.html?view=rear&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:380px;border:0"></iframe>
+        <figcaption style="position:absolute;top:12px;left:12px;font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Rear · USB-C, brass toggle, speaker grille, harness, rear drop ToF</figcaption>
+      </figure>
+    </div>
+    <div style="display:flex;gap:28px;flex-wrap:wrap;font:400 13px 'IBM Plex Mono',monospace;color:#3d4344">
+      <span>Track centres 160 · track width 26 · gauge 120</span>
+      <span>Sprocket Ø36 rear · idler Ø32 front, axle 30 high</span>
+      <span>Belly clearance 16</span>
+      <span>Head drum Ø84 × 80 · tilt axis 136 above floor</span>
+    </div>
+  </section>
+
+  <section data-screen-label="02 Running gear exploded" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">02</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Tracks &amp; neck · exploded</h2>
+    </div>
+    <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+      <iframe src="Rover Lite Viewer.html?view=exploded&amp;embed=1" style="display:block;width:100%;height:700px;border:0"></iframe>
+      <figcaption style="position:absolute;bottom:12px;left:12px;font:500 12px 'IBM Plex Mono',monospace;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">Tracks, running gear and fenders pulled outward; deck, neck and head lifted</figcaption>
+    </figure>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr));gap:24px">
+      <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto;align-self:start">
+        <div style="min-width:560px">
+          <div style="display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
+            <div style="padding:10px 16px">Joint</div><div style="padding:10px 16px">Drive</div><div style="padding:10px 16px">Support</div>
+          </div>
+          <sc-for list="{{ joints }}" as="j" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:140px minmax(0,1fr) minmax(0,1fr);border-top:1px solid #c9bfa6;font:400 14px/1.4 'Jost'">
+              <div style="padding:12px 16px;font-weight:600">{{ j.joint }}</div>
+              <div style="padding:12px 16px">{{ j.drive }}</div>
+              <div style="padding:12px 16px">{{ j.support }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px;font:400 15px/1.5 'Jost'">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Printed tracks</div>
+          <div style="text-wrap:pretty">Each track is one continuous TPU 95A band, 26 mm wide and 2.8 mm thick, with inner guide teeth every 13 mm that mesh with the sprocket and run between the idler and road-wheel flanges, and outer grousers for grip. It prints standing up as a Ø140 ring with no supports and stretches into shape on the running gear. There are no pins or links to wear.</div>
+        </div>
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Climbing</div>
+          <div style="text-wrap:pretty">The front idler axle sits 30 mm up, so the front run of the track meets a step face on an incline and walks up it. The rear sprocket drives, which keeps the lower run of the track in tension when climbing. The battery sits low between the tracks and puts the centre of mass 4 mm behind the hull centre, which keeps it from bucking as the nose lifts.</div>
+        </div>
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Neck</div>
+          <div style="text-wrap:pretty">Pan STS3215 stands upright under a chrome turntable on a 6806 thin-section bearing. The yoke on top carries the helmet drum, which tilts about its own axis: the tilt STS3215 rides inside the drum and its horn bolts to the left yoke arm, with a 685ZZ and shoulder bolt on the right.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="02b Behaviour modes" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">02b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Behaviour modes</h2>
+    </div>
+    <p style="margin:0;max-width:820px;font:400 17px/1.5 'Jost';text-wrap:pretty">Rover Lite moves like a careful explorer: it stops to look before it goes, scans with the head while the tracks stay still, and creeps up to anything new.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <sc-for list="{{ modes }}" as="m" hint-placeholder-count="6">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font:700 18px 'Jost'">{{ m.n }}</span><span style="font:500 12px 'IBM Plex Mono',monospace;text-align:right">{{ m.q }}</span></div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ m.d }}</div>
+        </div>
+      </sc-for>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#23292b;color:#f1e8d2;display:flex;flex-direction:column;gap:8px">
+        <div style="font:700 18px 'Jost'">Control split</div>
+        <div style="font:400 14px/1.5 'IBM Plex Mono',monospace;text-wrap:pretty">Central: mapping, where to go, who is there, behaviour. Pi: face render, camera and mic streams, voice bearing, target centring. ESP32-S3: track speed loops at 500 Hz with encoder and IMU fusion, pan/tilt trajectories, obstacle and drop-off reflexes at 30–50 Hz, heartbeat watchdog, power and thermal guard.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="03 Body layout" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">03</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Body layout</h2>
+    </div>
+    <figure style="margin:0;border:2px solid #23292b;border-radius:20px;overflow:hidden;background:#ebe2cb;position:relative">
+      <iframe src="Rover Lite Viewer.html?view=xray&amp;embed=1&amp;pose={{ pose }}" style="display:block;width:100%;height:660px;border:0"></iframe>
+      <figcaption style="position:absolute;bottom:12px;left:12px;font:500 12px 'IBM Plex Mono',monospace;background:#f7f0de;border:1.5px solid #23292b;border-radius:999px;padding:4px 12px">X-ray: hull, deck, fenders, drum and tracks at 13% opacity</figcaption>
+    </figure>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;padding:24px;display:flex;flex-direction:column;gap:18px">
+      <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Bus &amp; power topology</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:500 13px 'IBM Plex Mono',monospace">
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">USB-C PD · rear</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">PD sink · 15 V</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">BQ25798 · 3S buck-boost charger</span><span>↔</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#37598a;color:#f7f0de">3S {{ packStr }} smart pack</span><span>→</span>
+        <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#c29a48">Brass main toggle · 7.5 A fuse</span>
+      </div>
+      <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:10px 16px;align-items:center;font:500 13px 'IBM Plex Mono',monospace">
+        <div style="color:#c8463a;font-weight:600">VBAT 10.5–12.6 V</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">eFuse · EN GPIO14</span><span>→</span>
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">Bus adapter → ID 1 pan → cable clock → ID 2 tilt</span>
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">6 V / 3 A buck → DRV8833 → N20 L + R</span>
+          <span style="border:2px solid #c8463a;border-radius:12px;padding:8px 12px">5 V / 5 A buck → ESP32-S3, Pi, amp, display</span>
+        </div>
+        <div style="font-weight:600">Reflex brain</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#2e6a46;color:#f7f0de">ESP32-S3 N16R8</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">UART1 · servo bus 1 Mbps</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">PCNT · 2 quadrature encoders</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²C0 · L8CX, 2 × L0X, BNO085, BQ25798</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²C1 · pack gauge SMBus</span>
+        </div>
+        <div style="font-weight:600">Face brain</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#2e6a46;color:#f7f0de">Pi Zero 2 W · hull</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">CSI · camera (300 mm FFC via neck)</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">SPI0 · display</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px">I²S · 2 mics in drum + amp in hull</span>
+          <span style="border:2px solid #23292b;border-radius:12px;padding:8px 12px;background:#e9a79f">UART · ESP32-S3 link 921 600</span>
+        </div>
+        <div style="font-weight:600">Neck harness</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <span style="border:1.5px dashed #23292b;border-radius:999px;padding:4px 10px;font-size:12px">12 V · GND · bus · 3V3 · GND · MOSI · SCLK · CS · DC · RST · BL · BCLK · LRCLK · DIN</span><span>12c silicone ribbon + CSI FFC laid flat together in red braid</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <sc-for list="{{ bodyNotes }}" as="b" hint-placeholder-count="10">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:8px">
+          <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em">{{ b.t }}</div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ b.d }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section data-screen-label="03b Wiring" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">03b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Wiring diagram</h2>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;padding:16px;overflow-x:auto">
+      <svg viewBox="0 0 1100 620" width="100%" style="min-width:760px;display:block" font-family="IBM Plex Mono, monospace">
+        <line x1="850" y1="110" x2="850" y2="610" stroke="#23292b" stroke-width="1.5" stroke-dasharray="8 5"></line>
+        <text x="856" y="606" font-size="10" fill="#23292b">NECK HARNESS · 12c + CSI FFC</text>
+        <text x="30" y="24" font-size="11" fill="#c8463a" letter-spacing="1.5">HULL · POWER</text>
+        <text x="330" y="24" font-size="11" fill="#c8463a" letter-spacing="1.5">HULL · BRAINS</text>
+        <text x="620" y="124" font-size="11" fill="#c8463a" letter-spacing="1.5">HULL · DRIVE + SENSE</text>
+        <text x="880" y="124" font-size="11" fill="#c8463a" letter-spacing="1.5">HEAD DRUM</text>
+        <g fill="none" stroke-width="3">
+          <path d="M130,96 V130 M130,186 V220 M130,276 V310 M130,366 V400" stroke="#c8463a"></path>
+          <path d="M230,338 H270 V518 H230" stroke="#c8463a"></path>
+          <path d="M230,428 H290 V248 H330" stroke="#c8463a"></path>
+          <path d="M230,518 H300 V570 H620" stroke="#c8463a" stroke-width="2"></path>
+          <path d="M230,548 H310 V115 H330 M310,360 H330" stroke="#c29a48"></path>
+          <path d="M445,276 V310 M560,338 H600 V248 H620 M720,276 V300 M720,310 V328 H846 V158 H880" stroke="#2e6a46"></path>
+          <path d="M560,160 H600 V428 H620" stroke="#c8463a" stroke-width="2"></path>
+          <path d="M600,500 H620" stroke="#e9a79f" stroke-width="2" stroke-dasharray="6 3"></path>
+          <path d="M560,190 H590 V500 H600" stroke="#e9a79f" stroke-width="2" stroke-dasharray="6 3"></path>
+          <path d="M560,120 H612 V68 H620" stroke="#37598a" stroke-width="2"></path>
+          <path d="M445,96 V40 H612" stroke="#37598a" stroke-width="2"></path>
+          <path d="M230,158 H250 V75 H330" stroke="#37598a" stroke-width="2"></path>
+          <path d="M560,400 H580 V480 H856 V248 H880" stroke="#23292b" stroke-width="2"></path>
+          <path d="M560,412 H590 V490 H862 V338 H880" stroke="#23292b" stroke-width="4"></path>
+          <path d="M560,424 H596 V500 H868 V428 H880" stroke="#37598a" stroke-width="2"></path>
+          <path d="M445,456 V470" stroke="#37598a" stroke-width="2"></path>
+          <path d="M560,220 H578 V370 H560" stroke="#23292b" stroke-width="1.5" stroke-dasharray="6 4"></path>
+          <path d="M440,40 V30 H1080" stroke="#5ea49b" stroke-width="2" stroke-dasharray="2 5"></path>
+        </g>
+        <g font-size="9" fill="#23292b">
+          <text x="138" y="117">PD 15 V</text><text x="138" y="207">3S</text><text x="138" y="297">VBAT</text><text x="138" y="387">VBAT</text>
+          <text x="274" y="470">12 V servo</text><text x="294" y="242">VBAT</text><text x="320" y="564">6 V → VM</text><text x="314" y="140">5 V</text>
+          <text x="452" y="296">UART1</text><text x="604" y="242">TTL BUS 1M</text><text x="726" y="296">ID 1</text><text x="826" y="150">ID 2</text>
+          <text x="566" y="156">PWM ×4</text><text x="562" y="186">ENC A/B ×2</text><text x="566" y="116">I²C0</text><text x="236" y="152">I²C1 SMB</text>
+          <text x="600" y="476">SPI0</text><text x="604" y="486">CSI FFC</text><text x="610" y="496">I²S</text>
+          <text x="582" y="232">UART 921k6</text><text x="450" y="26">Wi-Fi · Central</text>
+        </g>
+        <g font-family="Jost, sans-serif" font-size="14" fill="#23292b" font-weight="700">
+          <rect x="30" y="40" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="64">USB-C PD SINK</text><text x="46" y="82" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">15 V request</text>
+          <rect x="30" y="130" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="154">BQ25798</text><text x="46" y="172" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">3S charger · 0x6B</text>
+          <rect x="30" y="220" width="200" height="56" rx="14" fill="#37598a" stroke="#23292b" stroke-width="2"></rect><text x="46" y="244" fill="#f7f0de">3S SMART PACK</text><text x="46" y="262" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">gauge 0x0B · balance</text>
+          <rect x="30" y="310" width="200" height="56" rx="14" fill="#c29a48" stroke="#23292b" stroke-width="2"></rect><text x="46" y="334">MAIN TOGGLE</text><text x="46" y="352" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">brass, rear · 7.5 A</text>
+          <rect x="30" y="400" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="424">SERVO eFUSE</text><text x="46" y="442" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">EN 14 · FLT → 21</text>
+          <rect x="30" y="490" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="46" y="514">6 V + 5 V BUCKS</text><text x="46" y="532" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">motors · logic</text>
+          <rect x="330" y="40" width="230" height="200" rx="14" fill="#2e6a46" stroke="#23292b" stroke-width="2"></rect><text x="346" y="66" fill="#f7f0de">ESP32-S3 N16R8</text>
+          <g font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace"><text x="346" y="88">reflex brain</text><text x="346" y="106">heartbeat watchdog</text><text x="346" y="124">track speed loops · IMU</text><text x="346" y="142">pan/tilt over servo bus</text><text x="346" y="160">obstacle + edge reflex</text><text x="346" y="178">power + thermal guard</text></g>
+          <rect x="330" y="250" width="230" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="346" y="274">SERVO BUS ADAPTER</text><text x="346" y="292" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">TTL half-duplex · 12 V in</text>
+          <rect x="330" y="340" width="230" height="116" rx="14" fill="#2e6a46" stroke="#23292b" stroke-width="2"></rect><text x="346" y="366" fill="#f7f0de">PI ZERO 2 W</text>
+          <g font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace"><text x="346" y="388">face renderer</text><text x="346" y="406">camera + mic stream</text><text x="346" y="424">voice bearing · playback</text><text x="346" y="442">wake/halt ← S3 GPIO46</text></g>
+          <rect x="330" y="470" width="230" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="346" y="494">MAX98357A → Ø28</text><text x="346" y="512" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">deck grille · SD 16</text>
+          <rect x="620" y="40" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="64">VL53L8CX · 0x29</text><text x="636" y="82" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">forward 8×8 · + BNO085</text>
+          <rect x="620" y="220" width="200" height="56" rx="14" fill="#23292b" stroke="#23292b" stroke-width="2"></rect><text x="636" y="244" fill="#f7f0de">STS3215 · ID 1 PAN</text><text x="636" y="262" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">±150° · hull</text>
+          <rect x="620" y="400" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#c8463a" stroke-width="2"></rect><text x="636" y="424">DRV8833</text><text x="636" y="442" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">nSLEEP 42 · nFAULT → 21</text>
+          <rect x="620" y="472" width="200" height="56" rx="14" fill="#23292b" stroke="#23292b" stroke-width="2"></rect><text x="636" y="496" fill="#f7f0de">N20 L · N20 R</text><text x="636" y="514" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">hall encoders A/B</text>
+          <rect x="620" y="130" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="636" y="154">VL53L0X ×2</text><text x="636" y="172" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">drop-off · 0x30 / 0x31</text>
+          <rect x="620" y="540" width="200" height="56" rx="28" fill="none" stroke="#5ea49b" stroke-width="2" stroke-dasharray="6 4"></rect><text x="636" y="564">CENTRAL</text><text x="636" y="582" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">mind · map · vision</text>
+          <rect x="880" y="130" width="200" height="56" rx="14" fill="#23292b" stroke="#23292b" stroke-width="2"></rect><text x="896" y="154" fill="#f7f0de">STS3215 · ID 2 TILT</text><text x="896" y="172" font-size="10" font-weight="400" fill="#f7f0de" font-family="IBM Plex Mono, monospace">−25 / +35° · in drum</text>
+          <rect x="880" y="220" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="244">GC9A01 Ø32</text><text x="896" y="262" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">240×240 · porthole</text>
+          <rect x="880" y="310" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="334">CAMERA MOD 3</text><text x="896" y="352" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">lamp housing</text>
+          <rect x="880" y="400" width="200" height="56" rx="14" fill="#f1e8d2" stroke="#23292b" stroke-width="2"></rect><text x="896" y="424">ICS-43434 ×2</text><text x="896" y="442" font-size="10" font-weight="400" font-family="IBM Plex Mono, monospace">drum ends, 84 mm apart</text>
+        </g>
+      </svg>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace;padding:12px 8px 4px">
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#c8463a"></span>VBAT / 12 V / 6 V</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#c29a48"></span>5 V</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#2e6a46"></span>Servo bus</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#37598a"></span>I²C / I²S</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:4px;background:#23292b"></span>SPI / CSI</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dashed #e9a79f"></span>Encoders</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dashed #23292b"></span>UART link</span>
+        <span style="display:flex;gap:6px;align-items:center"><span style="width:22px;height:0;border-top:2px dotted #5ea49b"></span>Wi-Fi</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="04 Drive check" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">04</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Drive, climb &amp; load check</h2>
+    </div>
+    <p style="margin:0;max-width:820px;font:400 16px/1.5 'Jost';text-wrap:pretty">N20 {{ ratioStr }}:1 6 V gearmotors on a regulated 6 V rail; sprocket pitch radius 20 mm; track efficiency taken as 70%. Robot {{ totalStr }} g, centre of mass 4 mm behind the hull centre and 44 mm high. Motor budget is 40% of stall per motor. Firmware limits: acceleration 1.5 m/s², braking 2.5 m/s², reverse 0.12 m/s; reaction time 30 ms. STS3215 budget is 0.9 N·m.</p>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:640px">
+        <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
+          <div style="padding:10px 16px">Case</div><div style="padding:10px 16px;text-align:right">Need</div><div style="padding:10px 16px;text-align:right">Have</div><div style="padding:10px 16px;text-align:right">Result</div>
+        </div>
+        <sc-for list="{{ checks }}" as="r" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) minmax(0,1.2fr);border-top:1px solid #c9bfa6;font:500 14px 'IBM Plex Mono',monospace">
+            <div style="padding:12px 16px;font-family:'Jost';font-size:15px">{{ r.c }}</div>
+            <div style="padding:12px 16px;text-align:right">{{ r.need }}</div>
+            <div style="padding:12px 16px;text-align:right">{{ r.have }}</div>
+            <div style="padding:12px 16px;text-align:right;font-weight:600;color:{{ r.col }}">{{ r.res }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Threshold climb is modelled as a 25° incline while the nose rides up the step, plus 10% rolling and track loss. Skid-steer pivot turns take lateral friction μ 0.6 over a 160 mm contact length and 120 mm gauge. Drop-off look-ahead is measured from the front road wheel and the rear sprocket contact, where the robot would start to drop. Red rows exceed the budget or the look-ahead.</p>
+  </section>
+
+  <section data-screen-label="05 Mass budget" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Parts list &amp; mass budget</h2>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="height:36px;border:2px solid #23292b;border-radius:999px;overflow:hidden;display:flex;background:#f7f0de">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+          <div style="width:{{ c.pct }};background:{{ c.col }};border-right:1.5px solid #23292b"></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+          <span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #23292b;background:{{ c.col }}"></span>{{ c.name }} · {{ c.g }} g</span>
+        </sc-for>
+        <span style="margin-left:auto;font-weight:600">Bar = {{ totalStr }} g total</span>
+      </div>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:760px">
+        <div style="display:grid;grid-template-columns:44px minmax(0,2.4fr) minmax(0,1.1fr) 56px 76px 84px 96px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 12px">#</div><div style="padding:10px 12px">Part</div><div style="padding:10px 12px">Group</div><div style="padding:10px 12px;text-align:right">Qty</div><div style="padding:10px 12px;text-align:right">Each g</div><div style="padding:10px 12px;text-align:right">Line g</div><div style="padding:10px 12px;text-align:right">Running</div>
+        </div>
+        <sc-for list="{{ parts }}" as="p" hint-placeholder-count="40">
+          <div style="display:grid;grid-template-columns:44px minmax(0,2.4fr) minmax(0,1.1fr) 56px 76px 84px 96px;border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+            <div style="padding:8px 12px;color:#c8463a;font-weight:600">{{ p.n }}</div>
+            <div style="padding:8px 12px;font:500 14px 'Jost'">{{ p.name }}</div>
+            <div style="padding:8px 12px;display:flex;gap:6px;align-items:center;color:#3d4344"><span style="width:9px;height:9px;border-radius:50%;flex:none;background:{{ p.col }}"></span>{{ p.cat }}</div>
+            <div style="padding:8px 12px;text-align:right">{{ p.qty }}</div>
+            <div style="padding:8px 12px;text-align:right">{{ p.unit }}</div>
+            <div style="padding:8px 12px;text-align:right">{{ p.sub }}</div>
+            <div style="padding:8px 12px;text-align:right;font-weight:600">{{ p.run }}</div>
+          </div>
+        </sc-for>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;border-top:2px solid #23292b;background:#ebe2cb;font:600 15px 'IBM Plex Mono',monospace">
+          <div style="padding:14px 16px;font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.06em">Total</div>
+          <div style="padding:14px 16px;text-align:right">{{ totalStr }} g</div>
+        </div>
+      </div>
+    </div>
+    <p style="margin:0;font:400 14px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">The pack is the heaviest single part and sits on the belly between the tracks, just behind the hull centre. Head and neck together are about a fifth of the robot; keeping the Pi in the hull holds the head light so it does not pitch the robot back when climbing.</p>
+  </section>
+
+  <section data-screen-label="05b Cost" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">BOM cost</h2>
+      <span style="margin-left:auto;font:500 13px 'IBM Plex Mono',monospace;color:#3d4344">Single unit · retail estimates, USD · Oct 2026</span>
+    </div>
+    <div style="border:2px solid #c8463a;border-radius:20px;padding:16px 20px;background:#f7f0de;font:400 15px/1.5 'Jost';text-wrap:pretty;max-width:900px"><span style="font-weight:700;color:#c8463a">Over target.</span> The spec build comes to ${{ costTotal }} against about $180. The two STS3215s, Pi Zero 2 W, Camera Module 3, BNO085 and VL53L8CX alone are about ${{ coreCost }}. The savings list gets to about ${{ liteTotal }} with only small capability losses; reaching $180 would also mean dropping the VL53L8CX or the pan servo.</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="height:36px;border:2px solid #23292b;border-radius:999px;overflow:hidden;display:flex;background:#f7f0de">
+        <sc-for list="{{ costCats }}" as="c" hint-placeholder-count="4">
+          <div style="width:{{ c.pct }};background:{{ c.col }};border-right:1.5px solid #23292b"></div>
+        </sc-for>
+      </div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;font:500 12px 'IBM Plex Mono',monospace">
+        <sc-for list="{{ costCats }}" as="c" hint-placeholder-count="4">
+          <span style="display:flex;gap:6px;align-items:center"><span style="width:12px;height:12px;border-radius:50%;border:1.5px solid #23292b;background:{{ c.col }}"></span>{{ c.name }} · ${{ c.sum }} · {{ c.share }}</span>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,640px),1fr));gap:24px;align-items:start">
+      <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+        <div style="min-width:640px">
+          <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.1fr) 44px 64px 84px 84px;background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+            <div style="padding:10px 12px">Item</div><div style="padding:10px 12px">Group</div><div style="padding:10px 8px;text-align:right">Qty</div><div style="padding:10px 8px;text-align:right">Each</div><div style="padding:10px 8px;text-align:right">Line</div><div style="padding:10px 12px;text-align:right">Running</div>
+          </div>
+          <sc-for list="{{ costs }}" as="p" hint-placeholder-count="28">
+            <div style="display:grid;grid-template-columns:minmax(0,2.4fr) minmax(0,1.1fr) 44px 64px 84px 84px;border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+              <div style="padding:8px 12px;font:500 14px 'Jost'">{{ p.name }}</div>
+              <div style="padding:8px 12px;display:flex;gap:6px;align-items:center;color:#3d4344"><span style="width:9px;height:9px;border-radius:50%;flex:none;background:{{ p.col }}"></span>{{ p.cat }}</div>
+              <div style="padding:8px 8px;text-align:right">{{ p.qty }}</div>
+              <div style="padding:8px 8px;text-align:right">${{ p.unit }}</div>
+              <div style="padding:8px 8px;text-align:right">${{ p.line }}</div>
+              <div style="padding:8px 12px;text-align:right;font-weight:600">${{ p.run }}</div>
+            </div>
+          </sc-for>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;border-top:2px solid #23292b;background:#ebe2cb;font:600 15px 'IBM Plex Mono',monospace">
+            <div style="padding:14px 16px;font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.06em">Total · single unit</div>
+            <div style="padding:14px 16px;text-align:right">${{ costTotal }} <span style="font-weight:400;color:#3d4344">· range {{ costRange }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:10px">
+        <div style="font:700 14px 'Jost';text-transform:uppercase;letter-spacing:.08em;color:#c8463a">Where to save</div>
+        <sc-for list="{{ savings }}" as="s" hint-placeholder-count="7">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;font:400 14px/1.4 'Jost';border-top:1px solid #d8cfb7;padding-top:8px">
+            <span style="text-wrap:pretty">{{ s.t }}</span><span style="font:600 13px 'IBM Plex Mono',monospace;color:#2e6a46;white-space:nowrap">{{ s.v }}</span>
+          </div>
+        </sc-for>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;font:700 14px 'Jost';border-top:2px solid #23292b;padding-top:8px"><span>All of the above</span><span style="font:600 13px 'IBM Plex Mono',monospace">≈ ${{ liteTotal }}</span></div>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Prices are typical single-quantity retail and have not been checked against current listings; confirm them before ordering. Excludes the USB-C PD charger, tools, shipping and printer time.</p>
+  </section>
+
+  <section data-screen-label="05c Assembly" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">05c</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Assembly · no glue</h2>
+      <span style="margin-left:auto;font:500 13px 'IBM Plex Mono',monospace;color:#3d4344">Every joint screws or snaps · fully reversible with a 2 mm and a 1.5 mm hex</span>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:640px">
+        <div style="display:grid;grid-template-columns:minmax(0,1.1fr) 120px minmax(0,2.2fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 14px">Joint</div><div style="padding:10px 14px">Method</div><div style="padding:10px 14px">Detail</div>
+        </div>
+        <sc-for list="{{ assembly }}" as="a" hint-placeholder-count="22">
+          <div style="display:grid;grid-template-columns:minmax(0,1.1fr) 120px minmax(0,2.2fr);border-top:1px solid #d8cfb7;align-items:center">
+            <div style="padding:9px 14px;font:600 14px 'Jost'">{{ a.j }}</div>
+            <div style="padding:9px 14px"><span style="font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.06em;border:1.5px solid #23292b;border-radius:999px;padding:3px 9px;background:{{ a.bg }};white-space:nowrap">{{ a.m }}</span></div>
+            <div style="padding:9px 14px;font:400 14px/1.45 'Jost';text-wrap:pretty">{{ a.d }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">No glue, tape, epoxy or adhesive cable mounts anywhere. Press-fit bearings are always retained by a screwed clamp ring or a shoulder bolt. Screws into plastic always land in a heat-set insert. No visible fastener heads: deck screws sit under snap-on chrome caps, everything else enters under the fenders, under the deck or behind a brass pivot cap.</p>
+  </section>
+
+  <section data-screen-label="06 Print orientation" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">06</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Print orientation</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px">
+      <sc-for list="{{ prints }}" as="q" hint-placeholder-count="14">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de;display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline">
+            <div style="font:700 17px 'Jost'">{{ q.part }}</div>
+            <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #23292b;border-radius:999px;padding:3px 10px;white-space:nowrap;background:{{ q.bg }}">{{ q.mat }}</span>
+          </div>
+          <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">{{ q.how }}</div>
+          <div style="font:400 12px 'IBM Plex Mono',monospace;color:#3d4344">{{ q.settings }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">All parts fit a 256 × 256 bed; the largest are the 192 mm hull tub (diagonal if needed) and the Ø140 track rings. Brushed-aluminium finish on the yoke: 400 → 800 sand, filler primer, metallic silver, one-direction Scotch-Brite pass, satin clear. Chrome parts: gloss black base, chrome-effect paint, gloss clear.</p>
+  </section>
+
+  <section data-screen-label="07 Safety reflex" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">07</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Safety reflex · parks and dozes</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+      <sc-for list="{{ reflex }}" as="s" hint-placeholder-count="6">
+        <div style="border:2px solid #23292b;border-radius:20px;padding:16px 18px;background:#f7f0de;display:flex;flex-direction:column;gap:6px">
+          <span style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#c8463a">{{ s.t }}</span>
+          <span style="font:700 18px 'Jost'">{{ s.h }}</span>
+          <span style="font:400 14px/1.45 'Jost';text-wrap:pretty">{{ s.d }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#23292b;color:#f1e8d2;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;font:400 14px/1.5 'IBM Plex Mono',monospace">
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Triggers</div>No Central heartbeat for 500 ms · pack below 15% or 10.5 V · any servo at 70 °C or above · eFuse or DRV8833 fault · track stall over 1 s.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Always-on local reflexes</div>Edge: either drop ToF reads more than 25 mm past its floor baseline → brake at 2.5 m/s² and back off 30 mm. Obstacle: VL53L8CX zone under 60 mm in the direction of travel → stop. Lifted or tipped past 35° (BNO085) → tracks off.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Rest pose</div>Tracks stopped (clearing an edge first if one is within 40 mm). Head pan 0°, tilt −25°: the porthole looks down at the floor. Servos to 20% torque; DRV8833 asleep.</div>
+      <div><div style="font:700 16px 'Jost';margin-bottom:6px">Resume</div>Moves again only on a fresh command from Central. Restoring the heartbeat alone does not wake it.</div>
+    </div>
+  </section>
+
+  <section data-screen-label="08 Hangar Bay" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">08</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Hangar Bay manifest</h2>
+    </div>
+    <div style="border:2px solid #23292b;border-radius:20px;background:#f7f0de;overflow-x:auto">
+      <div style="min-width:760px">
+        <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) 90px minmax(0,1.8fr);background:#23292b;color:#f1e8d2;font:600 11px 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+          <div style="padding:10px 12px">Peripheral</div><div style="padding:10px 12px">Host</div><div style="padding:10px 12px">Bus</div><div style="padding:10px 12px">Addr / ID</div><div style="padding:10px 12px">Pins</div>
+        </div>
+        <sc-for list="{{ manifest }}" as="m" hint-placeholder-count="20">
+          <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1.2fr) 90px minmax(0,1.8fr);border-top:1px solid #d8cfb7;font:400 13px 'IBM Plex Mono',monospace;align-items:center">
+            <div style="padding:8px 12px;font:600 14px 'Jost'">{{ m.dev }}</div>
+            <div style="padding:8px 12px;color:#3d4344">{{ m.host }}</div>
+            <div style="padding:8px 12px">{{ m.bus }}</div>
+            <div style="padding:8px 12px;color:#c8463a;font-weight:600">{{ m.addr }}</div>
+            <div style="padding:8px 12px">{{ m.pins }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font:600 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase">hangar_bay/rover_lite.yaml</div>
+<pre style="margin:0;border:2px solid #23292b;border-radius:20px;background:#23292b;color:#e6dcc3;padding:20px 22px;font:400 12.5px/1.6 'IBM Plex Mono',monospace;overflow-x:auto;white-space:pre">body: rover_lite
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, location: hull, reserved_gpio: [19, 20, 26-37, 43, 44] }
+  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: hull }
+power:
+  battery: { cells: 3, mah: 1500, smart: true, gauge: sbs, balance: true }
+  charger: { part: bq25798, input: usb_c_pd, request_v: 15 }
+  rails:   { servo: vbat_via_efuse, motor_6v: buck_3a, logic_5v: buck_5a }
+buses:
+  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }
+  i2c0:      { host: reflex, sda: 8,  scl: 9,  hz: 400000 }
+  i2c1_smb:  { host: reflex, sda: 12, scl: 13, hz: 100000 }
+  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }
+  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000, cable_mm: 300 }
+  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }
+  csi:       { host: face, port: cam0, ffc_mm: 300 }
+drive:
+  type: tracked_skid_steer
+  sprocket_pitch_r_mm: 20
+  gauge_mm: 120
+  contact_len_mm: 160
+  motor: { part: n20_6v, ratio: 298, driver: drv8833, pwm_hz: 20000, vm: 6.0 }
+  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }
+  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }
+  driver: { nsleep: 42, nfault: 21 }
+  limits: { accel_mps2: 1.5, brake_mps2: 2.5, v_mps: 0.2, v_reverse_mps: 0.12 }
+servos:
+  - { id: 1, name: pan,  model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }
+  - { id: 2, name: tilt, model: sts3215, min_deg: -25,  max_deg: 35,  rest_deg: -25 }
+  limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }
+peripherals:
+  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }
+  - { name: tof_fwd,    part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8 }
+  - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30 }
+  - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30 }
+  - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, location: com }
+  - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 6 }
+  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }
+  - { name: face_wake,  gpio: 46, to: face.gpio3 }
+  - { name: status_led, part: ws2812, gpio: 48 }
+  - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }
+  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 84 }
+  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }
+  - { name: camera,     part: imx708,    bus: csi }
+reflexes:
+  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_30mm] }
+  obstacle: { sensor: tof_fwd, stop_mm: 60 }
+  tilt:     { sensor: imu, max_deg: 35, action: tracks_off }
+safety:
+  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault, drv_fault, stall_1s]
+  routine:  [stop, brake, wait_2s, edge_clear_creep, head_to_rest_slow, torque_low, face_sleepy]
+  resume:   fresh_command_only</pre>
+    </div>
+  </section>
+
+  <section data-screen-label="09 Open items" style="border-top:3px double #23292b;padding-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px">
+    <div style="font:700 16px 'Jost';text-transform:uppercase;letter-spacing:.08em">Verify before CAD freeze</div>
+    <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font:400 15px/1.5 'Jost';grid-column:span 3">
+      <li>Printed TPU track: tooth engagement under climbing load (no ratcheting over the sprocket), stretch over a week of tension, and whether 95A or 90A grips better on wood thresholds.</li>
+      <li>Track tension: set the idler slot travel (±4 mm) once the real band length is known; check the band does not walk off on pivot turns.</li>
+      <li>Threshold climb on a real 20 mm aluminium door strip, both directions, at an angle as well as square on.</li>
+      <li>Camera FFC through the pan cable clock and the tilt axis: 50,000 cycles of full pan and tilt range.</li>
+      <li>Drop-off ToF on dark rugs and glossy floors; the VL53L8CX can double-check edges on the forward zones.</li>
+      <li>N20 speed and stall at 6 V for the chosen ratio; listings vary widely between sellers.</li>
+      <li>Head drum packaging: tilt STS3215, display, Camera Module 3 and both mics inside Ø84 × 80, with the FFC fold behind the display.</li>
+      <li>Heat: Pi Zero 2 W and two bucks share the closed hull; add a vent path under the fenders if the Pi throttles.</li>
+      <li>Cost: decide on the savings list before ordering.</li>
+    </ul>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;pose&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;explore&quot;,&quot;look&quot;,&quot;sleepy&quot;],&quot;default&quot;:&quot;explore&quot;,&quot;tsType&quot;:&quot;'explore'|'look'|'sleepy'&quot;,&quot;section&quot;:&quot;Concept views&quot;},&quot;gearRatio&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;100&quot;,&quot;150&quot;,&quot;298&quot;],&quot;default&quot;:&quot;298&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Drive&quot;},&quot;packMah&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;1000&quot;,&quot;1500&quot;,&quot;2200&quot;],&quot;default&quot;:&quot;1500&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Power&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const pose = this.props.pose ?? 'explore';
+    const ratio = Number(this.props.gearRatio ?? 298);
+    const pack = Number(this.props.packMah ?? 1500);
+    const packMass = { 1000: 90, 1500: 128, 2200: 180 }[pack] ?? 128;
+    const packCost = { 1000: 20, 1500: 24, 2200: 30 }[pack] ?? 24;
+    const C = {
+      act: ['Servos', '#c8463a'], drv: ['Drivetrain', '#e0a83e'], prt: ['Printed parts', '#5ea49b'],
+      elec: ['Electronics & power', '#37598a'], bat: ['Battery', '#2b3f63'], sens: ['Face & sensors', '#6a3f8e'], misc: ['Wiring & fasteners', '#efe3c8'],
+    };
+    const raw = [
+      ['STS3215 servo, 12 V · pan + tilt', 'act', 2, 55], ['Metal servo horn', 'act', 2, 3],
+      ['N20 6 V gearmotor + hall encoder, ' + ratio + ':1', 'drv', 2, 12], ['683ZZ bearing', 'drv', 16, 0.5], ['6806-2RS bearing · pan', 'drv', 1, 12], ['685ZZ + M5 shoulder bolt · tilt', 'drv', 1, 5],
+      ['Track loop · TPU 95A', 'prt', 2, 28], ['Sprocket · CF-nylon', 'prt', 2, 6], ['Idler · PETG', 'prt', 2, 4], ['Road wheel · PETG', 'prt', 6, 2.5],
+      ['Track frame plate + tension block · CF-nylon', 'prt', 2, 12], ['Fender · PETG', 'prt', 2, 10],
+      ['Hull tub · PETG', 'prt', 1, 70], ['Deck lid · PETG', 'prt', 1, 32], ['Trays, cradle, clamps · CF-nylon', 'prt', 1, 18], ['Turntable + clamp ring · CF-nylon', 'prt', 1, 14],
+      ['Yoke · CF-nylon', 'prt', 1, 18], ['Helmet drum tube + end caps · PETG', 'prt', 1, 46], ['Porthole, camera lamp, fin, caps · PETG', 'prt', 1, 10],
+      ['Raspberry Pi Zero 2 W + heatsink + microSD', 'elec', 1, 14], ['ESP32-S3 N16R8 dev board', 'elec', 1, 10], ['Servo bus adapter', 'elec', 1, 6],
+      ['BQ25798 charger board', 'elec', 1, 6], ['USB-C PD sink + port + bezel', 'elec', 1, 4], ['5 V / 5 A buck', 'elec', 1, 10], ['6 V / 3 A buck', 'elec', 1, 6],
+      ['DRV8833 driver', 'elec', 1, 2], ['Servo eFuse', 'elec', 1, 2], ['Brass toggle main switch + 7.5 A fuse', 'elec', 1, 9],
+      ['3S ' + pack + ' mAh smart pack · gauge + balance', 'bat', 1, packMass],
+      ['1.28" GC9A01 round display', 'sens', 1, 8], ['Pi Camera Module 3 + 300 mm FFC', 'sens', 1, 6], ['ICS-43434 I²S mic breakout', 'sens', 2, 1],
+      ['BNO085 IMU breakout', 'sens', 1, 3], ['VL53L8CX 8×8 ToF breakout', 'sens', 1, 2], ['VL53L0X ToF breakout', 'sens', 2, 1], ['Ø28 speaker + MAX98357A', 'sens', 1, 8],
+      ['Harness, braided sleeve, JST-GH/PH', 'misc', 1, 16], ['Fasteners, heat-set inserts, P-clips', 'misc', 1, 22],
+    ];
+    const fmt = (v) => (Math.round(v * 10) / 10).toLocaleString('en-US');
+    let run = 0; const catSum = {};
+    const parts = raw.map(([name, cat, qty, unit], i) => {
+      const sub = qty * unit; run += sub; catSum[cat] = (catSum[cat] || 0) + sub;
+      return { n: String(i + 1).padStart(2, '0'), name, cat: C[cat][0], col: C[cat][1], qty, unit: fmt(unit), sub: fmt(sub), run: Math.round(run).toLocaleString('en-US') };
+    });
+    const total = run;
+    const cats = Object.keys(C).filter((k) => catSum[k]).map((k) => ({ name: C[k][0], col: C[k][1], g: Math.round(catSum[k]), pct: (catSum[k] / total * 100).toFixed(2) + '%' }));
+
+    const g = 9.81, m = total / 1000, r = 0.02, eta = 0.7;
+    const rpm = 30000 / ratio, stall = 0.008 * ratio * 0.0981;
+    const vMax = rpm / 60 * 2 * Math.PI * r;
+    const tauUse = 0.4 * stall;
+    const aBrake = 2.5, tR = 0.03, lookF = 0.06, lookR = 0.025, marg = 0.01;
+    const A = 1 / (2 * aBrake);
+    const vSafe = (-tR + Math.sqrt(tR * tR + 4 * A * (lookF - marg))) / (2 * A);
+    const vCap = Math.min(vMax, vSafe, 0.3);
+    const stop = (v) => v * v / (2 * aBrake) + v * tR;
+    const tauClimb = m * g * (Math.sin(25 * Math.PI / 180) + 0.1) * r / 2 / eta;
+    const Mturn = 0.6 * m * g * 0.16 / 4, Fturn = Mturn / 0.12, tauTurn = Fturn * r / eta;
+    const tauAcc = m * 1.5 * r / 2 / eta;
+    const tipBack = Math.atan((0.08 - 0.004) / 0.044) * 180 / Math.PI;
+    const mh = 0.135, tauTilt = mh * g * 0.006 + mh * (0.084 * 0.084) / 12 * 12;
+    const Ipan = 0.18 * (0.084 * 0.084 + 0.08 * 0.08) / 12 + 0.03 * 0.05 * 0.05 / 12, tauPan = Ipan * 10;
+    const wh = pack * 11.1 / 1000, runH = wh * 0.9 / 4;
+    const ok = '#2e6a46', bad = '#c8463a';
+    const mNm = (x) => (x * 1000).toFixed(1) + ' mN·m';
+    const mm = (x) => Math.round(x * 1000) + ' mm';
+    const pctRow = (c, need, have) => ({ c, need: mNm(need), have: mNm(have), res: need <= have ? Math.round(need / have * 100) + '% of budget' : 'Over budget', col: need <= have ? ok : bad });
+    const checks = [
+      { c: 'Threshold geometry · front idler axle height', need: '20 mm step', have: '30 mm', res: 'OK · up to ≈ 25 mm', col: ok },
+      pctRow('Threshold climb · per motor (25° + losses)', tauClimb, tauUse),
+      pctRow('Skid-steer pivot turn · per motor', tauTurn, tauUse),
+      pctRow('Accelerate 1.5 m/s² · per motor', tauAcc, tauUse),
+      { c: 'Tip back while climbing', need: '25° nose-up', have: Math.round(tipBack) + '° to tip', res: 'OK', col: ok },
+      { c: 'Front edge stop · motor top speed ' + vMax.toFixed(2) + ' m/s', need: mm(stop(vMax)), have: '60 mm look-ahead', res: stop(vMax) + marg <= lookF ? 'OK · ' + mm(lookF - stop(vMax)) + ' spare' : 'Too fast · capped', col: stop(vMax) + marg <= lookF ? ok : bad },
+      { c: 'Front edge stop · capped ' + vCap.toFixed(2) + ' m/s', need: mm(stop(vCap)), have: '60 mm look-ahead', res: 'OK · ' + mm(lookF - stop(vCap)) + ' spare', col: ok },
+      { c: 'Rear edge stop · reverse 0.12 m/s', need: mm(stop(0.12)), have: '25 mm look-ahead', res: stop(0.12) + 0.005 <= lookR ? 'OK · ' + mm(lookR - stop(0.12)) + ' spare' : 'Tight', col: stop(0.12) + 0.005 <= lookR ? ok : bad },
+      { c: 'Head tilt · hold + nod at 12 rad/s² (ID 2)', need: (tauTilt).toFixed(3) + ' N·m', have: '0.9 N·m', res: Math.round(tauTilt / 0.9 * 100) + '% of budget', col: ok },
+      { c: 'Head pan · 10 rad/s² (ID 1)', need: (tauPan).toFixed(4) + ' N·m', have: '0.9 N·m', res: '< 1% of budget', col: ok },
+      { c: 'Runtime · 3S ' + pack + ' mAh at 4 W average', need: '≥ 2 h', have: runH.toFixed(1) + ' h', res: runH >= 2 ? 'OK' : 'Short', col: runH >= 2 ? ok : bad },
+    ];
+
+    const CC = { act: ['Servos', '#c8463a'], drv: ['Drivetrain', '#e0a83e'], brain: ['Compute, face & sensors', '#6a3f8e'], pwr: ['Power', '#37598a'], mech: ['Print & hardware', '#5ea49b'] };
+    const craw = [
+      ['STS3215 servo, 12 V', 'act', 2, 20], ['Metal servo horns', 'act', 2, 2],
+      ['N20 6 V gearmotor + hall encoder', 'drv', 2, 6], ['DRV8833 breakout', 'drv', 1, 2], ['683ZZ bearings', 'drv', 16, 0.4], ['6806-2RS bearing', 'drv', 1, 3], ['685ZZ + M5 shoulder bolt', 'drv', 1, 1.5],
+      ['Raspberry Pi Zero 2 W + microSD', 'brain', 1, 21], ['ESP32-S3 N16R8 dev board', 'brain', 1, 9], ['Serial bus adapter', 'brain', 1, 6],
+      ['Pi Camera Module 3', 'brain', 1, 25], ['300 mm Zero camera FFC', 'brain', 1, 2], ['1.28" round display', 'brain', 1, 6], ['ICS-43434 mic breakout', 'brain', 2, 4],
+      ['BNO085 IMU breakout', 'brain', 1, 20], ['VL53L8CX 8×8 ToF breakout', 'brain', 1, 20], ['VL53L0X ToF breakout', 'brain', 2, 3], ['Ø28 speaker + MAX98357A', 'brain', 1, 7],
+      ['3S ' + pack + ' mAh smart pack', 'pwr', 1, packCost], ['BQ25798 charger board', 'pwr', 1, 12], ['USB-C PD sink (15 V)', 'pwr', 1, 4], ['5 V / 5 A buck', 'pwr', 1, 6], ['6 V / 3 A buck', 'pwr', 1, 3], ['Servo eFuse', 'pwr', 1, 4], ['Brass toggle + fuse', 'pwr', 1, 6],
+      ['Filament: PETG, CF-nylon, TPU', 'mech', 1, 12], ['Fasteners, inserts, P-clips', 'mech', 1, 7], ['Wire, ribbon, braid, connectors', 'mech', 1, 8],
+    ];
+    const cs = {}; let ct = 0;
+    const money = (v) => v % 1 ? v.toFixed(2) : String(v);
+    const costs = craw.map(([name, kk, qty, unit]) => { const line = Math.round(qty * unit * 100) / 100; ct += line; cs[kk] = (cs[kk] || 0) + line; return { name, cat: CC[kk][0], col: CC[kk][1], qty, unit: money(unit), line: money(line), run: Math.round(ct).toLocaleString('en-US') }; });
+    const costCats = Object.keys(CC).filter((kk) => cs[kk]).map((kk) => ({ name: CC[kk][0], col: CC[kk][1], sum: Math.round(cs[kk]), share: Math.round(cs[kk] / ct * 100) + '%', pct: (cs[kk] / ct * 100).toFixed(2) + '%' }));
+    const r10 = (v) => '$' + Math.round(v / 10) * 10;
+    const savings = [
+      { t: 'Pi Camera Module 2 or an OV5647 Zero camera instead of Module 3 (loses autofocus and HDR)', v: '−$13' },
+      { t: 'BNO085 clone breakout, or LSM6DSOX with heading from track odometry', v: '−$10' },
+      { t: 'Plain 3S LiPo + 3S BMS + INA226 gauge instead of a smart pack', v: '−$8' },
+      { t: 'Waveshare ST3215 (rebadged STS3215) as a pair on sale', v: '−$6' },
+      { t: 'Generic 3S PD charge board instead of BQ25798', v: '−$5' },
+      { t: 'Generic display, mic and amp breakouts', v: '−$6' },
+      { t: 'Print hull and deck in PETG only (no CF-nylon for the yoke and frames)', v: '−$4' },
+    ];
+    const liteTotal = Math.round(ct - 52);
+    const coreCost = Math.round(2 * 20 + 21 + 25 + 20 + 20);
+
+    const aS = '#5ea49b', aC = '#e9a79f', aP = '#efe3c8';
+    const assembly = [
+      { j: 'Motors → hull', m: 'Clamp', bg: aP, d: 'Each N20 sits on a floor saddle under a CF-nylon strap (two M2 into inserts); the gearbox passes through the hull wall and the track frame.' },
+      { j: 'Sprocket → motor shaft', m: 'Screw', bg: aS, d: 'D-bore sprocket, one M2 set screw into a radial insert on the flat.' },
+      { j: 'Track frames → hull', m: 'Screw', bg: aS, d: 'Each CF-nylon frame plate bolts to the hull side with four M3 into wall-boss inserts.' },
+      { j: 'Road wheels', m: 'Screw', bg: aS, d: 'Two 683ZZ per wheel on an M3 × 30 bolt into an insert in the frame boss.' },
+      { j: 'Idler + tension', m: 'Screw', bg: aS, d: 'Idler on two 683ZZ and an M3 bolt into a sliding axle block; an M3 jack screw through the tension boss sets track tension (±3 mm).' },
+      { j: 'Track loop', m: 'Clamp', bg: aP, d: 'Printed TPU loop (64 pads, 6.86 mm pitch) runs over the sprocket, road wheels and idler; guide teeth ride in the wheel grooves and mesh with the sprocket slots.' },
+      { j: 'Fenders', m: 'Screw', bg: aS, d: 'Two tabs per fender, M3 into hull side-wall inserts above the frames.' },
+      { j: 'Battery', m: 'Snap', bg: aC, d: '3S pack (up to 72 × 34 × 22) clicks into a floor cradle between two lipped rails. Reached by lifting the deck.' },
+      { j: 'Electronics', m: 'Screw / snap', bg: aS, d: 'Two CF-nylon trays on floor standoffs (M2.5). Rear tray: Pi Zero 2 W on its 58 × 23 bosses plus an M2.5 grid for the charger, bucks, bus adapter and driver. Front tray: ESP32-S3 in a snap cradle.' },
+      { j: 'Pan servo', m: 'Clamp', bg: aP, d: 'Stands on the floor in a U-frame that takes the torque, with 4 mm of travel along its length: slide it until the spline sits on the bearing axis and fill the gap with printed shims. Pads under the deck clamp it down when the deck is screwed on.' },
+      { j: 'Deck → hull', m: 'Screw', bg: aS, d: 'Four M3 down through the deck corners into hull corner-tube inserts; chrome caps snap over the heads.' },
+      { j: '6806 bearing', m: 'Clamp', bg: aP, d: 'Seated in the deck hub, held by the clamp ring (six M3 into hub inserts).' },
+      { j: 'Pan horn → turntable → yoke', m: 'Screw', bg: aS, d: 'Turntable spigot runs in the bearing; four M3 into the metal horn, four M3 up into yoke inserts.' },
+      { j: 'Tilt servo → drum', m: 'Clamp', bg: aP, d: 'Servo sits in a sleeve moulded on the left end cap, held by a screw-down cap (four M3). Shim along its length so the spline sits on the drum axis.' },
+      { j: 'Tilt horn / idler → yoke', m: 'Screw', bg: aS, d: 'Metal horn to the left arm (four M3 on 14 mm); right side M5 shoulder bolt through a 685ZZ in the arm into an M5 insert in the right end cap.' },
+      { j: 'Drum end caps → tube', m: 'Screw', bg: aS, d: 'Each cap spigots into the tube and takes four M2.5 into tube-boss inserts.' },
+      { j: 'Display + porthole', m: 'Snap', bg: aC, d: 'Ø39 GC9A01 module in the front collar, held by a snap ring; the riveted porthole bezel clicks on over three nubs.' },
+      { j: 'Camera lamp', m: 'Screw', bg: aS, d: 'Camera Module 3 on a plate (four M2 inserts); plate and lamp housing sandwich the drum wall with two M2.' },
+      { j: 'Mics, fin, sensors, speaker', m: 'Clamp / snap', bg: aP, d: 'Mics clamped behind end-cap holes by retainer plates (M2); fin pegs snap into the drum; lidar and drop-off ToF clamped to their windows (M2); speaker under a screw-down ring in the deck.' },
+    ];
+
+    const pm = { pe: ['PETG', '#efe3c8'], ps: ['PETG', '#5ea49b'], cf: ['CF-nylon', '#d7d4cf'], tpk: ['TPU 95A', '#9a9d9e'], tpu: ['TPU 95A', '#e9a79f'] };
+    const P = (part, kk, how, settings) => ({ part, mat: pm[kk][0], bg: pm[kk][1], how, settings });
+    const prints = [
+      P('Track loops ×2', 'tpk', 'Standing up as a Ø140 ring, 26 mm tall; guide teeth and grousers are vertical ribs.', '2 walls (solid) · 0.2 mm · 15 mm/s · no supports'),
+      P('Sprockets, road wheels, idlers', 'cf', 'Flat, outer face down.', '5 walls · 60% · 0.15 mm · no supports'),
+      P('Track frames, idler blocks', 'cf', 'Flat, bosses up.', '5 walls · 50% · 0.2 mm · no supports'),
+      P('Hull tub', 'ps', 'Floor on the bed.', '3 walls · 20% · 0.2 mm · no supports'),
+      P('Deck lid', 'pe', 'Upside down, top on the bed; grille slots bridge.', '3 walls · 15% · 0.16 mm · no supports'),
+      P('Fenders', 'ps', 'Top face down; tabs print upright.', '3 walls · 20% · 0.16 mm · no supports'),
+      P('Turntable, clamp ring, yoke', 'cf', 'Turntable disc down; yoke on its back.', '6 walls · 60% · 0.15 mm · no supports'),
+      P('Drum tube', 'pe', 'Standing on an end.', '3 walls · 15% · 0.16 mm · no supports'),
+      P('Drum end caps', 'ps', 'Outer face down; sleeve and boss print upright.', '4 walls · 30% · 0.16 mm · no supports'),
+      P('Trays, cradle, clamps, caps', 'cf', 'Flat.', '4 walls · 40% · 0.2 mm · no supports'),
+      P('Porthole bezel, lamp, retainer, fin, corner caps', 'pe', 'Face down.', '100% · 0.12 mm · no supports'),
+    ];
+
+    const poseLabel = { explore: 'Explore', look: 'Look · pan 28°, tilt 14°', sleepy: 'Dozing' }[pose] || 'Explore';
+    return {
+      pose, poseLabel, parts, cats, checks, costs, costCats, savings, assembly, prints,
+      totalStr: Math.round(total).toLocaleString('en-US'), packStr: String(pack), ratioStr: String(ratio),
+      vCapStr: vCap.toFixed(2), runStr: runH.toFixed(1),
+      costTotal: Math.round(ct), costRange: r10(ct * 0.88) + '–' + r10(ct * 1.12), liteTotal, coreCost,
+      joints: [
+        { joint: 'Left track', drive: 'N20 + encoder → rear sprocket, D-bore + M3 set screw', support: 'Sprocket stub in 683ZZ; idler and 3 road wheels on 683ZZ pairs' },
+        { joint: 'Right track', drive: 'Mirror of left', support: 'Same' },
+        { joint: 'Track tension', drive: 'Front idler on slotted block', support: 'M3 tension screw into insert, ±4 mm travel' },
+        { joint: 'Head pan · ID 1', drive: 'Upright in hull; metal horn → yoke, 4 × M3', support: '6806-2RS under the turntable takes the head moment' },
+        { joint: 'Head tilt · ID 2', drive: 'Inside drum; metal horn → left yoke arm, 4 × M3', support: '685ZZ + M5 shoulder bolt on the right arm' },
+        { joint: 'Stops', drive: 'Soft limits in firmware', support: 'Printed hard stops 3° beyond each soft limit' },
+      ],
+      modes: [
+        { n: 'Explore', q: '≤ 0.2 m/s · head scanning', d: 'Drives in short legs, stopping to pan the head across the scene. Central builds the map; the VL53L8CX and drop ToFs keep it out of trouble.' },
+        { n: 'Look', q: 'pan ±150° · tilt −25/+35°', d: 'Turns its head to a voice first, then pivots the tracks to follow if the person keeps talking.' },
+        { n: 'Investigate', q: 'creep 0.05 m/s', d: 'Rolls up to a new object, tilts the porthole down to look, backs off and looks again.' },
+        { n: 'Climb', q: 'thresholds ≤ 20 mm', d: 'Squares up to a door strip, slows to 0.1 m/s, climbs with the head tilted up for balance and shows a "hup" face.' },
+        { n: 'Follow', q: '0.4 m behind', d: 'Trails a person around the room on the camera and the forward 8×8 zones.' },
+        { n: 'Doze', q: 'parked · tilt −25°', d: 'Parks, head down, sleepy face. Safety reflex, low battery and night mode all end here.' },
+      ],
+      bodyNotes: [
+        { t: 'Running gear', d: 'Rear sprocket drive, raised front idler and three road wheels per side, all on 683ZZ bearings. Tracks are printed TPU loops with inner guide teeth.' },
+        { t: 'Power', d: '3S smart pack on the belly, charged over rear USB-C PD by a BQ25798. Servos run straight from the pack through an eFuse; a 6 V buck feeds the track motors; a 5 V / 5 A buck feeds the logic.' },
+        { t: 'Reflex brain', d: 'ESP32-S3 N16R8 at the front of the hull owns the servo bus, both encoders, the DRV8833, every ranging sensor and the IMU, and runs the heartbeat watchdog.' },
+        { t: 'Face brain', d: 'Pi Zero 2 W lies over the battery. It drives the display, reads the camera and mics through the neck harness, and plays audio; Central does the thinking.' },
+        { t: 'Neck harness', d: 'A 12-core silicone ribbon and the camera FFC lie flat together in red braid, through a cable clock under the turntable and up the back of the yoke into a grommet in the drum.' },
+        { t: 'Face', d: 'Ø32 GC9A01 behind a chrome porthole with eight brass rivets, on the front of the helmet drum.' },
+        { t: 'Camera', d: 'Camera Module 3 in a chrome "lamp" on the drum top, centred above the face and looking along it.' },
+        { t: 'Microphones & speaker', d: 'Two ICS-43434 behind the sea-foam end discs, 84 mm apart, turning with the head for a voice bearing. Ø28 speaker under the deck grille at the rear.' },
+        { t: 'Sensing', d: 'VL53L8CX in the bow for 8×8 obstacle ranging; VL53L0X drop-off sensors in the bow and stern chins, angled 30° down-and-out. BNO085 at the centre of mass.' },
+        { t: 'Thermal', d: 'Pi and bucks share the hull; air enters under the fenders and leaves through the deck grille.' },
+      ],
+      reflex: [
+        { t: 'T+0', h: 'Stop', d: 'Tracks and both servo targets frozen.' },
+        { t: 'T+0', h: 'Brake', d: 'DRV8833 short-brake; servos hold at full torque.' },
+        { t: 'T+0 → 2 s', h: 'Wait', d: 'Face shows a listening ellipsis while waiting for Central.' },
+        { t: 'T+2 s', h: 'Rest pose', d: 'Clear any edge within 40 mm at 0.05 m/s, then head to pan 0°, tilt −25° at 30°/s.' },
+        { t: 'At rest', h: 'Torque low', d: 'Servos to 20% torque; DRV8833 asleep.' },
+        { t: 'At rest', h: 'Sleepy face', d: 'Half-closed eyes, lost-connection glyph, amp muted.' },
+      ],
+      manifest: [
+        { dev: 'STS3215 pan', host: 'ESP32-S3', bus: 'UART1 servo bus 1M', addr: 'ID 1', pins: 'TX17 RX18' },
+        { dev: 'STS3215 tilt', host: 'ESP32-S3', bus: 'UART1 servo bus 1M', addr: 'ID 2', pins: 'via neck harness' },
+        { dev: 'Track motor L', host: 'ESP32-S3', bus: 'DRV8833 · LEDC 20 kHz', addr: '—', pins: 'IN1 38 · IN2 39' },
+        { dev: 'Track motor R', host: 'ESP32-S3', bus: 'DRV8833 · LEDC 20 kHz', addr: '—', pins: 'IN1 40 · IN2 41' },
+        { dev: 'Encoder L / R', host: 'ESP32-S3', bus: 'PCNT quadrature', addr: 'unit 0 / 1', pins: 'L 1/2 · R 47/3' },
+        { dev: 'DRV8833 control', host: 'ESP32-S3', bus: 'GPIO', addr: '—', pins: 'nSLEEP 42 · nFAULT → 21' },
+        { dev: 'Servo eFuse', host: 'ESP32-S3', bus: 'GPIO', addr: '—', pins: 'EN 14 · FLT → 21 (wired-OR)' },
+        { dev: 'VL53L8CX forward', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x29', pins: 'SDA8 SCL9 · LPn 4 · INT 5' },
+        { dev: 'VL53L0X drop front', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x30', pins: 'XSHUT 10' },
+        { dev: 'VL53L0X drop rear', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x31', pins: 'XSHUT 11' },
+        { dev: 'BNO085 IMU', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x4A', pins: 'INT 7' },
+        { dev: 'BQ25798 charger', host: 'ESP32-S3', bus: 'I²C0 400k', addr: '0x6B', pins: 'INT 6' },
+        { dev: '3S pack gauge', host: 'ESP32-S3', bus: 'I²C1 SMBus 100k', addr: '0x0B', pins: 'SDA12 SCL13' },
+        { dev: 'Pi link', host: 'ESP32-S3 ↔ Pi', bus: 'UART 921600', addr: '—', pins: 'S3 TX15 RX16 · Pi TX14 RX15' },
+        { dev: 'Pi wake/halt', host: 'ESP32-S3', bus: 'GPIO', addr: '—', pins: 'S3 GPIO46 → Pi GPIO3' },
+        { dev: 'Status LED', host: 'ESP32-S3', bus: 'RMT', addr: '—', pins: 'GPIO48' },
+        { dev: 'GC9A01 display', host: 'Pi Zero 2 W', bus: 'SPI0 40M', addr: 'CE0', pins: 'MOSI10 SCLK11 CS8 DC25 RST24 BL13' },
+        { dev: 'ICS-43434 ×2', host: 'Pi Zero 2 W', bus: 'I²S in', addr: 'L / R', pins: 'BCLK18 LRCLK19 DIN20' },
+        { dev: 'MAX98357A', host: 'Pi Zero 2 W', bus: 'I²S out', addr: '—', pins: 'DOUT21 SD16' },
+        { dev: 'Camera Module 3', host: 'Pi Zero 2 W', bus: 'CSI-2', addr: 'cam0', pins: '22-pin FFC, 300 mm' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
