@@ -14,7 +14,8 @@
     "reexport": "node tools/reexport.js",
     "diagnose": "node tools/diagnose-mesh.mjs",
     "site": "node tools/serve.js",
-    "site-data": "node tools/site-data.js"
+    "site-data": "node tools/site-data.js",
+    "new-body": "node tools/new-body.js"
   },
   "devDependencies": {
     "ajv": "^8.20.0",

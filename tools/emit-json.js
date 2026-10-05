@@ -21,11 +21,24 @@ const P = require('./lib/packs');
 
 const check = process.argv.includes('--check');
 
-// Per the catalog's `class`, in the schema's freeform vocabulary.
-const KIND = {
-  'dial': 'desk', 'scout': 'rover', 'rover-lite': 'rover', 'wobble': 'rover',
-  'lamp': 'arm', 'inchworm': 'arm', 'biped-mini': 'walker',
+// body.kind, in the schema's freeform vocabulary, derived from the catalog's
+// `class` rather than a table keyed by slug.
+//
+// It was a table, and a new body got kind: undefined and failed the schema on
+// a required property it never names - which is a terrible first experience for
+// someone adding their first pack. Deriving it means any new class still
+// produces something, and the fallback is the class's own first word.
+const KIND_BY_CLASS = {
+  'desk / shelf': 'desk',
+  'desk arm': 'arm',
+  'floor runner': 'rover',
+  'tracked explorer': 'rover',
+  'self-balancing': 'rover',
+  'walker': 'walker',
 };
+const kindOf = (cls) => KIND_BY_CLASS[String(cls || '').toLowerCase().trim()]
+  || String(cls || 'body').toLowerCase().split(/[\s/]+/)[0]
+  || 'body';
 
 const peripheral = (hw, pred) => (hw.peripherals || []).find(pred);
 
@@ -116,7 +129,7 @@ function buildManifest(slug, tpl, hw, cat) {
   return {
     protocol_version: 1,
     body: {
-      kind: KIND[slug],
+      kind: kindOf(cat && cat.class),
       name: tpl.body.name,
       vendor: 'Meckie bodies',
       model: slug,

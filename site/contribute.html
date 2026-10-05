@@ -54,6 +54,28 @@
 
   <section>
     <div class="section-head"><span class="section-num">01</span>
+      <h2 class="section-title">Start from a working body</h2></div>
+    <p class="muted" style="margin:0 0 18px">A pack is ten-odd files that have to agree with each
+      other. Rather than start from nothing, copy one that already works &mdash; then change it a
+      part at a time and watch what breaks.</p>
+    <pre class="code">npm install
+npm run new-body -- my-body "My Body"      # copies Scout: 1 board, 19 parts, no serial servos
+npm run sync &amp;&amp; npm run emit &amp;&amp; npm run site-data
+npm run check</pre>
+    <p class="muted" style="margin:18px 0 0">That gives you a complete, valid pack that already
+      shows up in the catalog, and exactly one failing check:</p>
+    <div class="note warn" style="margin-top:12px">
+      <span class="mono">my-body: still an unmodified copy of scout &mdash; its Print Parts geometry
+      is scout's with the names changed.</span>
+    </div>
+    <p class="muted" style="margin:14px 0 0">That is the whole job, stated as a test. Pass
+      <span class="mono">--from</span> to start from a body closer to what you are building &mdash;
+      <span class="mono">--from biped-mini</span> for legs, <span class="mono">--from lamp</span>
+      for an arm.</p>
+  </section>
+
+  <section>
+    <div class="section-head"><span class="section-num">02</span>
       <h2 class="section-title">The shape of a pack</h2></div>
     <pre class="code">bodies/&lt;slug&gt;/
   &lt;Name&gt; Design Brief.dc.html     the full brief, sections 01-06
@@ -75,7 +97,7 @@
   </section>
 
   <section>
-    <div class="section-head"><span class="section-num">02</span>
+    <div class="section-head"><span class="section-num">03</span>
       <h2 class="section-title">The rules CI enforces</h2></div>
 
     <div class="card" style="padding:26px 28px">
@@ -117,13 +139,14 @@
   </section>
 
   <section>
-    <div class="section-head"><span class="section-num">03</span>
+    <div class="section-head"><span class="section-num">04</span>
       <h2 class="section-title">Submitting</h2></div>
     <pre class="code">git checkout -b my-body
-# add bodies/&lt;slug&gt;/ following the standard
-npm run sync &amp;&amp; npm run emit
+npm run new-body -- my-body "My Body"
+# design it: geometry, manifest, brief, buy list
+npm run sync &amp;&amp; npm run emit &amp;&amp; npm run site-data
 npm run check     # validate + generators current + the gates still fail on bad input
-# open a PR</pre>
+# drop "scaffolded_from" from your bodies.json entry, then open a PR</pre>
     <p class="muted" style="margin-top:18px">Hardware must be CERN-OHL-S-2.0 and code MIT, and the
       pack must include a Hangar Bay template. A community body gets a <em>known template</em> —
       pick it by name in Hangar Bay, flash, go — once it is accepted into the catalog. Until then it

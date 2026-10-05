@@ -464,6 +464,53 @@ function readDir(g, dir, what) {
   }
 }
 
+// --------------------------------------------------------- scaffolding ---
+{
+  const g = group('scaffold');
+  if (!g.skip) {
+    // A body scaffolded from another starts as a copy with a new name. Good way
+    // to start, bad thing to ship: a renamed scout is not a new body.
+    //
+    // The test is the GEOMETRY, not the STLs. Comparing exported bytes looked
+    // right and was not: a scaffold re-exports its meshes, so a handful of
+    // files shift and the comparison lets the whole copy through. The Print
+    // Parts page is the design - if it still says what its source says once the
+    // renames are undone, nothing has been designed yet.
+    for (const b of catalog.bodies) {
+      const from = b.scaffolded_from;
+      if (!from) continue;
+      if (!slugs.includes(from)) {
+        g.fail(`${b.slug}: scaffolded_from names "${from}", which is not a body here`);
+        continue;
+      }
+      const srcEntry = catalog.bodies.find(x => x.slug === from);
+      const pageOf = (slug, entry) => {
+        const dir = P.packDir(slug);
+        let files;
+        try { files = fs.readdirSync(dir); } catch (e) { return null; }
+        const hit = files.find(f => f.endsWith(' Print Parts.html'));
+        if (!hit) return null;
+        try { return fs.readFileSync(path.join(dir, hit), 'utf8'); } catch (e) { return null; }
+      };
+      const mine = pageOf(b.slug, b);
+      const theirs = pageOf(from, srcEntry);
+      if (mine === null || theirs === null) { g.pass(); continue; }  // layout reports it
+
+      // Undo what the scaffold renamed, so only real design changes survive.
+      const norm = (text, slug, name) => text
+        .split(`window.${slug.replace(/-/g, '')}Parts`).join('@PARTS@')
+        .split(name).join('@NAME@')
+        .split(slug).join('@SLUG@');
+      const same = norm(mine, b.slug, b.name) === norm(theirs, from, srcEntry.name);
+
+      g.check(!same,
+        `${b.slug}: still an unmodified copy of ${from} — its Print Parts geometry is ` +
+        `${from}'s with the names changed. Design it, then drop "scaffolded_from" from ` +
+        'its bodies.json entry.');
+    }
+  }
+}
+
 // ----------------------------------------------------- stl reproducibility ---
 {
   const g = group('reproducible');

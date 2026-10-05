@@ -33,11 +33,13 @@ async function main() {
   if (all || verify) {
     jobs = P.slugs().map(slug => ({ slug, keys: null }));
   } else {
-    if (rest.length < 2) {
-      console.error('usage: reexport.js <slug> <part>...   |   --all   |   --verify');
+    if (!rest.length) {
+      console.error('usage: reexport.js <slug> [<part>...]   |   --all   |   --verify');
       process.exit(2);
     }
-    jobs = [{ slug: rest[0], keys: rest.slice(1) }];
+    // A slug on its own means every part of that body, which is what
+    // scaffolding a new pack needs. Naming parts narrows it.
+    jobs = [{ slug: rest[0], keys: rest.length > 1 ? rest.slice(1) : null }];
   }
 
   let wrote = 0, checked = 0, drift = 0, worst = 0, missing = 0;
