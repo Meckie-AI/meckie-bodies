@@ -1,0 +1,796 @@
+{
+  "slug": "dial",
+  "name": "Dial",
+  "class": "desk / shelf",
+  "moves": "pan + tilt head, no locomotion",
+  "servos": "2× STS3215",
+  "brains": "Pi Zero 2 W + ESP32-S3",
+  "power": "3S 1500 mAh smart pack + USB-C PD",
+  "mass_g": 1270,
+  "bom_usd": 301,
+  "stl": 32,
+  "tagline": "A little 1950s portable TV who turns to look at whoever is talking.",
+  "folder": "bodies/dial",
+  "brief": "bodies/dial/Dial Design Brief.dc.html",
+  "viewer": "bodies/dial/Dial Viewer.html",
+  "print_parts": "bodies/dial/Dial Print Parts.html",
+  "stl_dir": "bodies/dial/stl",
+  "parts_csv": "bodies/dial/parts-list.csv",
+  "manifest": "bodies/dial/firmware/hangar_bay_dial.yaml",
+  "status": "design complete · not yet test-printed",
+  "license": {
+    "hardware": "CERN-OHL-S-2.0",
+    "code": "MIT"
+  },
+  "hangar_bay_template": "bodies/dial/hangar-bay/dial.template.yaml",
+  "hardware_sha256": "13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01",
+  "version": "1.0.0",
+  "drives": false,
+  "pack_url": "unpublished",
+  "targets": [
+    {
+      "key": "reflex",
+      "role": "body",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "face",
+      "role": null,
+      "host": "rpi_zero_2w",
+      "mcu": null,
+      "board": null,
+      "platform": null,
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      },
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client"
+    }
+  ],
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "required": false,
+      "writes": null,
+      "checks": null,
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "required": false,
+      "writes": "servos[].offset_deg",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "required": false,
+      "writes": null,
+      "checks": [
+        "tof_front"
+      ],
+      "auto": false
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true,
+      "writes": null,
+      "checks": null,
+      "auto": false
+    }
+  ],
+  "parts": [
+    {
+      "key": "base_pan",
+      "name": "Base pan",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Floor on the bed. No supports.",
+      "file": "dial-base_pan-x1.stl",
+      "bytes": 415984,
+      "size": "406 KB",
+      "triangles": 8318
+    },
+    {
+      "key": "clamp_ring",
+      "name": "Bearing clamp ring",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "dial-clamp_ring-x1.stl",
+      "bytes": 151184,
+      "size": "148 KB",
+      "triangles": 3022
+    },
+    {
+      "key": "tray",
+      "name": "Electronics tray (10 mm insert grid)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "dial-tray-x1.stl",
+      "bytes": 289284,
+      "size": "283 KB",
+      "triangles": 5784
+    },
+    {
+      "key": "chassis",
+      "name": "Head chassis plate",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat, bosses up (front-facing side up). No supports.",
+      "file": "dial-chassis-x1.stl",
+      "bytes": 288284,
+      "size": "282 KB",
+      "triangles": 5764
+    },
+    {
+      "key": "pan_sleeve",
+      "name": "Pan servo clamp sleeve",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flange down. No supports. Servo stands shaft-up; slotted flange sets the shaft on the bearing axis.",
+      "file": "dial-pan_sleeve-x1.stl",
+      "bytes": 66984,
+      "size": "65 KB",
+      "triangles": 1338
+    },
+    {
+      "key": "pan_sleeve_cap",
+      "name": "Pan servo clamp sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "dial-pan_sleeve_cap-x1.stl",
+      "bytes": 99584,
+      "size": "97 KB",
+      "triangles": 1990
+    },
+    {
+      "key": "tilt_sleeve",
+      "name": "Tilt servo clamp sleeve",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flange down. No supports. Bolts to the chassis rear face; the servo passes through the chassis window. Shim between cap and servo to set the spline on the pivot axis.",
+      "file": "dial-tilt_sleeve-x1.stl",
+      "bytes": 105084,
+      "size": "103 KB",
+      "triangles": 2100
+    },
+    {
+      "key": "tilt_sleeve_cap",
+      "name": "Tilt servo clamp sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "dial-tilt_sleeve_cap-x1.stl",
+      "bytes": 99584,
+      "size": "97 KB",
+      "triangles": 1990
+    },
+    {
+      "key": "tilt_stop",
+      "name": "Tilt servo front stop strap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Bar down. No supports.",
+      "file": "dial-tilt_stop-x1.stl",
+      "bytes": 41084,
+      "size": "40 KB",
+      "triangles": 820
+    },
+    {
+      "key": "turntable",
+      "name": "Turntable",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Disc down, spigot up. No supports.",
+      "file": "dial-turntable-x1.stl",
+      "bytes": 225184,
+      "size": "220 KB",
+      "triangles": 4502
+    },
+    {
+      "key": "yoke",
+      "name": "Yoke",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Lay on its back (−X face). 6 walls, 60% infill.",
+      "file": "dial-yoke-x1.stl",
+      "bytes": 195084,
+      "size": "191 KB",
+      "triangles": 3900
+    },
+    {
+      "key": "battery_hatch",
+      "name": "Battery hatch",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Stand on its bottom edge (hinge pins down). Brim.",
+      "file": "dial-battery_hatch-x1.stl",
+      "bytes": 32684,
+      "size": "32 KB",
+      "triangles": 652
+    },
+    {
+      "key": "front_shell",
+      "name": "Cabinet front shell",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Face down. Snap hooks print upright. No supports.",
+      "file": "dial-front_shell-x1.stl",
+      "bytes": 431284,
+      "size": "421 KB",
+      "triangles": 8624
+    },
+    {
+      "key": "rear_shell",
+      "name": "Cabinet rear cover + tube bell",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Bell end down. Taper under 45°, vents bridge. No supports.",
+      "file": "dial-rear_shell-x1.stl",
+      "bytes": 248084,
+      "size": "242 KB",
+      "triangles": 4960
+    },
+    {
+      "key": "cable_clock",
+      "name": "Cable clock (1.25-turn spool, screws to the turntable underside)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down.",
+      "file": "dial-cable_clock-x1.stl",
+      "bytes": 135484,
+      "size": "132 KB",
+      "triangles": 2708
+    },
+    {
+      "key": "camera_bracket",
+      "name": "Camera bracket",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Foot down. No supports.",
+      "file": "dial-camera_bracket-x1.stl",
+      "bytes": 41684,
+      "size": "41 KB",
+      "triangles": 832
+    },
+    {
+      "key": "camera_pod",
+      "name": "Camera pod (snap-on)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Top face down; hooks print upright.",
+      "file": "dial-camera_pod-x1.stl",
+      "bytes": 13284,
+      "size": "13 KB",
+      "triangles": 264
+    },
+    {
+      "key": "carry_handle",
+      "name": "Carry handle (chrome, M3 into rear-cover inserts)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Flat on its side.",
+      "file": "dial-carry_handle-x1.stl",
+      "bytes": 63084,
+      "size": "62 KB",
+      "triangles": 1260
+    },
+    {
+      "key": "esp_cradle",
+      "name": "ESP32-S3 DevKitC snap cradle",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down. Rails flex to click the board in.",
+      "file": "dial-esp_cradle-x1.stl",
+      "bytes": 43684,
+      "size": "43 KB",
+      "triangles": 872
+    },
+    {
+      "key": "handle_caps",
+      "name": "Handle boss caps (brass, snap over the screw heads)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, brass paint",
+      "orientation": "Flat.",
+      "file": "dial-handle_caps-x2.stl",
+      "bytes": 9484,
+      "size": "9 KB",
+      "triangles": 188
+    },
+    {
+      "key": "knob",
+      "name": "Knob (snap pin, free-turning)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, brass paint",
+      "orientation": "Face down, pin up.",
+      "file": "dial-knob-x2.stl",
+      "bytes": 29984,
+      "size": "29 KB",
+      "triangles": 598
+    },
+    {
+      "key": "knob_panel",
+      "name": "Knob panel",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Front face down; tabs print upright.",
+      "file": "dial-knob_panel-x1.stl",
+      "bytes": 73684,
+      "size": "72 KB",
+      "triangles": 1472
+    },
+    {
+      "key": "mic_clamp",
+      "name": "Mic retainer plate",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "dial-mic_clamp-x2.stl",
+      "bytes": 84284,
+      "size": "82 KB",
+      "triangles": 1684
+    },
+    {
+      "key": "screen_surround",
+      "name": "Screen surround",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down; tabs print upright.",
+      "file": "dial-screen_surround-x1.stl",
+      "bytes": 96084,
+      "size": "94 KB",
+      "triangles": 1920
+    },
+    {
+      "key": "seam_band",
+      "name": "Seam band (split ring)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Flat.",
+      "file": "dial-seam_band-x1.stl",
+      "bytes": 91884,
+      "size": "90 KB",
+      "triangles": 1836
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring (Ø40)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "dial-speaker_ring-x1.stl",
+      "bytes": 82784,
+      "size": "81 KB",
+      "triangles": 1654
+    },
+    {
+      "key": "swivel_tier",
+      "name": "Swivel tier",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Top face down on the bed. No supports.",
+      "file": "dial-swivel_tier-x1.stl",
+      "bytes": 274684,
+      "size": "268 KB",
+      "triangles": 5492
+    },
+    {
+      "key": "tof_bezel",
+      "name": "ToF window bezel (red)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG signal red",
+      "orientation": "Face down.",
+      "file": "dial-tof_bezel-x1.stl",
+      "bytes": 104484,
+      "size": "102 KB",
+      "triangles": 2088
+    },
+    {
+      "key": "strap",
+      "name": "Battery strap",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flat.",
+      "file": "dial-strap-x1.stl",
+      "bytes": 65084,
+      "size": "64 KB",
+      "triangles": 1300
+    },
+    {
+      "key": "tpu_foot",
+      "name": "Foot",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flat, floor down. 3 walls, 15% gyroid.",
+      "file": "dial-tpu_foot-x1.stl",
+      "bytes": 144284,
+      "size": "141 KB",
+      "triangles": 2884
+    },
+    {
+      "key": "lcd_retainer",
+      "name": "LCD retainer (clamps the module)",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flat. 3 walls.",
+      "file": "dial-lcd_retainer-x1.stl",
+      "bytes": 132084,
+      "size": "129 KB",
+      "triangles": 2640
+    },
+    {
+      "key": "rear_grommet",
+      "name": "Neck harness grommet",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flange down.",
+      "file": "dial-rear_grommet-x1.stl",
+      "bytes": 18484,
+      "size": "18 KB",
+      "triangles": 368
+    }
+  ],
+  "buy": [
+    {
+      "part": "STS3215 / ST3215 serial bus servo, 12 V 30 kg",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CFY52HVV",
+      "notes": "Get the 12 V / 30 kg version, not the 7.4 V one."
+    },
+    {
+      "part": "Metal servo horn for STS3215 (25T)",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=STS3215%20metal%20servo%20horn%20aluminum",
+      "notes": "Some servos ship with a metal horn; check before buying."
+    },
+    {
+      "part": "6810-2RS bearing (50×65×7)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=6810-2RS%20bearing",
+      "notes": ""
+    },
+    {
+      "part": "Raspberry Pi Zero 2 W",
+      "qty": "1",
+      "where": "raspberrypi.com",
+      "link": "https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/",
+      "notes": "Usually marked up on Amazon. Buy from an approved reseller at list price, with a 32 GB microSD."
+    },
+    {
+      "part": "ESP32-S3-DevKitC-1 N16R8",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CDRM6BGQ",
+      "notes": "Must be N16R8 (16 MB flash, 8 MB PSRAM)."
+    },
+    {
+      "part": "Serial bus servo driver / adapter board",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJBKQ8LJ",
+      "notes": "TTL half-duplex adapter for ST/SC servos."
+    },
+    {
+      "part": "Raspberry Pi Camera Module 3",
+      "qty": "1",
+      "where": "raspberrypi.com",
+      "link": "https://www.raspberrypi.com/products/camera-module-3/",
+      "notes": "Standard (not wide) lens, plus a Zero-size FFC cable."
+    },
+    {
+      "part": "2.8\" 320×240 IPS SPI display",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=2.8%20inch%20IPS%20SPI%20display%20320x240%20ST7789",
+      "notes": "ST7789 driver, IPS panel."
+    },
+    {
+      "part": "VL53L8CX 8×8 ToF lidar breakout",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=SATEL-VL53L8",
+      "notes": "ST SATEL-VL53L8 board. A VL53L5CX board on Amazon is a close substitute."
+    },
+    {
+      "part": "ICS-43434 I²S MEMS mic breakout",
+      "qty": "2",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=ICS-43434",
+      "notes": "Rarely on Amazon. INMP441 boards on Amazon work as a substitute."
+    },
+    {
+      "part": "MAX98357A I²S amplifier breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJMBMXMH",
+      "notes": ""
+    },
+    {
+      "part": "Speaker, Ø40 mm, 4–8 Ω 3 W",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=40mm%20speaker%204%20ohm%203W",
+      "notes": ""
+    },
+    {
+      "part": "3S Li-ion pack with BMS + balance lead",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=3S%2011.1V%2018650%20battery%20pack%20BMS%20balance",
+      "notes": "Capacity as in the brief."
+    },
+    {
+      "part": "BQ25798 charger breakout",
+      "qty": "1",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=BQ25798",
+      "notes": "Multi-cell USB-C charger with power path."
+    },
+    {
+      "part": "USB-C PD trigger board (sink)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0H1BYPQ1T",
+      "notes": "DIP-switch selectable voltage; set to the value in the brief."
+    },
+    {
+      "part": "5 V / 5 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=5V%205A%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "eFuse / load switch breakout",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=TPS25947%20evaluation",
+      "notes": "TPS2594x-class eFuse. A 10 A blade fuse plus MOSFET switch board works as a simpler alternative."
+    },
+    {
+      "part": "Toggle switch + inline blade fuse holder",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=brass%20toggle%20switch%20SPST%2010A",
+      "notes": "Pick a brass or chrome finish."
+    },
+    {
+      "part": "Steel ballast disc, laser-cut",
+      "qty": "1",
+      "where": "SendCutSend",
+      "link": "https://sendcutsend.com",
+      "notes": "Ø130 × 4 mm mild steel, 3× M4 tapped at R50 (30°, 150°, 270°)."
+    }
+  ],
+  "manifest_text": "body: dial\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, reserved_gpio: [26-37] }\n  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: head }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  i2c0:      { host: reflex, sda: 8,  scl: 9,  hz: 400000 }\n  i2c1_smb:  { host: reflex, sda: 10, scl: 11, hz: 100000 }\n  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\n  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 62500000 }\n  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }\n  csi:       { host: face, port: cam0 }\nservos:\n  - { id: 1, name: pan,  model: sts3215, center: 2048, min: 341,  max: 3755, rest: 2048 }\n  - { id: 2, name: tilt, model: sts3215, center: 2048, min: 1707, max: 2503, rest: 1764 }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }\nperipherals:\n  - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5, role: presence }\n  - { name: charger,    part: bq25798,   bus: i2c0, addr: 0x6B, int: 6, ce: 7 }\n  - { name: gauge,      part: sbs_pack,  bus: i2c1_smb, addr: 0x0B }\n  - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }\n  - { name: face_wake,  gpio: 14, to: face.gpio3 }\n  - { name: status_led, part: ws2812,    gpio: 48 }\n  - { name: display,    part: st7789v,   bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 320x240, rotation: 90 }\n  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 92 }\n  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }\n  - { name: camera,     part: imx708,    bus: csi }\nsensing_rule: { drives: false, forward_lidar: tof_front, drop_off: not_applicable_fixed_base }\nsafety:\n  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]\n  routine:  [stop, brake, wait_2s, slow_to_rest, torque_low, face_sleepy]\n  resume:   fresh_command_only\n",
+  "manifest_json": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "desk",
+      "name": "Dial",
+      "vendor": "Meckie bodies",
+      "model": "dial",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 320,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 48000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 1
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/dial/firmware/hangar_bay_dial.yaml",
+      "hardware_sha256": "13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build_json": {
+    "model": "dial",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "pan",
+            "model": "sts3215"
+          },
+          {
+            "id": 2,
+            "name": "tilt",
+            "model": "sts3215"
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display (st7789v)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+      },
+      {
+        "what": "2 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "mic (ics43434)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "camera (imx708)",
+        "value": "hosted on face",
+        "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): face",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/dial/hangar-bay/dial.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "unsupported": [
+    {
+      "what": "display (st7789v)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+    },
+    {
+      "what": "2 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "mic (ics43434)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "camera (imx708)",
+      "value": "hosted on face",
+      "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): face",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 35,
+  "esp32_only": false,
+  "servo_type": "serial bus"
+}

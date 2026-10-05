@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Meckie bodies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,700;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <a class="brand" href="/">Meckie bodies<span class="dot">.</span></a>
+  <nav class="topnav">
+    <a href="/" class="on">Catalog</a>
+    <a href="/contribute">Contribute</a>
+    <a href="/bodies.json">Feed</a>
+  </nav>
+</div></div>
+
+<div class="wrap">
+  <header class="masthead">
+    <h1>Bodies.</h1>
+    <p class="tagline">Open-hardware vehicles a household Meckie can inhabit. Each one runs its
+      reflexes and senses locally and streams to Central for thinking. Print it, flash it, and it
+      is a body.</p>
+    <div class="rule"></div>
+  </header>
+
+  <section style="margin-top:28px">
+    <div class="statgrid" id="topstats"></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">The catalog</h2>
+    </div>
+
+    <div class="filters" id="filters"></div>
+    <p class="label" id="count" style="margin:14px 0 0"></p>
+
+    <div class="grid" id="grid"></div>
+    <p class="muted small" id="empty" hidden style="margin-top:24px">
+      Nothing matches those filters.
+    </p>
+  </section>
+
+  <section>
+    <div class="note">
+      <strong>Verify before you print.</strong> No STL here has been sliced or test-printed. Each
+      pack's <span class="mono">README.txt</span> lists the first test prints, and the servo spline
+      position along the STS3215 / STS3032 case is not published &mdash; every servo pocket carries
+      3&nbsp;mm of shim room, and the first build of each body should measure it and record what it
+      finds.
+    </div>
+  </section>
+</div>
+
+<footer><div class="wrap">
+  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT). Meckie OS is free to
+     download; the Meckie brain is a paid service.</p>
+</div></footer>
+
+<script>
+const FILTERS = [
+  { key: 'class', label: 'Class', get: b => b.class },
+  { key: 'drives', label: 'Moves', get: b => (b.drives ? 'drives' : 'fixed base') },
+  { key: 'boards', label: 'Boards', get: b => (b.esp32_only ? 'ESP32 only' : 'ESP32 + Pi') },
+  { key: 'servo_type', label: 'Actuators', get: b => b.servo_type },
+  { key: 'price', label: 'Price', get: b => (b.bom_usd < 150 ? 'under $150' : b.bom_usd < 300 ? '$150–300' : 'over $300') },
+];
+
+const active = new Map();   // filter key -> value
+let BODIES = [];
+
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v;
+    else if (k === 'html') n.innerHTML = v;
+    else if (v !== null && v !== undefined) n.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null) n.append(c);
+  return n;
+};
+
+function topStats(bodies) {
+  const prints = bodies.reduce((n, b) => n + b.stl, 0);
+  const cheapest = bodies.reduce((a, b) => (b.bom_usd < a.bom_usd ? b : a));
+  const stats = [
+    ['Bodies', String(bodies.length)],
+    ['Print files', String(prints)],
+    ['Licence', 'CERN-OHL-S-2.0 hardware · MIT code'],
+    ['Cheapest build', cheapest.name + ' · ~$' + cheapest.bom_usd],
+  ];
+  const g = document.getElementById('topstats');
+  g.replaceChildren(...stats.map(([k, v]) =>
+    el('div', { class: 'stat' }, el('div', { class: 'label' }, k), el('div', { class: 'v' }, v))));
+}
+
+function drawFilters() {
+  const bar = document.getElementById('filters');
+  bar.replaceChildren();
+  for (const f of FILTERS) {
+    const values = [...new Set(BODIES.map(f.get))].sort();
+    if (values.length < 2) continue;
+    const facet = el('div', { class: 'facet' }, el('span', { class: 'label' }, f.label));
+    for (const v of values) {
+      const on = active.get(f.key) === v;
+      const b = el('button', { class: 'pill' + (on ? ' on' : ''), type: 'button' }, v);
+      b.onclick = () => {
+        if (active.get(f.key) === v) active.delete(f.key); else active.set(f.key, v);
+        drawFilters(); drawGrid();
+      };
+      facet.append(b);
+    }
+    bar.append(facet);
+  }
+  if (active.size) {
+    const clear = el('button', { class: 'pill red', type: 'button' }, 'Clear');
+    clear.onclick = () => { active.clear(); drawFilters(); drawGrid(); };
+    bar.append(clear);
+  }
+}
+
+function matches(b) {
+  for (const f of FILTERS) {
+    const want = active.get(f.key);
+    if (want !== undefined && f.get(b) !== want) return false;
+  }
+  return true;
+}
+
+function card(b) {
+  const stat = (k, v) => el('div', {}, el('span', { class: 'k' }, k), el('span', { class: 'v' }, v));
+  // The viewer is the pack's own three.js page, embedded. It is the same file a
+  // builder opens from disk, so the catalog cannot drift from the geometry.
+  const src = '/packs/' + b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop()) + '?view=iso&embed=1';
+  const frame = el('iframe', { src, loading: 'lazy', title: b.name + ' — 3D view' });
+  const port = el('div', { class: 'viewport' }, el('div', { class: 'loading' }, 'Building geometry…'), frame);
+  frame.addEventListener('load', () => { const l = port.querySelector('.loading'); if (l) l.remove(); });
+
+  return el('a', { class: 'card bodycard', href: '/body/' + b.slug, style: 'color:inherit' },
+    port,
+    el('div', { class: 'body' },
+      el('h3', {}, b.name),
+      el('div', { class: 'row chips', style: 'gap:6px' },
+        el('span', { class: 'chip foam' }, b.class),
+        b.drives ? el('span', { class: 'chip red' }, 'drives') : null,
+        el('span', { class: 'chip' + (b.esp32_only ? ' brass' : ' steel') }, b.esp32_only ? 'ESP32 only' : 'ESP32 + Pi')),
+      el('p', { class: 'tag' }, b.tagline),
+      el('div', { class: 'stats' },
+        stat('Actuators', b.servos.replace(/\s*\([^)]*\)/g, '')),
+        stat('Mass', b.mass_g + ' g'),
+        stat('BOM', '~$' + b.bom_usd),
+        stat('Prints', b.stl + ' files'))));
+}
+
+function drawGrid() {
+  const list = BODIES.filter(matches);
+  const grid = document.getElementById('grid');
+  grid.replaceChildren(...list.map(card));
+  document.getElementById('empty').hidden = list.length > 0;
+  document.getElementById('count').textContent =
+    list.length === BODIES.length
+      ? BODIES.length + ' bodies'
+      : list.length + ' of ' + BODIES.length + ' bodies';
+}
+
+fetch('/data/index.json').then(r => r.json()).then(d => {
+  BODIES = d.bodies;
+  topStats(BODIES);
+  drawFilters();
+  drawGrid();
+}).catch(e => {
+  document.getElementById('grid').append(
+    el('p', { class: 'muted' }, 'Could not load the catalog: ' + e.message +
+      ' — run npm run site-data first.'));
+});
+</script>
+</body>
+</html>

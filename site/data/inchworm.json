@@ -1,0 +1,942 @@
+{
+  "slug": "inchworm",
+  "name": "Inchworm",
+  "class": "desk arm",
+  "moves": "5-DOF serpentine chain",
+  "servos": "5× STS3215",
+  "brains": "Pi Zero 2 W + ESP32-S3 (base) + XIAO ESP32-S3 Sense (head)",
+  "power": "USB-C PD wall power",
+  "mass_g": 1835,
+  "bom_usd": 266,
+  "stl": 37,
+  "tagline": "A weird, endearing critter that stretches, peeks and glows.",
+  "folder": "bodies/inchworm",
+  "brief": "bodies/inchworm/Inchworm Design Brief.dc.html",
+  "viewer": "bodies/inchworm/Inchworm Viewer.html",
+  "print_parts": "bodies/inchworm/Inchworm Print Parts.html",
+  "stl_dir": "bodies/inchworm/stl",
+  "parts_csv": "bodies/inchworm/parts-list.csv",
+  "manifest": "bodies/inchworm/firmware/hangar_bay_inchworm.yaml",
+  "status": "design complete · not yet test-printed",
+  "license": {
+    "hardware": "CERN-OHL-S-2.0",
+    "code": "MIT"
+  },
+  "hangar_bay_template": "bodies/inchworm/hangar-bay/inchworm.template.yaml",
+  "hardware_sha256": "b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7",
+  "version": "1.0.0",
+  "drives": false,
+  "pack_url": "unpublished",
+  "targets": [
+    {
+      "key": "reflex",
+      "role": "body",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "head",
+      "role": "head",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "audio",
+      "role": null,
+      "host": "rpi_zero_2w",
+      "mcu": null,
+      "board": null,
+      "platform": null,
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      },
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client"
+    }
+  ],
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "required": false,
+      "writes": null,
+      "checks": null,
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "required": false,
+      "writes": "servos[].offset_deg",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "required": false,
+      "writes": null,
+      "checks": [
+        "lidar_fwd"
+      ],
+      "auto": false
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true,
+      "writes": null,
+      "checks": null,
+      "auto": false
+    }
+  ],
+  "parts": [
+    {
+      "key": "j1_tower",
+      "name": "Base floor + J1 tower",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Floor on the bed. 5 walls, 40%. No supports.",
+      "file": "inchworm-j1_tower-x1.stl",
+      "bytes": 357584,
+      "size": "349 KB",
+      "triangles": 7150
+    },
+    {
+      "key": "tray",
+      "name": "Electronics tray (Pi Zero + ESP32 + M2.5 grid)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-tray-x1.stl",
+      "bytes": 549784,
+      "size": "537 KB",
+      "triangles": 10994
+    },
+    {
+      "key": "head_frame",
+      "name": "Head frame (on J5)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Back face down. 6 walls, 60%.",
+      "file": "inchworm-head_frame-x1.stl",
+      "bytes": 55884,
+      "size": "55 KB",
+      "triangles": 1116
+    },
+    {
+      "key": "j1_cap",
+      "name": "J1 tower side cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-j1_cap-x1.stl",
+      "bytes": 77484,
+      "size": "76 KB",
+      "triangles": 1548
+    },
+    {
+      "key": "link1_frame",
+      "name": "Link 1 frame (holds J2 servo), 70 mm",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, chrome paint on cheeks",
+      "orientation": "Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.",
+      "file": "inchworm-link1_frame-x1.stl",
+      "bytes": 114684,
+      "size": "112 KB",
+      "triangles": 2292
+    },
+    {
+      "key": "link1_cap",
+      "name": "Link 1 sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-link1_cap-x1.stl",
+      "bytes": 65084,
+      "size": "64 KB",
+      "triangles": 1300
+    },
+    {
+      "key": "link2_frame",
+      "name": "Link 2 frame (holds J3 servo), 65 mm",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, chrome paint on cheeks",
+      "orientation": "Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.",
+      "file": "inchworm-link2_frame-x1.stl",
+      "bytes": 111384,
+      "size": "109 KB",
+      "triangles": 2226
+    },
+    {
+      "key": "link2_cap",
+      "name": "Link 2 sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-link2_cap-x1.stl",
+      "bytes": 65084,
+      "size": "64 KB",
+      "triangles": 1300
+    },
+    {
+      "key": "link3_frame",
+      "name": "Link 3 frame (holds J4 servo), 60 mm",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, chrome paint on cheeks",
+      "orientation": "Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.",
+      "file": "inchworm-link3_frame-x1.stl",
+      "bytes": 109284,
+      "size": "107 KB",
+      "triangles": 2184
+    },
+    {
+      "key": "link3_cap",
+      "name": "Link 3 sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-link3_cap-x1.stl",
+      "bytes": 65084,
+      "size": "64 KB",
+      "triangles": 1300
+    },
+    {
+      "key": "link4_frame",
+      "name": "Link 4 frame (holds J5 servo), 60 mm",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, chrome paint on cheeks",
+      "orientation": "Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.",
+      "file": "inchworm-link4_frame-x1.stl",
+      "bytes": 109284,
+      "size": "107 KB",
+      "triangles": 2184
+    },
+    {
+      "key": "link4_cap",
+      "name": "Link 4 sleeve cap",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "inchworm-link4_cap-x1.stl",
+      "bytes": 65084,
+      "size": "64 KB",
+      "triangles": 1300
+    },
+    {
+      "key": "antenna_tip",
+      "name": "Antenna glow tip (over a 2020 LED)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Hole up. 100% infill.",
+      "file": "inchworm-antenna_tip-x2.stl",
+      "bytes": 55184,
+      "size": "54 KB",
+      "triangles": 1102
+    },
+    {
+      "key": "base_dome",
+      "name": "Base dome",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim down; the dome closes in under 45°. No supports.",
+      "file": "inchworm-base_dome-x1.stl",
+      "bytes": 374784,
+      "size": "366 KB",
+      "triangles": 7494
+    },
+    {
+      "key": "glow_ring",
+      "name": "Base glow ring diffuser (snaps into the dome groove)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat. 100% infill.",
+      "file": "inchworm-glow_ring-x1.stl",
+      "bytes": 82484,
+      "size": "81 KB",
+      "triangles": 1648
+    },
+    {
+      "key": "camera_hood",
+      "name": "Camera hood",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Rim down.",
+      "file": "inchworm-camera_hood-x1.stl",
+      "bytes": 228584,
+      "size": "223 KB",
+      "triangles": 4570
+    },
+    {
+      "key": "display_retainer",
+      "name": "Display retainer ring (snap)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down; hooks upright.",
+      "file": "inchworm-display_retainer-x1.stl",
+      "bytes": 44984,
+      "size": "44 KB",
+      "triangles": 898
+    },
+    {
+      "key": "face_bezel",
+      "name": "Face bezel + red TPU-look ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down.",
+      "file": "inchworm-face_bezel-x1.stl",
+      "bytes": 73284,
+      "size": "72 KB",
+      "triangles": 1464
+    },
+    {
+      "key": "head_front",
+      "name": "Head shell, front (face)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Face down. No supports.",
+      "file": "inchworm-head_front-x1.stl",
+      "bytes": 150684,
+      "size": "147 KB",
+      "triangles": 3012
+    },
+    {
+      "key": "head_rear",
+      "name": "Head shell, rear",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim down. No supports.",
+      "file": "inchworm-head_rear-x1.stl",
+      "bytes": 175284,
+      "size": "171 KB",
+      "triangles": 3504
+    },
+    {
+      "key": "sensor_clamp",
+      "name": "Lidar / mic clamp plate",
+      "qty": 3,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "inchworm-sensor_clamp-x3.stl",
+      "bytes": 82684,
+      "size": "81 KB",
+      "triangles": 1652
+    },
+    {
+      "key": "link1_ribs",
+      "name": "Link 1 glow rib (snaps over shell screws, holds 6 LEDs)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat. 100% infill for even glow.",
+      "file": "inchworm-link1_ribs-x2.stl",
+      "bytes": 45784,
+      "size": "45 KB",
+      "triangles": 914
+    },
+    {
+      "key": "link1_shell_L",
+      "name": "Link 1 shell, left half (left)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link1_shell_L-x1.stl",
+      "bytes": 128784,
+      "size": "126 KB",
+      "triangles": 2574
+    },
+    {
+      "key": "link1_shell_R",
+      "name": "Link 1 shell, right half (right)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link1_shell_R-x1.stl",
+      "bytes": 128084,
+      "size": "125 KB",
+      "triangles": 2560
+    },
+    {
+      "key": "link2_ribs",
+      "name": "Link 2 glow rib (snaps over shell screws, holds 6 LEDs)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat. 100% infill for even glow.",
+      "file": "inchworm-link2_ribs-x2.stl",
+      "bytes": 45784,
+      "size": "45 KB",
+      "triangles": 914
+    },
+    {
+      "key": "link2_shell_L",
+      "name": "Link 2 shell, left half (left)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link2_shell_L-x1.stl",
+      "bytes": 125884,
+      "size": "123 KB",
+      "triangles": 2516
+    },
+    {
+      "key": "link2_shell_R",
+      "name": "Link 2 shell, right half (right)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link2_shell_R-x1.stl",
+      "bytes": 125884,
+      "size": "123 KB",
+      "triangles": 2516
+    },
+    {
+      "key": "link3_ribs",
+      "name": "Link 3 glow rib (snaps over shell screws, holds 6 LEDs)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat. 100% infill for even glow.",
+      "file": "inchworm-link3_ribs-x2.stl",
+      "bytes": 45784,
+      "size": "45 KB",
+      "triangles": 914
+    },
+    {
+      "key": "link3_shell_L",
+      "name": "Link 3 shell, left half (left)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link3_shell_L-x1.stl",
+      "bytes": 117884,
+      "size": "115 KB",
+      "triangles": 2356
+    },
+    {
+      "key": "link3_shell_R",
+      "name": "Link 3 shell, right half (right)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link3_shell_R-x1.stl",
+      "bytes": 117984,
+      "size": "115 KB",
+      "triangles": 2358
+    },
+    {
+      "key": "link4_ribs",
+      "name": "Link 4 glow rib (snaps over shell screws, holds 6 LEDs)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat. 100% infill for even glow.",
+      "file": "inchworm-link4_ribs-x2.stl",
+      "bytes": 45784,
+      "size": "45 KB",
+      "triangles": 914
+    },
+    {
+      "key": "link4_shell_L",
+      "name": "Link 4 shell, left half (left)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link4_shell_L-x1.stl",
+      "bytes": 117884,
+      "size": "115 KB",
+      "triangles": 2356
+    },
+    {
+      "key": "link4_shell_R",
+      "name": "Link 4 shell, right half (right)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "inchworm-link4_shell_R-x1.stl",
+      "bytes": 117984,
+      "size": "115 KB",
+      "triangles": 2358
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "inchworm-speaker_ring-x1.stl",
+      "bytes": 117484,
+      "size": "115 KB",
+      "triangles": 2348
+    },
+    {
+      "key": "xiao_cradle",
+      "name": "XIAO ESP32-S3 Sense cradle",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "inchworm-xiao_cradle-x1.stl",
+      "bytes": 41784,
+      "size": "41 KB",
+      "triangles": 834
+    },
+    {
+      "key": "tpu_foot",
+      "name": "Foot",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat.",
+      "file": "inchworm-tpu_foot-x1.stl",
+      "bytes": 144284,
+      "size": "141 KB",
+      "triangles": 2884
+    },
+    {
+      "key": "proleg",
+      "name": "Proleg nub",
+      "qty": 8,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Peg up.",
+      "file": "inchworm-proleg-x8.stl",
+      "bytes": 92884,
+      "size": "91 KB",
+      "triangles": 1856
+    }
+  ],
+  "buy": [
+    {
+      "part": "STS3215 / ST3215 serial bus servo, 12 V 30 kg",
+      "qty": "5",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CFY52HVV",
+      "notes": "Get the 12 V / 30 kg version, not the 7.4 V one."
+    },
+    {
+      "part": "Metal servo horn for STS3215 (25T)",
+      "qty": "5",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=STS3215%20metal%20servo%20horn%20aluminum",
+      "notes": "Some servos ship with a metal horn; check before buying."
+    },
+    {
+      "part": "ESP32-S3-DevKitC-1 N16R8",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CDRM6BGQ",
+      "notes": "Must be N16R8 (16 MB flash, 8 MB PSRAM)."
+    },
+    {
+      "part": "Serial bus servo driver / adapter board",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJBKQ8LJ",
+      "notes": "TTL half-duplex adapter for ST/SC servos."
+    },
+    {
+      "part": "Seeed XIAO ESP32-S3 Sense (camera + mic)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0C69FFVHH",
+      "notes": "The Sense version, with the camera board."
+    },
+    {
+      "part": "1.28\" GC9A01 round display, 240×240",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=GC9A01%201.28%20inch%20round%20LCD%20240x240",
+      "notes": "SPI version."
+    },
+    {
+      "part": "ICS-43434 I²S MEMS mic breakout",
+      "qty": "2",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=ICS-43434",
+      "notes": "Rarely on Amazon. INMP441 boards on Amazon work as a substitute."
+    },
+    {
+      "part": "VL53L1X ToF lidar breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=VL53L1X%20time%20of%20flight%20sensor%20breakout",
+      "notes": "Forward lidar, 4 m."
+    },
+    {
+      "part": "Raspberry Pi Zero 2 W",
+      "qty": "1",
+      "where": "raspberrypi.com",
+      "link": "https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/",
+      "notes": "Usually marked up on Amazon. Buy from an approved reseller at list price, with a 32 GB microSD."
+    },
+    {
+      "part": "MAX98357A I²S amplifier breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJMBMXMH",
+      "notes": ""
+    },
+    {
+      "part": "Speaker, Ø28 mm, 8 Ω 1 W",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=28mm%20speaker%208%20ohm%201W",
+      "notes": ""
+    },
+    {
+      "part": "SK6812 2020 addressable LED strip",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=SK6812%202020%20LED%20strip",
+      "notes": ""
+    },
+    {
+      "part": "USB-C PD trigger board (sink)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0H1BYPQ1T",
+      "notes": "DIP-switch selectable voltage; set to the value in the brief."
+    },
+    {
+      "part": "12 V / 5 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=12V%205A%20step%20down%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "5 V / 5 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=5V%205A%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "eFuse / load switch breakout",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=TPS25947%20evaluation",
+      "notes": "TPS2594x-class eFuse. A 10 A blade fuse plus MOSFET switch board works as a simpler alternative."
+    },
+    {
+      "part": "Toggle switch + inline blade fuse holder",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=brass%20toggle%20switch%20SPST%2010A",
+      "notes": "Pick a brass or chrome finish."
+    },
+    {
+      "part": "685ZZ bearings + M5 shoulder bolts + M5 nyloc nuts",
+      "qty": "5",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=685ZZ+bearing",
+      "notes": "One per joint."
+    }
+  ],
+  "manifest_text": "body: inchworm\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: base, role: [ik, servo_bus, power, safety] }\n  audio:  { chip: rpi_zero_2w, os: bookworm-lite, location: base, role: [speech, motion_clips] }\n  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: head, role: [camera, face, mics, lidar] }\npower:  { source: usb_c_pd, request_v: 15, min_v: 13.0, battery: none }\nlinks:\n  head: { reflex: { uart: 2, tx: 15, rx: 16 }, head: { tx: 43, rx: 44 }, baud: 921600, via: spine_harness }\n  pi:   { reflex: { uart: 0, tx: 43, rx: 44 }, pi: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  head_spi:  { host: head, sclk: 7, mosi: 9, hz: 40000000 }\n  head_i2s:  { host: head, bclk: 3, ws: 4, din: 5, rate: 16000 }\n  head_i2c:  { host: head, sda: 6, scl: 2, hz: 400000 }\n  pi_i2s:    { host: audio, bclk: 18, lrclk: 19, dout: 21, rate: 48000 }\nkinematics:\n  chain: [ { id: 1, axis: pitch, link_mm: 70 }, { id: 2, axis: yaw, link_mm: 65 }, { id: 3, axis: pitch, link_mm: 60 },\n           { id: 4, axis: yaw, link_mm: 60 }, { id: 5, axis: pitch, link_mm: 45 } ]\n  base_h_mm: 78\n  ik_hz: 100\nservos:\n  - { id: 1, name: j1_pitch, model: sts3215, min_deg: -45, max_deg: 90, rest_deg: 85 }\n  - { id: 2, name: j2_yaw,   model: sts3215, min_deg: -85, max_deg: 30, rest_deg: 0 }\n  - { id: 3, name: j3_pitch, model: sts3215, min_deg: -85, max_deg: 35, rest_deg: -35 }\n  - { id: 4, name: j4_yaw,   model: sts3215, min_deg: -80, max_deg: 30, rest_deg: 0 }\n  - { id: 5, name: j5_pitch, model: sts3215, min_deg: -85, max_deg: 30, rest_deg: -30 }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, contact_torque_pct: 30, contact_err_deg: 6, j1_hold_max_s: 20 }\nperipherals:\n  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }\n  - { name: pd_good,    gpio: 6 }\n  - { name: vin_sense,  adc_gpio: 1, divider: 100k_10k }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: glow,       part: sk6812_2020, gpio: 38, count: 66, map: { seg1: 0-11, seg2: 12-23, seg3: 24-35, seg4: 36-47, antennae: 48-49, base_ring: 50-65 }, max_brightness_pct: 40 }\n  - { name: display,    part: gc9a01, host: head, bus: head_spi, dc: 8, rst: 1, bl: tied_on, cs: tied_low, size: 240x240 }\n  - { name: mics,       part: ics43434, host: head, bus: head_i2s, count: 2, sel: [gnd, 3v3] }\n  - { name: lidar_fwd,  part: vl53l1x, host: head, bus: head_i2c, addr: 0x29, location: chin, role: obstacle }\n  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\n  - { name: speaker_amp, part: max98357a, host: audio, bus: pi_i2s, sd: 16 }\nsensing_rule: { drives: false, forward_lidar: lidar_fwd, drop_off: not_applicable_fixed_base }\nreflexes:\n  near:    { sensor: lidar_fwd, stop_mm: 60, action: [stop, back_off_20mm] }\n  contact: { sensors: [servo_load], action: [stop, torque_30] }\nsafety:\n  triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, contact]\n  routine:  [stop, brake, wait_2s, bow_to_rest, torque_low, face_sleepy]\n  resume:   fresh_command_only\n",
+  "manifest_json": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "arm",
+      "name": "Inchworm",
+      "vendor": "Meckie bodies",
+      "model": "inchworm",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 16000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 1
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/inchworm/firmware/hangar_bay_inchworm.yaml",
+      "hardware_sha256": "b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build_json": {
+    "model": "inchworm",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8,
+        "rst": 1
+      }
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "j1_pitch",
+            "model": "sts3215",
+            "min_deg": -45,
+            "max_deg": 90,
+            "rest_deg": 85
+          },
+          {
+            "id": 2,
+            "name": "j2_yaw",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 30,
+            "rest_deg": 0
+          },
+          {
+            "id": 3,
+            "name": "j3_pitch",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 35,
+            "rest_deg": -35
+          },
+          {
+            "id": 4,
+            "name": "j4_yaw",
+            "model": "sts3215",
+            "min_deg": -80,
+            "max_deg": 30,
+            "rest_deg": 0
+          },
+          {
+            "id": 5,
+            "name": "j5_pitch",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 30,
+            "rest_deg": -30
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "mic_type": "ics43434",
+    "mic": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5
+      }
+    },
+    "camera": true,
+    "topology": {
+      "boards": [
+        {
+          "role": "body",
+          "mcu": "esp32s3",
+          "board": "esp32-s3-devkitc-1",
+          "pack_mcu_key": "reflex"
+        },
+        {
+          "role": "head",
+          "mcu": "esp32s3",
+          "board": "seeed_xiao_esp32s3",
+          "pack_mcu_key": "head"
+        }
+      ],
+      "neck": {
+        "declared_in_pack": {
+          "head": {
+            "reflex": {
+              "uart": 2,
+              "tx": 15,
+              "rx": 16
+            },
+            "head": {
+              "tx": 43,
+              "rx": 44
+            },
+            "baud": 921600,
+            "via": "spine_harness"
+          },
+          "pi": {
+            "reflex": {
+              "uart": 0,
+              "tx": 43,
+              "rx": 44
+            },
+            "pi": {
+              "uart": 0,
+              "tx": 14,
+              "rx": 15
+            },
+            "baud": 921600
+          }
+        }
+      }
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs/bl",
+        "value": "cs=tied_low bl=tied_on",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.head_i2s.din; bl would use GPIO 4, which this body uses for bus.head_i2s.ws",
+        "collides": true
+      },
+      {
+        "what": "5 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on audio",
+        "reason": "wired to the audio board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): audio",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/inchworm/hangar-bay/inchworm.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "unsupported": [
+    {
+      "what": "display cs/bl",
+      "value": "cs=tied_low bl=tied_on",
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.head_i2s.din; bl would use GPIO 4, which this body uses for bus.head_i2s.ws",
+      "collides": true
+    },
+    {
+      "what": "5 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on audio",
+      "reason": "wired to the audio board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): audio",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 51,
+  "esp32_only": false,
+  "servo_type": "serial bus"
+}

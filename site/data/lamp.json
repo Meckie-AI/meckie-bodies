@@ -1,0 +1,793 @@
+{
+  "slug": "lamp",
+  "name": "Lamp",
+  "class": "desk arm",
+  "moves": "4-DOF spring-balanced arm",
+  "servos": "4× STS3215",
+  "brains": "Pi Zero 2 W + ESP32-S3 (base) + XIAO ESP32-S3 Sense (head)",
+  "power": "USB-C PD wall power",
+  "mass_g": 2251,
+  "bom_usd": 269,
+  "stl": 26,
+  "tagline": "A curious desk companion that leans in, nods and peeks around objects; also a real desk light.",
+  "folder": "bodies/lamp",
+  "brief": "bodies/lamp/Lamp Design Brief.dc.html",
+  "viewer": "bodies/lamp/Lamp Viewer.html",
+  "print_parts": "bodies/lamp/Lamp Print Parts.html",
+  "stl_dir": "bodies/lamp/stl",
+  "parts_csv": "bodies/lamp/parts-list.csv",
+  "manifest": "bodies/lamp/firmware/hangar_bay_lamp.yaml",
+  "status": "design complete · not yet test-printed",
+  "license": {
+    "hardware": "CERN-OHL-S-2.0",
+    "code": "MIT"
+  },
+  "hangar_bay_template": "bodies/lamp/hangar-bay/lamp.template.yaml",
+  "hardware_sha256": "3fca258d2ea9cbe6f538373eec77fd85ccd004651641aaf99b5153af66c2d94a",
+  "version": "1.0.0",
+  "drives": false,
+  "pack_url": "unpublished",
+  "targets": [
+    {
+      "key": "reflex",
+      "role": "body",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "head_cam",
+      "role": "head",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "face",
+      "role": null,
+      "host": "rpi_zero_2w",
+      "mcu": null,
+      "board": null,
+      "platform": null,
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      },
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client"
+    }
+  ],
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "required": false,
+      "writes": null,
+      "checks": null,
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "required": false,
+      "writes": "servos[].offset_deg",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true,
+      "writes": null,
+      "checks": null,
+      "auto": false
+    }
+  ],
+  "parts": [
+    {
+      "key": "rail_tie",
+      "name": "Arm cross tie",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "lamp-rail_tie-x2.stl",
+      "bytes": 37684,
+      "size": "37 KB",
+      "triangles": 752
+    },
+    {
+      "key": "base_floor",
+      "name": "Base floor",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "lamp-base_floor-x1.stl",
+      "bytes": 323784,
+      "size": "316 KB",
+      "triangles": 6474
+    },
+    {
+      "key": "clamp_ring",
+      "name": "Bearing clamp ring",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "lamp-clamp_ring-x1.stl",
+      "bytes": 151084,
+      "size": "148 KB",
+      "triangles": 3020
+    },
+    {
+      "key": "elbow_crank",
+      "name": "Elbow crank (on the left upper rail)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "lamp-elbow_crank-x1.stl",
+      "bytes": 45684,
+      "size": "45 KB",
+      "triangles": 912
+    },
+    {
+      "key": "drive_crank",
+      "name": "Elbow drive crank (on ID 3 horn)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. 100% infill.",
+      "file": "lamp-drive_crank-x1.stl",
+      "bytes": 119884,
+      "size": "117 KB",
+      "triangles": 2396
+    },
+    {
+      "key": "tray",
+      "name": "Electronics tray (ring, Pi bosses + M2 grid)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "lamp-tray-x1.stl",
+      "bytes": 710084,
+      "size": "693 KB",
+      "triangles": 14200
+    },
+    {
+      "key": "lower_rail_L",
+      "name": "Lower arm rail, left (rides a 6802 on the drive crank) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, brushed-alu finish",
+      "orientation": "Flat. 6 walls, 60%.",
+      "file": "lamp-lower_rail_L-x1.stl",
+      "bytes": 79084,
+      "size": "77 KB",
+      "triangles": 1580
+    },
+    {
+      "key": "lower_rail_R",
+      "name": "Lower arm rail, right (bolts to the shoulder horn) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, brushed-alu finish",
+      "orientation": "Flat. 6 walls, 60%.",
+      "file": "lamp-lower_rail_R-x1.stl",
+      "bytes": 91284,
+      "size": "89 KB",
+      "triangles": 1824
+    },
+    {
+      "key": "turret",
+      "name": "Turret",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, brushed-alu finish",
+      "orientation": "Disc down, spigot up. 6 walls, 60%.",
+      "file": "lamp-turret-x1.stl",
+      "bytes": 181484,
+      "size": "177 KB",
+      "triangles": 3628
+    },
+    {
+      "key": "upper_rail_L",
+      "name": "Upper arm rail, left (elbow crank) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, brushed-alu finish",
+      "orientation": "Flat. 6 walls, 60%.",
+      "file": "lamp-upper_rail_L-x1.stl",
+      "bytes": 78884,
+      "size": "77 KB",
+      "triangles": 1576
+    },
+    {
+      "key": "upper_rail_R",
+      "name": "Upper arm rail, right (tilt horn side) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon, brushed-alu finish",
+      "orientation": "Flat. 6 walls, 60%.",
+      "file": "lamp-upper_rail_R-x1.stl",
+      "bytes": 91284,
+      "size": "89 KB",
+      "triangles": 1824
+    },
+    {
+      "key": "base_shell",
+      "name": "Base shell",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Top face down. No supports.",
+      "file": "lamp-base_shell-x1.stl",
+      "bytes": 488884,
+      "size": "477 KB",
+      "triangles": 9776
+    },
+    {
+      "key": "display_retainer",
+      "name": "Display retainer ring (snap)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down; hooks upright.",
+      "file": "lamp-display_retainer-x1.stl",
+      "bytes": 44984,
+      "size": "44 KB",
+      "triangles": 898
+    },
+    {
+      "key": "face_bezel",
+      "name": "Face bezel",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down.",
+      "file": "lamp-face_bezel-x1.stl",
+      "bytes": 38484,
+      "size": "38 KB",
+      "triangles": 768
+    },
+    {
+      "key": "finial",
+      "name": "Finial",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, brass paint",
+      "orientation": "Ball up.",
+      "file": "lamp-finial-x1.stl",
+      "bytes": 40184,
+      "size": "39 KB",
+      "triangles": 802
+    },
+    {
+      "key": "knuckle_half",
+      "name": "Head knuckle half (holds tilt servo ID 4)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG signal red",
+      "orientation": "Split face down.",
+      "file": "lamp-knuckle_half-x2.stl",
+      "bytes": 180284,
+      "size": "176 KB",
+      "triangles": 3604
+    },
+    {
+      "key": "hood",
+      "name": "Hood",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Rim down. Under 45° all the way; no supports.",
+      "file": "lamp-hood-x1.stl",
+      "bytes": 107984,
+      "size": "105 KB",
+      "triangles": 2158
+    },
+    {
+      "key": "led_diffuser",
+      "name": "LED ring diffuser",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG natural (translucent)",
+      "orientation": "Flat.",
+      "file": "lamp-led_diffuser-x1.stl",
+      "bytes": 38484,
+      "size": "38 KB",
+      "triangles": 768
+    },
+    {
+      "key": "mic_clamp",
+      "name": "Mic retainer plate",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "lamp-mic_clamp-x2.stl",
+      "bytes": 84284,
+      "size": "82 KB",
+      "triangles": 1684
+    },
+    {
+      "key": "pod_cap",
+      "name": "Pod side cap (chrome)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Flat.",
+      "file": "lamp-pod_cap-x2.stl",
+      "bytes": 19284,
+      "size": "19 KB",
+      "triangles": 384
+    },
+    {
+      "key": "liner",
+      "name": "Reflector liner (LED ring + display carrier)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG white",
+      "orientation": "Small end down.",
+      "file": "lamp-liner-x1.stl",
+      "bytes": 76884,
+      "size": "75 KB",
+      "triangles": 1536
+    },
+    {
+      "key": "pod_left",
+      "name": "Shoulder pod, left half (elbow-drive servo ID 3)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "lamp-pod_left-x1.stl",
+      "bytes": 203084,
+      "size": "198 KB",
+      "triangles": 4060
+    },
+    {
+      "key": "pod_right",
+      "name": "Shoulder pod, right half (shoulder servo ID 2)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Split face down. No supports.",
+      "file": "lamp-pod_right-x1.stl",
+      "bytes": 202284,
+      "size": "198 KB",
+      "triangles": 4044
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "lamp-speaker_ring-x1.stl",
+      "bytes": 117484,
+      "size": "115 KB",
+      "triangles": 2348
+    },
+    {
+      "key": "xiao_cradle",
+      "name": "XIAO ESP32-S3 Sense cradle",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "lamp-xiao_cradle-x1.stl",
+      "bytes": 42184,
+      "size": "41 KB",
+      "triangles": 842
+    },
+    {
+      "key": "tpu_foot",
+      "name": "Foot",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flat.",
+      "file": "lamp-tpu_foot-x1.stl",
+      "bytes": 144284,
+      "size": "141 KB",
+      "triangles": 2884
+    }
+  ],
+  "buy": [
+    {
+      "part": "STS3215 / ST3215 serial bus servo, 12 V 30 kg",
+      "qty": "4",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CFY52HVV",
+      "notes": "Get the 12 V / 30 kg version, not the 7.4 V one."
+    },
+    {
+      "part": "Metal servo horn for STS3215 (25T)",
+      "qty": "4",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=STS3215%20metal%20servo%20horn%20aluminum",
+      "notes": "Some servos ship with a metal horn; check before buying."
+    },
+    {
+      "part": "6810-2RS bearing (50×65×7)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=6810-2RS%20bearing",
+      "notes": ""
+    },
+    {
+      "part": "6802-2RS bearing (15×24×5)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=6802-2RS%20bearing",
+      "notes": ""
+    },
+    {
+      "part": "Extension springs (sizes in brief)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=extension%20spring%20assortment",
+      "notes": "An assortment covers the sizes."
+    },
+    {
+      "part": "M3 pushrod + ball rod ends",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=M3%20ball%20link%20rod%20end",
+      "notes": ""
+    },
+    {
+      "part": "Raspberry Pi Zero 2 W",
+      "qty": "1",
+      "where": "raspberrypi.com",
+      "link": "https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/",
+      "notes": "Usually marked up on Amazon. Buy from an approved reseller at list price, with a 32 GB microSD."
+    },
+    {
+      "part": "ESP32-S3-DevKitC-1 N16R8",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CDRM6BGQ",
+      "notes": "Must be N16R8 (16 MB flash, 8 MB PSRAM)."
+    },
+    {
+      "part": "Serial bus servo driver / adapter board",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJBKQ8LJ",
+      "notes": "TTL half-duplex adapter for ST/SC servos."
+    },
+    {
+      "part": "Seeed XIAO ESP32-S3 Sense (camera + mic)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0C69FFVHH",
+      "notes": "The Sense version, with the camera board."
+    },
+    {
+      "part": "1.28\" GC9A01 round display, 240×240",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=GC9A01%201.28%20inch%20round%20LCD%20240x240",
+      "notes": "SPI version."
+    },
+    {
+      "part": "ICS-43434 I²S MEMS mic breakout",
+      "qty": "2",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=ICS-43434",
+      "notes": "Rarely on Amazon. INMP441 boards on Amazon work as a substitute."
+    },
+    {
+      "part": "MAX98357A I²S amplifier breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJMBMXMH",
+      "notes": ""
+    },
+    {
+      "part": "Speaker, Ø28 mm, 8 Ω 1 W",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=28mm%20speaker%208%20ohm%201W",
+      "notes": ""
+    },
+    {
+      "part": "Warm-white LED ring, 2700 K CRI 90",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=COB%20LED%20ring%202700K%2012V",
+      "notes": ""
+    },
+    {
+      "part": "Constant-current LED driver",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=constant%20current%20LED%20driver%20module%20PWM",
+      "notes": ""
+    },
+    {
+      "part": "USB-C PD trigger board (sink)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0H1BYPQ1T",
+      "notes": "DIP-switch selectable voltage; set to the value in the brief."
+    },
+    {
+      "part": "12 V / 5 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=12V%205A%20step%20down%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "5 V / 5 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=5V%205A%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "eFuse / load switch breakout",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=TPS25947%20evaluation",
+      "notes": "TPS2594x-class eFuse. A 10 A blade fuse plus MOSFET switch board works as a simpler alternative."
+    },
+    {
+      "part": "Toggle switch + inline blade fuse holder",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=brass%20toggle%20switch%20SPST%2010A",
+      "notes": "Pick a brass or chrome finish."
+    },
+    {
+      "part": "685ZZ bearings + M5 shoulder bolts (elbow, head idler)",
+      "qty": "4",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=685ZZ+bearing",
+      "notes": "In the workshop kit."
+    }
+  ],
+  "manifest_text": "body: lamp\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: base, reserved_gpio: [26-37] }\n  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: base }\n  head_cam: { chip: esp32s3, module: xiao_esp32s3_sense, location: hood_lip, power: harness_5v }\npower:  { source: usb_c_pd, request_v: 15, min_v: 13.0, battery: none }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\n  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 32000000, cable_mm: 520 }\n  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }\nkinematics: { l1_mm: 160, l2_mm: 160, head_mm: 86, shoulder_h_mm: 90, elbow: parallelogram_from_base }\nservos:\n  - { id: 1, name: yaw,      model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }\n  - { id: 2, name: shoulder, model: sts3215, min_deg: -20,  max_deg: 65,  rest_deg: -15, note: lower arm from vertical }\n  - { id: 3, name: elbow,    model: sts3215, min_deg: 60,   max_deg: 150, rest_deg: 140, note: upper arm absolute from vertical }\n  - { id: 4, name: head,     model: sts3215, min_deg: -90,  max_deg: 45,  rest_deg: -60, note: hood axis from horizontal }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30, collision_err_deg: 6 }\nperipherals:\n  - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }\n  - { name: pd_good,    gpio: 6 }\n  - { name: vin_sense,  adc_gpio: 1, divider: 100k_10k }\n  - { name: v12_sense,  adc_gpio: 2, divider: 100k_10k }\n  - { name: desk_light, part: cc_led_driver, pwm_gpio: 38, pwm_hz: 20000, max_ma: 350, cct_k: 2700 }\n  - { name: face_wake,  gpio: 14, to: face.gpio3 }\n  - { name: status_led, part: ws2812,    gpio: 48 }\n  - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }\n  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 89 }\n  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }\n  - { name: camera,     part: ov3660,    host: head_cam, bus: dvp_onboard, stream: mjpeg_wifi, res: 1024x768, fps: 15 }\nsensing_rule: { drives: false, forward_lidar: none, drop_off: not_applicable_fixed_base }\nposes:\n  asleep:    { yaw: 0, shoulder: -15, elbow: 140, head: -60, light_pct: 10 }\n  attentive: { yaw: 0, shoulder: 15,  elbow: 95,  head: -35 }\nsafety:\n  triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, collision]\n  routine:  [stop, brake, wait_2s, slow_to_asleep, torque_low, light_dim_10, face_sleepy]\n  resume:   fresh_command_only\n",
+  "manifest_json": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "arm",
+      "name": "Lamp",
+      "vendor": "Meckie bodies",
+      "model": "lamp",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 48000,
+        "direction": true
+      },
+      "state": {}
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/lamp/firmware/hangar_bay_lamp.yaml",
+      "hardware_sha256": "3fca258d2ea9cbe6f538373eec77fd85ccd004651641aaf99b5153af66c2d94a",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build_json": {
+    "model": "lamp",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "yaw",
+            "model": "sts3215",
+            "min_deg": -150,
+            "max_deg": 150,
+            "rest_deg": 0
+          },
+          {
+            "id": 2,
+            "name": "shoulder",
+            "model": "sts3215",
+            "min_deg": -20,
+            "max_deg": 65,
+            "rest_deg": -15
+          },
+          {
+            "id": 3,
+            "name": "elbow",
+            "model": "sts3215",
+            "min_deg": 60,
+            "max_deg": 150,
+            "rest_deg": 140
+          },
+          {
+            "id": 4,
+            "name": "head",
+            "model": "sts3215",
+            "min_deg": -90,
+            "max_deg": 45,
+            "rest_deg": -60
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "camera": true,
+    "topology": {
+      "boards": [
+        {
+          "role": "body",
+          "mcu": "esp32s3",
+          "board": "esp32-s3-devkitc-1",
+          "pack_mcu_key": "reflex"
+        },
+        {
+          "role": "head",
+          "mcu": "esp32s3",
+          "board": "seeed_xiao_esp32s3",
+          "pack_mcu_key": "head_cam"
+        }
+      ],
+      "neck": {
+        "declared_in_pack": {
+          "link": {
+            "reflex": {
+              "uart": 2,
+              "tx": 15,
+              "rx": 16
+            },
+            "face": {
+              "uart": 0,
+              "tx": 14,
+              "rx": 15
+            },
+            "baud": 921600
+          }
+        }
+      }
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display (gc9a01)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+      },
+      {
+        "what": "4 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "mic (ics43434)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): face",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/lamp/hangar-bay/lamp.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "unsupported": [
+    {
+      "what": "display (gc9a01)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+    },
+    {
+      "what": "4 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "mic (ics43434)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "1 Raspberry Pi target(s): face",
+      "value": "rpi_zero_2w",
+      "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+    }
+  ],
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 30,
+  "esp32_only": false,
+  "servo_type": "serial bus"
+}

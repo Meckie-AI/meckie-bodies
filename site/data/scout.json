@@ -1,0 +1,579 @@
+{
+  "slug": "scout",
+  "name": "Scout",
+  "class": "floor runner",
+  "moves": "2-wheel differential drive",
+  "servos": "2× N20 encoder gearmotor",
+  "brains": "XIAO ESP32-S3 Sense (ESP32-only)",
+  "power": "1S LiPo + USB-C",
+  "mass_g": 198,
+  "bom_usd": 82,
+  "stl": 19,
+  "tagline": "An excitable puppy that zips over to greet you.",
+  "folder": "bodies/scout",
+  "brief": "bodies/scout/Scout Design Brief.dc.html",
+  "viewer": "bodies/scout/Scout Viewer.html",
+  "print_parts": "bodies/scout/Scout Print Parts.html",
+  "stl_dir": "bodies/scout/stl",
+  "parts_csv": "bodies/scout/parts-list.csv",
+  "manifest": "bodies/scout/firmware/hangar_bay_scout.yaml",
+  "status": "design complete · not yet test-printed",
+  "license": {
+    "hardware": "CERN-OHL-S-2.0",
+    "code": "MIT"
+  },
+  "hangar_bay_template": "bodies/scout/hangar-bay/scout.template.yaml",
+  "hardware_sha256": "9af9ae5d92fd0da5a93e4dfabedc4918dcbab288a6bca63bf9e1a16b16d5bb4e",
+  "version": "1.0.0",
+  "drives": true,
+  "pack_url": "unpublished",
+  "targets": [
+    {
+      "key": "reflex",
+      "role": "body",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    }
+  ],
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "wizard": [
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each motor forward briefly",
+      "required": false,
+      "writes": "drive.invert",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "required": false,
+      "writes": "imu.offsets",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "required": false,
+      "writes": null,
+      "checks": [
+        "lidar_fwd",
+        "drop_front",
+        "drop_rear"
+      ],
+      "auto": false
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true,
+      "writes": null,
+      "checks": null,
+      "auto": false
+    }
+  ],
+  "parts": [
+    {
+      "key": "deck",
+      "name": "Electronics deck (8 mm insert grid)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "scout-deck-x1.stl",
+      "bytes": 379784,
+      "size": "371 KB",
+      "triangles": 7594
+    },
+    {
+      "key": "motor_strap",
+      "name": "Motor strap",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. No supports.",
+      "file": "scout-motor_strap-x2.stl",
+      "bytes": 40484,
+      "size": "40 KB",
+      "triangles": 808
+    },
+    {
+      "key": "camera_hood",
+      "name": "Camera hood",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Rim down.",
+      "file": "scout-camera_hood-x1.stl",
+      "bytes": 228584,
+      "size": "223 KB",
+      "triangles": 4570
+    },
+    {
+      "key": "caster_cap",
+      "name": "Caster ball cap",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down.",
+      "file": "scout-caster_cap-x1.stl",
+      "bytes": 74684,
+      "size": "73 KB",
+      "triangles": 1492
+    },
+    {
+      "key": "display_retainer",
+      "name": "Display retainer ring (snap)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down; hooks upright.",
+      "file": "scout-display_retainer-x1.stl",
+      "bytes": 44984,
+      "size": "44 KB",
+      "triangles": 898
+    },
+    {
+      "key": "face_bezel",
+      "name": "Face bezel",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down; hooks upright.",
+      "file": "scout-face_bezel-x1.stl",
+      "bytes": 73284,
+      "size": "72 KB",
+      "triangles": 1464
+    },
+    {
+      "key": "hubcap",
+      "name": "Hubcap + whitewall",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint (whitewall in cream)",
+      "orientation": "Face down; pins print upright.",
+      "file": "scout-hubcap-x2.stl",
+      "bytes": 129284,
+      "size": "126 KB",
+      "triangles": 2584
+    },
+    {
+      "key": "lower_shell",
+      "name": "Lower shell (tub)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Floor on the bed. No supports.",
+      "file": "scout-lower_shell-x1.stl",
+      "bytes": 454784,
+      "size": "444 KB",
+      "triangles": 9094
+    },
+    {
+      "key": "sensor_clamp",
+      "name": "Sensor clamp plate",
+      "qty": 3,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "scout-sensor_clamp-x3.stl",
+      "bytes": 83084,
+      "size": "81 KB",
+      "triangles": 1660
+    },
+    {
+      "key": "switch_clamp",
+      "name": "Slide-switch clamp",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "scout-switch_clamp-x1.stl",
+      "bytes": 84384,
+      "size": "82 KB",
+      "triangles": 1686
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "scout-speaker_ring-x1.stl",
+      "bytes": 114484,
+      "size": "112 KB",
+      "triangles": 2288
+    },
+    {
+      "key": "upper_shell",
+      "name": "Upper shell (dome)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim on the bed. Dome closes under 45°; no supports.",
+      "file": "scout-upper_shell-x1.stl",
+      "bytes": 627584,
+      "size": "613 KB",
+      "triangles": 12550
+    },
+    {
+      "key": "wheel_hub",
+      "name": "Wheel hub",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Outer face down. No supports.",
+      "file": "scout-wheel_hub-x2.stl",
+      "bytes": 128884,
+      "size": "126 KB",
+      "triangles": 2576
+    },
+    {
+      "key": "xiao_bracket",
+      "name": "XIAO ESP32-S3 Sense snap cradle",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down. Screws to the camera mount disc inside the dome so the lens looks out of the camera hole.",
+      "file": "scout-xiao_bracket-x1.stl",
+      "bytes": 47684,
+      "size": "47 KB",
+      "triangles": 952
+    },
+    {
+      "key": "bumper_front",
+      "name": "Bumper, front",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flange down. 2 walls, 20% gyroid.",
+      "file": "scout-bumper_front-x1.stl",
+      "bytes": 771584,
+      "size": "754 KB",
+      "triangles": 15430
+    },
+    {
+      "key": "bumper_rear",
+      "name": "Bumper, rear",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flange down. 2 walls, 20% gyroid.",
+      "file": "scout-bumper_rear-x1.stl",
+      "bytes": 770884,
+      "size": "753 KB",
+      "triangles": 15416
+    },
+    {
+      "key": "ear",
+      "name": "Floppy ear",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat, peg up.",
+      "file": "scout-ear-x2.stl",
+      "bytes": 37584,
+      "size": "37 KB",
+      "triangles": 750
+    },
+    {
+      "key": "tail_ball",
+      "name": "Tail ball",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Hole up.",
+      "file": "scout-tail_ball-x1.stl",
+      "bytes": 57184,
+      "size": "56 KB",
+      "triangles": 1142
+    },
+    {
+      "key": "tyre",
+      "name": "Tyre",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A black",
+      "orientation": "Flat. 3 walls, 30% gyroid, 20 mm/s.",
+      "file": "scout-tyre-x2.stl",
+      "bytes": 97684,
+      "size": "95 KB",
+      "triangles": 1952
+    }
+  ],
+  "buy": [
+    {
+      "part": "N20 6 V gearmotor with hall encoder",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=N20%20gear%20motor%20encoder%206V",
+      "notes": "Ratio as in the brief."
+    },
+    {
+      "part": "DRV8833 dual motor driver",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=DRV8833%20motor%20driver%20module",
+      "notes": ""
+    },
+    {
+      "part": "Seeed XIAO ESP32-S3 Sense (camera + mic)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0C69FFVHH",
+      "notes": "The Sense version, with the camera board."
+    },
+    {
+      "part": "1.28\" GC9A01 round display, 240×240",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=GC9A01%201.28%20inch%20round%20LCD%20240x240",
+      "notes": "SPI version."
+    },
+    {
+      "part": "VL53L1X ToF lidar breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=VL53L1X%20time%20of%20flight%20sensor%20breakout",
+      "notes": "Forward lidar, 4 m."
+    },
+    {
+      "part": "VL53L0X ToF breakout",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=VL53L0X%20time%20of%20flight%20sensor%20breakout",
+      "notes": "Drop-off sensors."
+    },
+    {
+      "part": "LSM6DSOX 6-DoF IMU breakout",
+      "qty": "1",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=LSM6DSOX",
+      "notes": ""
+    },
+    {
+      "part": "Speaker, Ø20 mm + PAM8302 amp",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=20mm%20speaker%208%20ohm%20PAM8302%20amplifier",
+      "notes": ""
+    },
+    {
+      "part": "TCA9554 I²C GPIO expander",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=TCA9554",
+      "notes": "Any TCA9554 / PCA9554 breakout."
+    },
+    {
+      "part": "2.4 GHz u.FL whip antenna",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=2.4GHz%20u.FL%20IPEX%20antenna",
+      "notes": ""
+    },
+    {
+      "part": "1S LiPo cell with protection",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=3.7V%20LiPo%20battery%20JST%201000mAh",
+      "notes": "Size as in the brief."
+    },
+    {
+      "part": "1S USB-C charger with power path",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=USB%20C%20lithium%20charger%20power%20path%20module%201S",
+      "notes": ""
+    },
+    {
+      "part": "MAX17048 fuel gauge breakout",
+      "qty": "1",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=MAX17048",
+      "notes": ""
+    },
+    {
+      "part": "3.3 V buck-boost regulator",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=3.3V%20buck%20boost%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "Steel bearing ball, 12 mm",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=12mm+steel+bearing+ball",
+      "notes": "Caster ball."
+    },
+    {
+      "part": "Heat-set inserts M2 / M2.5 / M3 + screws",
+      "qty": "1 kit",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=heat+set+insert+kit+M2+M2.5+M3",
+      "notes": "See the workshop kit on the parts page."
+    }
+  ],
+  "manifest_text": "body: scout\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500, antenna: ufl_external }\nmcu:\n  reflex: { chip: esp32s3, module: xiao_esp32s3_sense, psram: 8MB, role: [reflex, face, camera, mic] }\npower:\n  battery: { cells: 1, chem: lipo, mah: 1000, protected: true }\n  charger: { part: bq24074_class, input: usb_c_5v, ichg_ma: 1000, power_path: true }\n  rail_3v3: { part: buck_boost, en: main_switch }\n  low_soc_pct: 15\n  low_v: 3.45\nbuses:\n  i2c0: { sda: 5, scl: 6, hz: 400000 }\n  spi2: { sclk: 7, mosi: 9, hz: 40000000 }\nexpander: { part: tca9554, bus: i2c0, addr: 0x20,\n  pins: { p0: motor_l_dir, p1: motor_r_dir, p2: drv_nsleep, p3: disp_rst, p4: disp_bl, p5: tof_rear_xshut, p6: amp_sd, p7: chg_pg_in } }\ndrive:\n  type: differential\n  wheel_d_mm: 40\n  track_mm: 108\n  motor: { part: n20_6v, ratio: 100, driver: drv8833, mode: pwm_in1_dir_in2, pwm_hz: 20000 }\n  left:  { pwm: 3, dir: expander.p0, enc_a: 1, pcnt_unit: 0 }\n  right: { pwm: 4, dir: expander.p1, enc_a: 2, pcnt_unit: 1 }\n  enc_cpr_wheel: 1400\n  limits: { accel_mps2: 2.5, brake_mps2: 3.5, v_table_mps: 0.4, v_reverse_mps: 0.15, yaw_dps: 360 }\nperipherals:\n  - { name: lidar_fwd, part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 44, fov: 27, role: obstacle }\n  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, tilt_deg: 25, role: drop_off }\n  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x29, xshut: expander.p5, tilt_deg: -25, role: drop_off }\n  - { name: imu,       part: lsm6dsox, bus: i2c0, addr: 0x6A, location: com, role: imu }\n  - { name: gauge,     part: max17048, bus: i2c0, addr: 0x36 }\n  - { name: display,   part: gc9a01, bus: spi2, dc: 8, cs: tied_low, rst: expander.p3, bl: expander.p4, size: 240x240 }\n  - { name: mic,       part: onboard_pdm, clk: 42, data: 41 }\n  - { name: speaker,   part: pam8302, input: pdm_tx, pin: 43, sd: expander.p6 }\n  - { name: camera,    part: ov3660, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\nreflexes:\n  obstacle: { sensor: lidar_fwd, stop_mm: 80, slow_mm: 250 }\n  edge:  { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_20mm] }\n  lift:  { sensors: [imu, drop_front, drop_rear], action: motors_off }\n  bump:  { sensors: [imu, encoders], decel_g: 1.5, stall_ms: 300, action: [stop, back_off_30mm] }\nsafety:\n  triggers: [heartbeat_lost, soc_below_15, vbat_below_3v45, drv_fault, stall_1s, overcurrent]\n  routine:  [stop, brake, wait_2s, edge_clear_creep, motors_coast, face_sleepy]\n  resume:   fresh_command_only\n",
+  "manifest_json": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "rover",
+      "name": "Scout",
+      "vendor": "Meckie bodies",
+      "model": "scout",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "drive": {
+        "deadman_ms": 500
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      }
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "onboard_pdm"
+      },
+      "state": {},
+      "depth": {
+        "sensors": 3
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/scout/firmware/hangar_bay_scout.yaml",
+      "hardware_sha256": "9af9ae5d92fd0da5a93e4dfabedc4918dcbab288a6bca63bf9e1a16b16d5bb4e",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build_json": {
+    "model": "scout",
+    "board": "seeed_xiao_esp32s3",
+    "body_platform": "espressif32@6.6.0",
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8
+      }
+    },
+    "motors": {
+      "driver": "drv8833",
+      "type": "differential",
+      "pins": {}
+    },
+    "mic_type": "onboard_pdm",
+    "mic": {
+      "pins": {
+        "bclk": 42,
+        "din": 41
+      }
+    },
+    "speaker": "pam8302",
+    "camera": true,
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs/rst/bl",
+        "value": "cs=tied_low rst=expander.p3 bl=expander.p4",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2c0.sda; bl would use GPIO 4, which this body uses for drive.right.pwm",
+        "collides": true
+      },
+      {
+        "what": "drive pins",
+        "value": "{\"left\":{\"pwm\":3,\"dir\":\"expander.p0\",\"enc_a\":1,\"pcnt_unit\":0},\"right\":{\"pwm\":4,\"dir\":\"expander.p1\",\"enc_a\":2,\"pcnt_unit\":1}}",
+        "reason": "differential: motor direction runs through expander.p0 rather than a second MCU pin, so the ain1/ain2 + bin1/bin2 shape does not fit"
+      },
+      {
+        "what": "mic (onboard_pdm)",
+        "value": "clk 42, data 41",
+        "reason": "the generator's audio_up block is I2S; a PDM mic needs a different driver, so audio_up cannot be generated for this body"
+      },
+      {
+        "what": "speaker amp shutdown",
+        "value": "sd=expander.p6",
+        "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/scout/hangar-bay/scout.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "unsupported": [
+    {
+      "what": "display cs/rst/bl",
+      "value": "cs=tied_low rst=expander.p3 bl=expander.p4",
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2c0.sda; bl would use GPIO 4, which this body uses for drive.right.pwm",
+      "collides": true
+    },
+    {
+      "what": "drive pins",
+      "value": "{\"left\":{\"pwm\":3,\"dir\":\"expander.p0\",\"enc_a\":1,\"pcnt_unit\":0},\"right\":{\"pwm\":4,\"dir\":\"expander.p1\",\"enc_a\":2,\"pcnt_unit\":1}}",
+      "reason": "differential: motor direction runs through expander.p0 rather than a second MCU pin, so the ain1/ain2 + bin1/bin2 shape does not fit"
+    },
+    {
+      "what": "mic (onboard_pdm)",
+      "value": "clk 42, data 41",
+      "reason": "the generator's audio_up block is I2S; a PDM mic needs a different driver, so audio_up cannot be generated for this body"
+    },
+    {
+      "what": "speaker amp shutdown",
+      "value": "sd=expander.p6",
+      "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+    }
+  ],
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 26,
+  "esp32_only": true,
+  "servo_type": "PWM / gearmotor"
+}

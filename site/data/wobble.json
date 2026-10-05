@@ -1,0 +1,731 @@
+{
+  "slug": "wobble",
+  "name": "Wobble",
+  "class": "self-balancing",
+  "moves": "2-wheel balance + kickstand",
+  "servos": "2× N20 + 1× MG90S kickstand",
+  "brains": "ESP32-S3 + XIAO ESP32-S3 Sense (head)",
+  "power": "2S pack mounted high + USB-C",
+  "mass_g": 425,
+  "bom_usd": 156,
+  "stl": 24,
+  "tagline": "A bouncy, slightly clumsy friend who rocks and sways while it talks.",
+  "folder": "bodies/wobble",
+  "brief": "bodies/wobble/Wobble Design Brief.dc.html",
+  "viewer": "bodies/wobble/Wobble Viewer.html",
+  "print_parts": "bodies/wobble/Wobble Print Parts.html",
+  "stl_dir": "bodies/wobble/stl",
+  "parts_csv": "bodies/wobble/parts-list.csv",
+  "manifest": "bodies/wobble/firmware/hangar_bay_wobble.yaml",
+  "status": "design complete · not yet test-printed",
+  "license": {
+    "hardware": "CERN-OHL-S-2.0",
+    "code": "MIT"
+  },
+  "hangar_bay_template": "bodies/wobble/hangar-bay/wobble.template.yaml",
+  "hardware_sha256": "69f482c86c8c12e86b258fe828c301086a54f2a0c06ae3a9cc74044b80527e16",
+  "version": "1.0.0",
+  "drives": true,
+  "pack_url": "unpublished",
+  "targets": [
+    {
+      "key": "reflex",
+      "role": "body",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    },
+    {
+      "key": "head",
+      "role": "head",
+      "host": null,
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      },
+      "os": null,
+      "provision": null
+    }
+  ],
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "wizard": [
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each motor forward briefly",
+      "required": false,
+      "writes": "drive.invert",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "required": false,
+      "writes": "imu.offsets",
+      "checks": null,
+      "auto": false
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "required": false,
+      "writes": null,
+      "checks": [
+        "lidar_fwd",
+        "drop_front",
+        "drop_rear"
+      ],
+      "auto": false
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true,
+      "writes": null,
+      "checks": null,
+      "auto": false
+    }
+  ],
+  "parts": [
+    {
+      "key": "leg",
+      "name": "Kickstand leg",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat on its side.",
+      "file": "wobble-leg-x2.stl",
+      "bytes": 25484,
+      "size": "25 KB",
+      "triangles": 508
+    },
+    {
+      "key": "motor_strap",
+      "name": "Motor strap",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "wobble-motor_strap-x2.stl",
+      "bytes": 41084,
+      "size": "40 KB",
+      "triangles": 820
+    },
+    {
+      "key": "board_plate",
+      "name": "Small-board plate (charger, buck, driver)",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "wobble-board_plate-x2.stl",
+      "bytes": 165884,
+      "size": "162 KB",
+      "triangles": 3316
+    },
+    {
+      "key": "spine",
+      "name": "Spine (every board mounts here)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat. 4 walls, 40%.",
+      "file": "wobble-spine-x1.stl",
+      "bytes": 1096284,
+      "size": "1.0 MB",
+      "triangles": 21924
+    },
+    {
+      "key": "battery_cradle",
+      "name": "Battery cradle (screws to the spine)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "wobble-battery_cradle-x1.stl",
+      "bytes": 81884,
+      "size": "80 KB",
+      "triangles": 1636
+    },
+    {
+      "key": "battery_door",
+      "name": "Battery door",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam (deep)",
+      "orientation": "Outer face down; latch upright.",
+      "file": "wobble-battery_door-x1.stl",
+      "bytes": 47884,
+      "size": "47 KB",
+      "triangles": 956
+    },
+    {
+      "key": "belly",
+      "name": "Belly tub",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Floor on the bed. No supports.",
+      "file": "wobble-belly-x1.stl",
+      "bytes": 496384,
+      "size": "485 KB",
+      "triangles": 9926
+    },
+    {
+      "key": "camera_hood",
+      "name": "Camera hood",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Rim down.",
+      "file": "wobble-camera_hood-x1.stl",
+      "bytes": 228584,
+      "size": "223 KB",
+      "triangles": 4570
+    },
+    {
+      "key": "band",
+      "name": "Chrome band (split ring)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Flat.",
+      "file": "wobble-band-x2.stl",
+      "bytes": 91884,
+      "size": "90 KB",
+      "triangles": 1836
+    },
+    {
+      "key": "display_retainer",
+      "name": "Display retainer ring (snap)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down; hooks upright.",
+      "file": "wobble-display_retainer-x1.stl",
+      "bytes": 44984,
+      "size": "44 KB",
+      "triangles": 898
+    },
+    {
+      "key": "esp_cradle",
+      "name": "ESP32-S3 DevKitC cradle (screws to the spine)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "wobble-esp_cradle-x1.stl",
+      "bytes": 43684,
+      "size": "43 KB",
+      "triangles": 872
+    },
+    {
+      "key": "face_bezel",
+      "name": "Face bezel + TPU-look visor ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down.",
+      "file": "wobble-face_bezel-x1.stl",
+      "bytes": 73284,
+      "size": "72 KB",
+      "triangles": 1464
+    },
+    {
+      "key": "hubcap",
+      "name": "Hubcap",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down; pins upright.",
+      "file": "wobble-hubcap-x2.stl",
+      "bytes": 180584,
+      "size": "176 KB",
+      "triangles": 3610
+    },
+    {
+      "key": "imu_clamp",
+      "name": "IMU clamp plate",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "wobble-imu_clamp-x1.stl",
+      "bytes": 84484,
+      "size": "83 KB",
+      "triangles": 1688
+    },
+    {
+      "key": "servo_bracket",
+      "name": "MG90S kickstand servo bracket",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "wobble-servo_bracket-x1.stl",
+      "bytes": 30584,
+      "size": "30 KB",
+      "triangles": 610
+    },
+    {
+      "key": "sensor_clamp",
+      "name": "Sensor clamp plate",
+      "qty": 5,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "wobble-sensor_clamp-x5.stl",
+      "bytes": 82684,
+      "size": "81 KB",
+      "triangles": 1652
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "wobble-speaker_ring-x1.stl",
+      "bytes": 117484,
+      "size": "115 KB",
+      "triangles": 2348
+    },
+    {
+      "key": "upper",
+      "name": "Upper shell",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim on the bed; the top chamfer is under 45°. No supports.",
+      "file": "wobble-upper-x1.stl",
+      "bytes": 576784,
+      "size": "563 KB",
+      "triangles": 11534
+    },
+    {
+      "key": "wheel_hub",
+      "name": "Wheel hub",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Outer face down.",
+      "file": "wobble-wheel_hub-x2.stl",
+      "bytes": 116884,
+      "size": "114 KB",
+      "triangles": 2336
+    },
+    {
+      "key": "xiao_cradle",
+      "name": "XIAO ESP32-S3 Sense cradle",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "wobble-xiao_cradle-x1.stl",
+      "bytes": 47684,
+      "size": "47 KB",
+      "triangles": 952
+    },
+    {
+      "key": "antenna_ball",
+      "name": "Antenna ball",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Hole up.",
+      "file": "wobble-antenna_ball-x2.stl",
+      "bytes": 47684,
+      "size": "47 KB",
+      "triangles": 952
+    },
+    {
+      "key": "corner_bumper",
+      "name": "Corner bumper",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat face down.",
+      "file": "wobble-corner_bumper-x2.stl",
+      "bytes": 93584,
+      "size": "91 KB",
+      "triangles": 1870
+    },
+    {
+      "key": "leg_foot",
+      "name": "Kickstand foot",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A",
+      "orientation": "Flat.",
+      "file": "wobble-leg_foot-x2.stl",
+      "bytes": 83184,
+      "size": "81 KB",
+      "triangles": 1662
+    },
+    {
+      "key": "tyre",
+      "name": "Tyre",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat. 3 walls, 30% gyroid, 20 mm/s.",
+      "file": "wobble-tyre-x2.stl",
+      "bytes": 128084,
+      "size": "125 KB",
+      "triangles": 2560
+    }
+  ],
+  "buy": [
+    {
+      "part": "N20 6 V gearmotor with hall encoder",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=N20%20gear%20motor%20encoder%206V",
+      "notes": "Ratio as in the brief."
+    },
+    {
+      "part": "DRV8833 dual motor driver",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=DRV8833%20motor%20driver%20module",
+      "notes": ""
+    },
+    {
+      "part": "MG90S metal-gear micro servo",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=MG90S%20micro%20servo%20metal%20gear",
+      "notes": ""
+    },
+    {
+      "part": "ESP32-S3-DevKitC-1 N16R8",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CDRM6BGQ",
+      "notes": "Must be N16R8 (16 MB flash, 8 MB PSRAM)."
+    },
+    {
+      "part": "Seeed XIAO ESP32-S3 Sense (camera + mic)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0C69FFVHH",
+      "notes": "The Sense version, with the camera board."
+    },
+    {
+      "part": "BNO085 9-DoF IMU breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=BNO085%20IMU%20breakout",
+      "notes": "Adafruit or a clone."
+    },
+    {
+      "part": "VL53L1X ToF lidar breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=VL53L1X%20time%20of%20flight%20sensor%20breakout",
+      "notes": "Forward lidar, 4 m."
+    },
+    {
+      "part": "VL53L0X ToF breakout",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=VL53L0X%20time%20of%20flight%20sensor%20breakout",
+      "notes": "Drop-off sensors."
+    },
+    {
+      "part": "1.28\" GC9A01 round display, 240×240",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=GC9A01%201.28%20inch%20round%20LCD%20240x240",
+      "notes": "SPI version."
+    },
+    {
+      "part": "ICS-43434 I²S MEMS mic breakout",
+      "qty": "2",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=ICS-43434",
+      "notes": "Rarely on Amazon. INMP441 boards on Amazon work as a substitute."
+    },
+    {
+      "part": "MAX98357A I²S amplifier breakout",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0CJMBMXMH",
+      "notes": ""
+    },
+    {
+      "part": "Speaker, Ø28 mm, 8 Ω 1 W",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=28mm%20speaker%208%20ohm%201W",
+      "notes": ""
+    },
+    {
+      "part": "2S Li-ion pack with BMS",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=2S%207.4V%201000mAh%20battery%20pack%20BMS",
+      "notes": ""
+    },
+    {
+      "part": "BQ25798 charger breakout",
+      "qty": "1",
+      "where": "Adafruit",
+      "link": "https://www.adafruit.com/search?q=BQ25798",
+      "notes": "Multi-cell USB-C charger with power path."
+    },
+    {
+      "part": "USB-C PD trigger board (sink)",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/dp/B0H1BYPQ1T",
+      "notes": "DIP-switch selectable voltage; set to the value in the brief."
+    },
+    {
+      "part": "5 V / 3 A buck converter",
+      "qty": "1",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=5V%203A%20mini%20buck%20converter%20module",
+      "notes": ""
+    },
+    {
+      "part": "eFuse / load switch breakout",
+      "qty": "1",
+      "where": "DigiKey",
+      "link": "https://www.digikey.com/en/products/result?keywords=TPS25947%20evaluation",
+      "notes": "TPS2594x-class eFuse. A 10 A blade fuse plus MOSFET switch board works as a simpler alternative."
+    },
+    {
+      "part": "Spring-steel antenna stalks + M3 brass inserts",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=spring+steel+antenna+wire",
+      "notes": "Thread into the roof inserts."
+    },
+    {
+      "part": "Z-bend pushrods 1 mm steel",
+      "qty": "2",
+      "where": "Amazon",
+      "link": "https://www.amazon.com/s?k=rc+pushrod+z+bend",
+      "notes": "Kickstand linkage."
+    }
+  ],
+  "manifest_text": "body: wobble\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: belly, role: [balance, drive, sense, legs, power] }\n  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: top, role: [camera, face, mics, speaker] }\npower:\n  battery: { cells: 2, mah: 1000, smart: true, gauge: sbs, balance: true }\n  charger: { part: bq25798, input: usb_c_pd, request_v: 9 }\n  rails:   { motor: vbat_direct, logic_5v: buck_3a, servo: 5v_load_switch }\n  sit_soc_pct: 20\n  sit_v: 6.8\nlinks:\n  base_head: { reflex: { uart: 2, tx: 17, rx: 18 }, head: { tx: 43, rx: 44 }, baud: 921600 }\nbuses:\n  i2c0:     { host: reflex, sda: 8, scl: 9, hz: 400000 }\n  i2c1_smb: { host: reflex, sda: 4, scl: 5, hz: 100000 }\n  spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }\n  i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }\nbalance:\n  imu: { name: imu, part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line, role: imu }\n  loop_hz: 400\n  controller: lqr_cascade\n  com_above_axle_mm: 63\n  pitch_trim_deg: 0.0\n  sway: { source: head.speech_envelope, max_deg: 8, max_hz: 2 }\n  fall_deg: 35\ndrive:\n  type: two_wheel_balancing\n  wheel_d_mm: 64\n  track_mm: 140\n  motor: { part: n20_6v, ratio: 50, driver: drv8833, pwm_hz: 20000, max_duty_pct: 78 }\n  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }\n  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }\n  driver: { nsleep: 42, nfault: 21 }\n  enc_cpr_wheel: 1400\n  limits: { v_mps: 0.3, v_reverse_mps: 0.15, decel_mps2: 2.0 }\nkickstand:\n  servo: { part: mg90s, pwm_gpio: 14, hz: 50, power_en: 15 }\n  stowed_us: 2350\n  deployed_us: 650\n  over_centre_deg: 4\nperipherals:\n  - { name: lidar_fwd,  part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 10, role: obstacle }\n  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, xshut: 11, tilt_deg: 35, role: drop_off, pitch_comp: true }\n  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x31, xshut: 12, tilt_deg: -35, role: drop_off, pitch_comp: true }\n  - { name: charger,    part: bq25798, bus: i2c0, addr: 0x6B, int: 13 }\n  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: display,    part: gc9a01, host: head, bus: spi, dc: 8, rst: 1, bl: 2, cs: tied_low, size: 240x240 }\n  - { name: mics,       part: ics43434, host: head, bus: i2s, count: 2, sel: [gnd, 3v3] }\n  - { name: speaker,    part: max98357a, host: head, bus: i2s, sd: tied_high }\n  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\nreflexes:\n  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [stop, back_off_40mm] }\n  obstacle: { sensor: lidar_fwd, slow_mm: 400, stop_mm: 200 }\n  fall:     { sensor: imu, pitch_deg: 35, action: motors_off }\nsafety:\n  triggers: [heartbeat_lost, soc_below_20, vbat_below_6v8, drv_fault, stall_1s, head_link_lost]\n  routine:  [stop, hold_position, wait_2s, legs_deploy, settle_on_legs, motors_off, servo_off, face_sleepy]\n  resume:   fresh_command_only\n",
+  "manifest_json": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "rover",
+      "name": "Wobble",
+      "vendor": "Meckie bodies",
+      "model": "wobble",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "drive": {
+        "deadman_ms": 500
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 16000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 3
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/wobble/firmware/hangar_bay_wobble.yaml",
+      "hardware_sha256": "69f482c86c8c12e86b258fe828c301086a54f2a0c06ae3a9cc74044b80527e16",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build_json": {
+    "model": "wobble",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8,
+        "rst": 1,
+        "bl": 2
+      }
+    },
+    "motors": {
+      "driver": "drv8833",
+      "type": "two_wheel_balancing",
+      "pins": {
+        "ain1": 38,
+        "ain2": 39,
+        "bin1": 40,
+        "bin2": 41
+      }
+    },
+    "servo": {
+      "pan": 14,
+      "axes": 1,
+      "part": "mg90s",
+      "role": "kickstand"
+    },
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "mic_type": "ics43434",
+    "mic": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5,
+        "dout": 6
+      }
+    },
+    "speaker": "max98357a",
+    "speaker_pins": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5,
+        "dout": 6
+      }
+    },
+    "camera": true,
+    "topology": {
+      "boards": [
+        {
+          "role": "body",
+          "mcu": "esp32s3",
+          "board": "esp32-s3-devkitc-1",
+          "pack_mcu_key": "reflex"
+        },
+        {
+          "role": "head",
+          "mcu": "esp32s3",
+          "board": "seeed_xiao_esp32s3",
+          "pack_mcu_key": "head"
+        }
+      ],
+      "neck": {
+        "declared_in_pack": {
+          "base_head": {
+            "reflex": {
+              "uart": 2,
+              "tx": 17,
+              "rx": 18
+            },
+            "head": {
+              "tx": 43,
+              "rx": 44
+            },
+            "baud": 921600
+          }
+        }
+      }
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs",
+        "value": "cs=tied_low",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2s.din",
+        "collides": true
+      },
+      {
+        "what": "motor enable pins (ena/enb)",
+        "value": "n/a on a DRV8833",
+        "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+      },
+      {
+        "what": "speaker amp shutdown",
+        "value": "sd=tied_high",
+        "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/wobble/hangar-bay/wobble.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "unsupported": [
+    {
+      "what": "display cs",
+      "value": "cs=tied_low",
+      "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2s.din",
+      "collides": true
+    },
+    {
+      "what": "motor enable pins (ena/enb)",
+      "value": "n/a on a DRV8833",
+      "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+    },
+    {
+      "what": "speaker amp shutdown",
+      "value": "sd=tied_high",
+      "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+    }
+  ],
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 38,
+  "esp32_only": true,
+  "servo_type": "PWM / gearmotor"
+}

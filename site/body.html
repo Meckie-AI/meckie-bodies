@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Meckie bodies</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,700;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="topbar"><div class="wrap">
+  <a class="brand" href="/">Meckie bodies<span class="dot">.</span></a>
+  <nav class="topnav">
+    <a href="/">Catalog</a>
+    <a href="/contribute">Contribute</a>
+    <a href="/bodies.json">Feed</a>
+  </nav>
+</div></div>
+
+<div class="wrap">
+  <header class="masthead">
+    <p class="label" style="margin:0 0 10px"><a href="/">&larr; All bodies</a></p>
+    <h1 id="name">&nbsp;</h1>
+    <p class="tagline" id="tagline"></p>
+    <div class="rule"></div>
+  </header>
+
+  <div class="statgrid" id="stats"></div>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <div id="panels"></div>
+</div>
+
+<footer><div class="wrap">
+  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT). Meckie OS is free to
+     download; the Meckie brain is a paid service.</p>
+</div></footer>
+
+<script>
+const SLUG = location.pathname.replace(/\/+$/, '').split('/').pop();
+const VIEWS = ['iso', 'side', 'front', 'top', 'rear', 'exploded', 'xray'];
+
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') n.className = v;
+    else if (k === 'html') n.innerHTML = v;
+    else if (k.startsWith('on') && typeof v === 'function') n.addEventListener(k.slice(2), v);
+    else if (v !== null && v !== undefined) n.setAttribute(k, v);
+  }
+  for (const c of kids.flat()) if (c != null) n.append(c);
+  return n;
+};
+const head = (num, title, ...rest) =>
+  el('div', { class: 'section-head' }, el('span', { class: 'section-num' }, num),
+    el('h2', { class: 'section-title' }, title), ...rest);
+
+const packFile = (b, p) => '/packs/' + b.slug + '/' + p.split('/').slice(2).map(encodeURIComponent).join('/');
+
+// ── 3D ──────────────────────────────────────────────────────────────
+function tab3D(b) {
+  const frame = el('iframe', { src: viewerSrc(b, 'iso'), title: b.name + ' — 3D view' });
+  function viewerSrc(b, view) {
+    return '/packs/' + b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop()) +
+      '?view=' + view + '&embed=1';
+  }
+  const bar = el('div', { class: 'viewbar' });
+  let current = 'iso';
+  for (const v of VIEWS) {
+    const btn = el('button', { class: 'pill' + (v === 'iso' ? ' on' : ''), type: 'button' }, v);
+    btn.onclick = () => {
+      current = v;
+      frame.src = viewerSrc(b, v);
+      [...bar.children].forEach(c => c.classList.toggle('on', c.textContent === v));
+    };
+    bar.append(btn);
+  }
+  return el('div', {},
+    head('03', '3D'),
+    bar,
+    el('div', { class: 'viewer-wrap' }, frame),
+    el('p', { class: 'muted small', style: 'margin-top:14px' },
+      'Drag to orbit. This is the pack’s own viewer, the same file you get in the download — ',
+      el('a', { href: viewerSrc(b, 'iso').replace('&embed=1', ''), target: '_blank' }, 'open it full size'),
+      '. The viewers are concept geometry kept close to the parts; the Print Parts page is the ' +
+      'geometric source of truth.'));
+}
+
+// ── Build (the brief) ───────────────────────────────────────────────
+function tabBuild(b) {
+  const src = packFile(b, b.brief);
+  return el('div', {},
+    head('02', 'Build'),
+    el('p', { class: 'muted', style: 'margin:0 0 18px' },
+      'The full design brief: concept views, the mechanism and its joint table, body layout and ' +
+      'bus topology, the load check, mass and cost budgets, every joint’s assembly method, ' +
+      'print orientation and the safety reflex.'),
+    el('div', { class: 'row', style: 'margin-bottom:18px' },
+      el('a', { class: 'pill red', href: src, target: '_blank' }, 'Open the brief'),
+      el('a', { class: 'pill', href: '/packs/' + b.slug + '/README.txt', target: '_blank' }, 'Maker notes')),
+    el('div', { class: 'viewer-wrap' },
+      el('iframe', { src, title: b.name + ' — design brief', style: 'height:min(80vh,900px)' })));
+}
+
+// ── Print ───────────────────────────────────────────────────────────
+function tabPrint(b) {
+  const groups = new Map();
+  for (const p of b.parts) {
+    if (!groups.has(p.material)) groups.set(p.material, []);
+    groups.get(p.material).push(p);
+  }
+  const sections = [...groups.entries()].map(([mat, parts]) => {
+    const rows = parts.map(p => el('tr', {},
+      el('td', {}, el('div', {}, p.name),
+        el('div', { class: 'label', style: 'margin-top:3px' }, p.file)),
+      el('td', { class: 'mono' }, '×' + p.qty),
+      el('td', { class: 'small muted' }, p.orientation || '—'),
+      el('td', { class: 'mono small', style: 'white-space:nowrap' }, p.size),
+      el('td', {}, el('a', { class: 'pill', href: '/packs/' + b.slug + '/stl/' + p.file, download: '' }, 'STL'))));
+    return el('div', { style: 'margin-bottom:34px' },
+      el('div', { class: 'row', style: 'margin-bottom:12px' },
+        el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em" }, mat),
+        el('span', { class: 'chip' }, parts.reduce((n, p) => n + p.qty, 0) + ' prints')),
+      el('div', { class: 'card scroll-x' },
+        el('table', { class: 'data fixed' },
+          el('thead', {}, el('tr', {},
+            el('th', {}, 'Part'), el('th', {}, 'Qty'),
+            el('th', {}, 'On the bed'), el('th', {}, 'Size'), el('th', {}, ''))),
+          el('tbody', {}, rows))));
+  });
+
+  return el('div', {},
+    head('06', 'Print',
+      el('a', { class: 'pill red', href: '/api/bodies/' + b.slug + '/stl.zip' },
+        'Download all ' + b.stl + ' STLs')),
+    el('p', { class: 'muted', style: 'margin:0 0 24px' },
+      b.total_prints + ' printed pieces from ' + b.stl + ' files, in ' + b.materials.length +
+      ' material' + (b.materials.length === 1 ? '' : 's') + '. Fits a 256 × 256 mm bed.'),
+    ...sections,
+    el('div', { class: 'note warn' },
+      el('strong', {}, 'Not yet sliced or test-printed.'),
+      ' Every servo pocket carries 3 mm of shim room because the spline position along the ' +
+      'STS3215 / STS3032 case is not published. Measure it on the first build and record what you find.'));
+}
+
+// ── Parts ───────────────────────────────────────────────────────────
+function tabParts(b) {
+  const amazon = b.buy.filter(r => /amazon\./i.test(r.link));
+  const other = b.buy.filter(r => !/amazon\./i.test(r.link));
+
+  const table = (rows) => el('div', { class: 'card scroll-x' },
+    el('table', { class: 'data' },
+      el('thead', {}, el('tr', {},
+        el('th', {}, 'Part'), el('th', {}, 'Qty'), el('th', {}, 'Where'), el('th', {}, 'Notes'), el('th', {}, ''))),
+      el('tbody', {}, rows.map(r => el('tr', {},
+        el('td', {}, r.part),
+        el('td', { class: 'mono' }, r.qty),
+        el('td', {}, el('span', { class: 'chip' }, r.where)),
+        el('td', { class: 'small muted' }, r.notes || '—'),
+        el('td', {}, el('a', { class: 'pill', href: r.link, target: '_blank', rel: 'noreferrer' }, 'Open')))))));
+
+  const openAll = el('button', { class: 'pill red', type: 'button' },
+    'Open the ' + amazon.length + ' Amazon items');
+  openAll.onclick = () => {
+    if (!confirm('This opens ' + amazon.length + ' browser tabs, one per item. Go ahead?')) return;
+    for (const r of amazon) window.open(r.link, '_blank', 'noreferrer');
+  };
+
+  return el('div', {},
+    head('05', 'Parts'),
+    el('p', { class: 'muted', style: 'margin:0 0 6px' },
+      'Buy list for one ' + b.name + ', about $' + b.bom_usd + ' at single-unit retail.'),
+    el('p', { class: 'small muted', style: 'margin:0 0 20px' },
+      'This is a convenience: source your own parts anywhere, as long as they match the spec in ' +
+      'the brief. The links point to one good option, not the only one, and carry no affiliate tags.'),
+    amazon.length ? el('div', {},
+      el('div', { class: 'row', style: 'margin-bottom:12px' },
+        el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em" }, 'Amazon'),
+        openAll),
+      table(amazon)) : null,
+    other.length ? el('div', { style: 'margin-top:34px' },
+      el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px" },
+        'Other suppliers'),
+      table(other)) : null,
+    el('p', { class: 'small muted', style: 'margin-top:18px' },
+      'BOM figures are single-unit retail estimates from October 2026 and have not been checked ' +
+      'against current listings. ',
+      el('a', { href: '/packs/' + b.slug + '/parts-list.csv', download: '' }, 'Download the CSV')));
+}
+
+// ── Hangar Bay ──────────────────────────────────────────────────────
+function tabHangar(b) {
+  const templateUrl = location.origin + '/api/bodies/' + b.slug + '/template';
+  const deep = 'meckie://hangar-bay/add?template=' + encodeURIComponent(templateUrl);
+
+  const flash = b.targets.map(t => el('tr', {},
+    el('td', {}, el('div', { class: 'mono' }, t.key),
+      el('div', { class: 'label', style: 'margin-top:3px' }, t.role ? 'role: ' + t.role : 'not a flash target')),
+    el('td', {}, t.board || t.host || '—'),
+    el('td', { class: 'small muted' },
+      t.role ? (t.platform || '') : (t.os ? t.os + ' · imaged by you' : '')),
+    el('td', {}, t.flash ? el('span', { class: 'chip' + (t.role ? ' brass' : ' steel') },
+      (t.flash.method || '').replace(/_/g, ' ')) : null)));
+
+  const steps = b.wizard.map((s, i) => el('tr', {},
+    el('td', { class: 'mono' }, String(i + 1).padStart(2, '0')),
+    el('td', {}, el('div', { class: 'mono' }, s.step),
+      s.required ? el('span', { class: 'chip red', style: 'margin-top:4px' }, 'required') : null),
+    el('td', { class: 'small' }, s.prompt),
+    el('td', { class: 'small muted mono' }, s.writes || (s.checks ? s.checks.join(', ') : (s.auto ? 'automatic' : '—')))));
+
+  const unsupported = (b.unsupported || []).map(u => el('li', { style: 'margin-bottom:10px' },
+    el('strong', {}, u.what), ' — ', el('span', { class: 'muted' }, u.reason),
+    u.value ? el('div', { class: 'label', style: 'margin-top:3px' }, u.value) : null));
+
+  return el('div', {},
+    head('07', 'Hangar Bay'),
+    el('p', { class: 'muted', style: 'margin:0 0 18px' },
+      'Hangar Bay can build whatever you design. This is the shortcut for a printed ' + b.name +
+      ': pick it by name, flash, go — no configuration.'),
+    el('div', { class: 'row', style: 'margin-bottom:10px' },
+      el('a', { class: 'pill red', href: deep }, 'Open in Hangar Bay'),
+      el('a', { class: 'pill', href: templateUrl, target: '_blank' }, 'View the template'),
+      el('a', { class: 'pill', href: templateUrl, download: b.slug + '.template.json' }, 'Download')),
+    el('p', { class: 'label', style: 'margin:0 0 28px' },
+      'hardware_sha256 ' + b.hardware_sha256.slice(0, 24) + '…'),
+
+    el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px" },
+      'What gets flashed'),
+    el('div', { class: 'card scroll-x', style: 'margin-bottom:34px' },
+      el('table', { class: 'data' },
+        el('thead', {}, el('tr', {},
+          el('th', {}, 'Target'), el('th', {}, 'Board'), el('th', {}, 'Toolchain'), el('th', {}, 'How'))),
+        el('tbody', {}, flash))),
+
+    el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px" },
+      'Calibration, in order'),
+    el('div', { class: 'card scroll-x' },
+      el('table', { class: 'data' },
+        el('thead', {}, el('tr', {},
+          el('th', {}, ''), el('th', {}, 'Step'), el('th', {}, 'What you do'), el('th', {}, 'Writes'))),
+        el('tbody', {}, steps))),
+    el('div', { class: 'note', style: 'margin-top:16px' },
+      'The last step is not optional. ', el('span', { class: 'mono' }, 'safety_test'),
+      ' drops the heartbeat and the body must take itself to its rest pose — it is the one ' +
+      'check that proves it parks itself when Central goes away.'),
+
+    unsupported.length ? el('div', { style: 'margin-top:34px' },
+      el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px" },
+        'What Meckie OS cannot generate yet'),
+      el('div', { class: 'note warn' },
+        el('ul', { style: 'margin:0;padding-left:20px' }, unsupported))) : null);
+}
+
+// ── Firmware ────────────────────────────────────────────────────────
+function tabFirmware(b) {
+  const pre = el('pre', { class: 'code' }, b.manifest_text);
+  const copy = el('button', { class: 'pill', type: 'button' }, 'Copy');
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(b.manifest_text); copy.textContent = 'Copied'; }
+    catch (e) { copy.textContent = 'Copy failed'; }
+    setTimeout(() => { copy.textContent = 'Copy'; }, 1600);
+  };
+  return el('div', {},
+    head('08', 'Firmware'),
+    el('p', { class: 'muted', style: 'margin:0 0 18px' },
+      'The body manifest: every peripheral, bus, pin, servo ID, joint limit, reflex and the safety ' +
+      'routine. This is the authored file — the JSON Meckie OS consumes is generated from it.'),
+    el('div', { class: 'row', style: 'margin-bottom:16px' },
+      copy,
+      el('a', { class: 'pill', href: packFile(b, b.manifest), download: '' }, 'Download YAML'),
+      el('a', { class: 'pill', href: '/packs/' + b.slug + '/generated/manifest.json', target: '_blank' }, 'manifest.json'),
+      el('a', { class: 'pill', href: '/packs/' + b.slug + '/generated/build.json', target: '_blank' }, 'build.json')),
+    pre);
+}
+
+// ── page ────────────────────────────────────────────────────────────
+const TABS = [
+  ['3D', tab3D], ['Build', tabBuild], ['Print', tabPrint],
+  ['Parts', tabParts], ['Hangar Bay', tabHangar], ['Firmware', tabFirmware],
+];
+
+fetch('/data/' + SLUG + '.json').then(r => {
+  if (!r.ok) throw new Error('no such body');
+  return r.json();
+}).then(b => {
+  document.title = b.name + ' — Meckie bodies';
+  document.getElementById('name').textContent = b.name + '.';
+  document.getElementById('tagline').textContent = b.tagline;
+
+  const stats = [
+    ['Class', b.class], ['Moves', b.moves],
+    ['Actuators', b.servos], ['Brains', b.brains],
+    ['Power', b.power], ['Mass', b.mass_g + ' g'],
+    ['BOM', '~$' + b.bom_usd + ' at single-unit retail'],
+    ['Status', b.status],
+  ];
+  document.getElementById('stats').replaceChildren(...stats.map(([k, v]) =>
+    el('div', { class: 'stat' }, el('div', { class: 'label' }, k), el('div', { class: 'v' }, v))));
+
+  const tabs = document.getElementById('tabs');
+  const panels = document.getElementById('panels');
+  const built = new Map();
+
+  const show = (name) => {
+    for (const [n] of TABS) {
+      const on = n === name;
+      tabs.querySelector('[data-tab="' + CSS.escape(n) + '"]').setAttribute('aria-selected', String(on));
+      built.get(n).hidden = !on;
+    }
+    history.replaceState(null, '', '#' + name.toLowerCase().replace(/\s+/g, '-'));
+  };
+
+  for (const [name, make] of TABS) {
+    tabs.append(el('button', { role: 'tab', 'data-tab': name, 'aria-selected': 'false',
+      onclick: () => show(name) }, name));
+    const panel = el('div', { class: 'panel', hidden: '' }, make(b));
+    built.set(name, panel);
+    panels.append(panel);
+  }
+
+  const want = TABS.find(([n]) => '#' + n.toLowerCase().replace(/\s+/g, '-') === location.hash);
+  show(want ? want[0] : '3D');
+}).catch(e => {
+  document.getElementById('name').textContent = 'Not found.';
+  document.getElementById('tagline').textContent =
+    'No body called "' + SLUG + '". ' + e.message;
+});
+</script>
+</body>
+</html>
