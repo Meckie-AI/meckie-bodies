@@ -3,24 +3,52 @@
    its brief read as one document: 1950s atomic-punk, cream and sea foam and
    signal red, chrome and brass. No wood, no emoji. */
 
+/* Namespaced --mkt-*, deliberately.
+   These pages are mounted inside meckie.ai, whose own stylesheet defines --bg,
+   --card, --text and friends for the shared nav and footer. Sharing those names
+   would have the catalog restyle the site's chrome and vice versa, so the
+   catalog keeps its own prefix and the two never touch. */
 :root {
-  --bg: #f1e8d2;
-  --card: #f7f0de;
-  --frame: #ebe2cb;
-  --ink: #23292b;
-  --red: #c8463a;
-  --foam: #5ea49b;
-  --brass: #c29a48;
-  --deep-foam: #2e6a46;
-  --steel: #37598a;
-  --muted: #3d4344;
-  --muted-2: #5a5f60;
-  --rule: #c9bfa6;
-  --rule-2: #d8cfb7;
+  --mkt-bg: #f1e8d2;
+  --mkt-card: #f7f0de;
+  --mkt-frame: #ebe2cb;
+  --mkt-ink: #23292b;
+  --mkt-red: #c8463a;
+  --mkt-foam: #5ea49b;
+  --mkt-brass: #c29a48;
+  --mkt-deep-foam: #2e6a46;
+  --mkt-steel: #37598a;
+  --mkt-muted: #3d4344;
+  --mkt-muted-2: #5a5f60;
+  --mkt-rule: #c9bfa6;
+  --mkt-rule-2: #d8cfb7;
+  --mkt-shadow: rgba(35, 41, 43, 0.07);
 
   --pad: 48px;
   --max: 1240px;
   --section: 56px;
+}
+
+/* Dark, following the site's switch (html.dark, set by /js/theme.js before
+   paint). Same atomic palette after dark: the signal red and sea foam stay,
+   lifted a little so they hold up on charcoal, and the cream becomes the ink
+   instead of the ground. Charcoals are the site's own so the catalog and the
+   chrome around it are the same room. */
+html.dark {
+  --mkt-bg: #1a1b1e;
+  --mkt-card: #232529;
+  --mkt-frame: #2e3036;
+  --mkt-ink: #e7dfcb;
+  --mkt-red: #e0675a;
+  --mkt-foam: #6fb8ae;
+  --mkt-brass: #cfa94f;
+  --mkt-deep-foam: #7cc3a0;
+  --mkt-steel: #7ba3dd;
+  --mkt-muted: #9b968a;
+  --mkt-muted-2: #837e73;
+  --mkt-rule: #3a3d42;
+  --mkt-rule-2: #33363b;
+  --mkt-shadow: rgba(0, 0, 0, 0.35);
 }
 
 * { box-sizing: border-box; }
@@ -29,14 +57,14 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--mkt-bg);
+  color: var(--mkt-ink);
   font: 400 16px/1.55 'Jost', system-ui, -apple-system, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--red); text-decoration: none; }
-a:hover { color: var(--ink); text-decoration: underline; }
+a { color: var(--mkt-red); text-decoration: none; }
+a:hover { color: var(--mkt-ink); text-decoration: underline; }
 
 .wrap { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
 
@@ -46,7 +74,7 @@ a:hover { color: var(--ink); text-decoration: underline; }
   font: 500 11px/1.4 'IBM Plex Mono', ui-monospace, monospace;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--muted-2);
+  color: var(--mkt-muted-2);
 }
 
 .mono { font-family: 'IBM Plex Mono', ui-monospace, monospace; }
@@ -63,32 +91,39 @@ h2.section-title {
 .section-head { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
 .section-num {
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--red); color: var(--card);
+  background: var(--mkt-red); color: var(--mkt-card);
   display: flex; align-items: center; justify-content: center;
   font: 700 16px 'Jost', sans-serif; flex: none;
   align-self: center;
 }
 
-/* ── top bar ─────────────────────────────────────────────────────── */
+/* ── sub bar ──────────────────────────────────────────────────────
+   The site's shared nav sits above this. This is the second bar: where you
+   are WITHIN the bodies section, and the only place the catalog names itself.
+   It is deliberately not sticky - two sticky bars eat the viewport on a
+   laptop, and the site's nav is the one worth keeping. */
 
-.topbar {
-  border-bottom: 2px solid var(--ink);
-  background: var(--card);
-  position: sticky; top: 0; z-index: 20;
+.subbar {
+  border-bottom: 2px solid var(--mkt-ink);
+  background: var(--mkt-card);
 }
-.topbar .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
+.subbar .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
 .brand {
   font: italic 700 26px 'Jost', sans-serif;
-  letter-spacing: -0.01em; color: var(--ink);
+  letter-spacing: -0.01em; color: var(--mkt-ink);
 }
-.brand:hover { text-decoration: none; color: var(--red); }
-.brand .dot { color: var(--red); }
-.topnav { margin-left: auto; display: flex; gap: 22px; align-items: center; }
-.topnav a {
+.brand:hover { text-decoration: none; color: var(--mkt-red); }
+.brand .dot { color: var(--mkt-red); }
+.subnav { margin-left: auto; display: flex; gap: 22px; align-items: center; }
+.subnav a {
   font: 500 12px 'IBM Plex Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--mkt-muted);
 }
-.topnav a:hover, .topnav a.on { color: var(--red); text-decoration: none; }
+.subnav a:hover, .subnav a.on { color: var(--mkt-red); text-decoration: none; }
+
+/* The site's stylesheet gives the shared nav its own fonts and colours; the
+   catalog must not restyle it. Only the gap below it is ours. */
+#meckie-nav + .subbar { border-top: 1px solid var(--mkt-rule-2); }
 
 /* ── masthead ────────────────────────────────────────────────────── */
 
@@ -99,20 +134,20 @@ h2.section-title {
 }
 .masthead .tagline {
   font: 400 18px/1.5 'Jost', sans-serif;
-  color: var(--muted); max-width: 760px; margin-top: 14px; text-wrap: pretty;
+  color: var(--mkt-muted); max-width: 760px; margin-top: 14px; text-wrap: pretty;
 }
-.masthead .rule { border-bottom: 3px double var(--ink); margin-top: 28px; }
+.masthead .rule { border-bottom: 3px double var(--mkt-ink); margin-top: 28px; }
 
 /* 2-column stat grid with 1px internal rules */
 .statgrid {
   display: grid; grid-template-columns: repeat(2, 1fr);
-  border-bottom: 2px solid var(--ink);
+  border-bottom: 2px solid var(--mkt-ink);
 }
 .statgrid .stat {
   padding: 14px 18px 14px 0;
-  border-bottom: 1px solid var(--rule-2);
+  border-bottom: 1px solid var(--mkt-rule-2);
 }
-.statgrid .stat:nth-child(odd) { border-right: 1px solid var(--rule-2); padding-right: 24px; }
+.statgrid .stat:nth-child(odd) { border-right: 1px solid var(--mkt-rule-2); padding-right: 24px; }
 .statgrid .stat:nth-child(even) { padding-left: 24px; }
 .statgrid .stat:nth-last-child(-n+2) { border-bottom: none; }
 .statgrid .v { font: 500 17px 'Jost', sans-serif; margin-top: 3px; }
@@ -121,43 +156,57 @@ h2.section-title {
   .statgrid { grid-template-columns: 1fr; }
   .statgrid .stat:nth-child(odd) { border-right: none; padding-right: 0; }
   .statgrid .stat:nth-child(even) { padding-left: 0; }
-  .statgrid .stat:nth-last-child(-n+2):not(:last-child) { border-bottom: 1px solid var(--rule-2); }
+  .statgrid .stat:nth-last-child(-n+2):not(:last-child) { border-bottom: 1px solid var(--mkt-rule-2); }
 }
 
 /* ── cards, pills, chips ─────────────────────────────────────────── */
 
 .card {
-  background: var(--card);
-  border: 2px solid var(--ink);
+  background: var(--mkt-card);
+  border: 2px solid var(--mkt-ink);
   border-radius: 20px;
   overflow: hidden;
 }
 
 .pill {
   display: inline-flex; align-items: center; gap: 7px;
-  border: 2px solid var(--ink); border-radius: 999px;
-  padding: 7px 15px; background: var(--card);
+  border: 2px solid var(--mkt-ink); border-radius: 999px;
+  padding: 7px 15px; background: var(--mkt-card);
   font: 500 12px 'IBM Plex Mono', monospace;
   text-transform: uppercase; letter-spacing: 0.08em;
-  cursor: pointer; color: var(--ink);
+  cursor: pointer; color: var(--mkt-ink);
 }
-.pill:hover { background: var(--frame); text-decoration: none; }
-.pill.on { background: var(--ink); color: var(--card); }
-.pill.red { background: var(--red); color: var(--card); border-color: var(--red); }
+.pill:hover { background: var(--mkt-frame); text-decoration: none; }
+.pill.on { background: var(--mkt-ink); color: var(--mkt-card); }
+.pill.red { background: var(--mkt-red); color: var(--mkt-card); border-color: var(--mkt-red); }
 .pill.red:hover { background: #b23a2f; border-color: #b23a2f; }
 .pill[disabled] { opacity: 0.4; cursor: not-allowed; }
 
 .chip {
   display: inline-block; border-radius: 13px;
-  border: 1px solid var(--rule); background: var(--frame);
+  border: 1px solid var(--mkt-rule); background: var(--mkt-frame);
   padding: 4px 11px;
   font: 500 11px 'IBM Plex Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--mkt-muted);
 }
-.chip.foam { background: #e2efe9; border-color: #a9cdc4; color: var(--deep-foam); }
+.chip.foam { background: #e2efe9; border-color: #a9cdc4; color: var(--mkt-deep-foam); }
 .chip.red { background: #f6ded9; border-color: #e0a79e; color: #9b352b; }
 .chip.brass { background: #f3e8cd; border-color: #d9c088; color: #8a6a24; }
-.chip.steel { background: #dde5f2; border-color: #a8bbd8; color: var(--steel); }
+.chip.steel { background: #dde5f2; border-color: #a8bbd8; color: var(--mkt-steel); }
+
+/* Dark: the same four meanings, as tints of the charcoal rather than washes of
+   the cream, so a chip still reads as a chip and not as a light patch. */
+html.dark .chip.foam { background: #1e3833; border-color: #2f5b53; color: #86cdbe; }
+html.dark .chip.red { background: #3a211d; border-color: #6b382f; color: #e89183; }
+html.dark .chip.brass { background: #352b18; border-color: #5c4a28; color: #d9b86a; }
+html.dark .chip.steel { background: #1f2a3b; border-color: #35496b; color: #93b4e4; }
+html.dark .note { background: #26282c; color: var(--mkt-muted); }
+html.dark .note.warn { background: #33211f; color: #e8a79b; }
+html.dark pre.code { background: #121619; border-color: var(--mkt-rule); }
+/* The pack viewers paint their own cream ground, so in dark mode a card would
+   hold a bright rectangle. Knock it back so it reads as a lit stage. */
+html.dark .bodycard .viewport, html.dark .viewer-wrap { background: #11151a; }
+html.dark .bodycard .viewport iframe, html.dark .viewer-wrap iframe { filter: brightness(0.92) saturate(0.95); }
 
 /* ── tables ──────────────────────────────────────────────────────── */
 
@@ -165,40 +214,40 @@ table.data { width: 100%; border-collapse: collapse; font-size: 14px; }
 table.data th {
   text-align: left; padding: 10px 12px;
   font: 500 11px 'IBM Plex Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2);
-  border-bottom: 2px solid var(--ink); white-space: nowrap;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--mkt-muted-2);
+  border-bottom: 2px solid var(--mkt-ink); white-space: nowrap;
 }
 table.data td {
-  padding: 11px 12px; border-bottom: 1px solid var(--rule-2);
+  padding: 11px 12px; border-bottom: 1px solid var(--mkt-rule-2);
   vertical-align: top;
 }
 table.data tr:last-child td { border-bottom: none; }
-table.data tbody tr:hover { background: var(--frame); }
+table.data tbody tr:hover { background: var(--mkt-frame); }
 .scroll-x { overflow-x: auto; }
 
 /* ── layout helpers ──────────────────────────────────────────────── */
 
 section { margin-top: var(--section); }
 .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
-.muted { color: var(--muted); }
+.muted { color: var(--mkt-muted); }
 .small { font-size: 14px; }
 
 .note {
-  border-left: 3px solid var(--brass);
-  background: var(--frame);
+  border-left: 3px solid var(--mkt-brass);
+  background: var(--mkt-frame);
   padding: 14px 18px; border-radius: 0 12px 12px 0;
-  font-size: 15px; color: var(--muted);
+  font-size: 15px; color: var(--mkt-muted);
 }
-.note.warn { border-left-color: var(--red); background: #f8e5e1; color: #7d2c23; }
+.note.warn { border-left-color: var(--mkt-red); background: #f8e5e1; color: #7d2c23; }
 
 /* ── footer ──────────────────────────────────────────────────────── */
 
 footer {
-  margin-top: 80px; border-top: 2px solid var(--ink);
-  background: var(--card); padding: 28px 0 56px;
+  margin-top: 80px; border-top: 2px solid var(--mkt-ink);
+  background: var(--mkt-card); padding: 28px 0 56px;
 }
 footer .wrap { display: flex; gap: 20px; flex-wrap: wrap; align-items: baseline; }
-footer p { margin: 0; font-size: 14px; color: var(--muted); max-width: 820px; }
+footer p { margin: 0; font-size: 14px; color: var(--mkt-muted); max-width: 820px; }
 
 /* ── catalog ─────────────────────────────────────────────────────── */
 
@@ -213,28 +262,28 @@ footer p { margin: 0; font-size: 14px; color: var(--muted); max-width: 820px; }
 
 .bodycard { display: flex; flex-direction: column; }
 .bodycard .viewport {
-  aspect-ratio: 4 / 3; background: var(--frame);
-  border-bottom: 2px solid var(--ink); position: relative;
+  aspect-ratio: 4 / 3; background: var(--mkt-frame);
+  border-bottom: 2px solid var(--mkt-ink); position: relative;
 }
 .bodycard .viewport iframe { width: 100%; height: 100%; border: 0; display: block; }
 .bodycard .viewport .loading {
   position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
   font: 500 11px 'IBM Plex Mono', monospace; text-transform: uppercase;
-  letter-spacing: 0.12em; color: var(--muted-2);
+  letter-spacing: 0.12em; color: var(--mkt-muted-2);
 }
 .bodycard .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .bodycard h3 { font: italic 700 30px/1 'Jost', sans-serif; }
-.bodycard .tag { color: var(--muted); font-size: 15px; text-wrap: pretty; flex: 1; }
+.bodycard .tag { color: var(--mkt-muted); font-size: 15px; text-wrap: pretty; flex: 1; }
 /* Keys above values: an actuator string like "2x N20 encoder gearmotor" is far
    longer than "198 g", and side-by-side it used to wrap into the next row. */
 .bodycard .stats {
   display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 12px 18px; border-top: 1px solid var(--rule-2); padding-top: 14px;
+  gap: 12px 18px; border-top: 1px solid var(--mkt-rule-2); padding-top: 14px;
 }
 .bodycard .stats div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .bodycard .stats .k {
   font: 500 10px 'IBM Plex Mono', monospace; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--muted-2);
+  letter-spacing: 0.08em; color: var(--mkt-muted-2);
 }
 .bodycard .stats .v { font-size: 14px; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 /* Two chip rows on one card and one on another made the grid ragged. */
@@ -244,24 +293,24 @@ footer p { margin: 0; font-size: 14px; color: var(--muted); max-width: 820px; }
 
 .tabs {
   display: flex; gap: 0; flex-wrap: wrap;
-  border-bottom: 2px solid var(--ink); margin-top: 36px;
+  border-bottom: 2px solid var(--mkt-ink); margin-top: 36px;
 }
 .tabs button {
   appearance: none; background: none; border: 0; cursor: pointer;
   padding: 14px 20px; margin-bottom: -2px;
   font: 500 12px 'IBM Plex Mono', monospace;
-  text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--mkt-muted);
   border-bottom: 3px solid transparent;
 }
-.tabs button:hover { color: var(--ink); }
-.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--red); }
+.tabs button:hover { color: var(--mkt-ink); }
+.tabs button[aria-selected="true"] { color: var(--mkt-ink); border-bottom-color: var(--mkt-red); }
 
 .panel { padding-top: 32px; }
 .panel[hidden] { display: none !important; }
 
 /* ── viewer ──────────────────────────────────────────────────────── */
 
-.viewer-wrap { border: 2px solid var(--ink); border-radius: 20px; overflow: hidden; background: var(--frame); }
+.viewer-wrap { border: 2px solid var(--mkt-ink); border-radius: 20px; overflow: hidden; background: var(--mkt-frame); }
 .viewer-wrap iframe { width: 100%; height: min(70vh, 640px); border: 0; display: block; }
 .viewbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
 
@@ -270,7 +319,7 @@ footer p { margin: 0; font-size: 14px; color: var(--muted); max-width: 820px; }
 pre.code {
   margin: 0; padding: 20px; overflow: auto;
   background: #1e2426; color: #e8e2d0;
-  border-radius: 14px; border: 2px solid var(--ink);
+  border-radius: 14px; border: 2px solid var(--mkt-ink);
   font: 400 13px/1.6 'IBM Plex Mono', monospace;
   max-height: 70vh;
 }

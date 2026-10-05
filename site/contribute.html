@@ -6,10 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,700;1,700&display=swap" rel="stylesheet">
 <script>
-// The same files are served standalone at / and mounted on meckie.ai under
-// /bodies, so the prefix has to be decided before anything else loads.
+// Decide the mount before anything else loads, then pull in the SITE's chrome
+// (theme + nav) ahead of the catalog's own stylesheet.
+//
+// theme.js must run before paint: it sets html.dark from localStorage, and the
+// catalog's palette keys off that class, so loading it late would flash the
+// light theme on a dark page. The catalog's stylesheet comes last so its
+// --mkt-* palette wins where the two overlap - which, being namespaced, is
+// nowhere by design.
 (function () {
-  var p = /^\/bodies(\/|$)/.test(location.pathname) ? '/bodies' : '';
+  var mounted = /^\/bodies(\/|$)/.test(location.pathname);
+  var p = mounted ? '/bodies' : '';
+  // Where the marketing site lives. Same origin when mounted; locally it is
+  // the marketing server, overridable with <meta name="meckie-site">.
+  var meta = document.querySelector('meta[name="meckie-site"]');
+  var site = mounted ? '' : ((meta && meta.content) || 'http://localhost:3200');
+  document.write('<link rel="stylesheet" href="' + site + '/style.css">');
+  document.write('<scr' + 'ipt src="' + site + '/js/theme.js"><\/scr' + 'ipt>');
+  document.write('<scr' + 'ipt src="' + site + '/js/nav.js"><\/scr' + 'ipt>');
   document.write('<link rel="stylesheet" href="' + p + '/style.css">');
   document.write('<scr' + 'ipt src="' + p + '/js/where.js"><\/scr' + 'ipt>');
 })();
@@ -17,13 +31,16 @@
 </head>
 <body>
 
-<div class="topbar"><div class="wrap">
+<!-- the site's shared nav, same as every other meckie.ai page -->
+<nav id="meckie-nav" data-page="public"></nav>
+
+<!-- the catalog's own second bar: where you are inside the bodies section -->
+<div class="subbar"><div class="wrap">
   <a class="brand" data-link="home" href="/">Meckie bodies<span class="dot">.</span></a>
-  <nav class="topnav">
+  <nav class="subnav">
     <a data-link="home" href="/">Catalog</a>
     <a data-link="contribute" href="/contribute" class="on">Contribute</a>
     <a data-link="feed" href="/bodies.json">Feed</a>
-    <a data-link="site" href="/" title="Meckie OS">Meckie OS &rarr;</a>
   </nav>
 </div></div>
 
