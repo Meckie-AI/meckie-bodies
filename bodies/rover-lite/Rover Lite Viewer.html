@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'explore';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -112,15 +112,15 @@ for(const sd of [-1,1]){const z0=sd*ZT;
  add(rg,'idler',CZ(ID.r,TW-0.002,40),mat.shell,[ID.x,ID.y,z0]);
  add(rg,'idler_cap',CZ(0.007,0.003,32),mat.chrome,[ID.x,ID.y,z0+sd*0.014]);
  for(const x of RWX){add(rg,'road_wheel',CZ(0.012,TW-0.002,32),mat.shell,[x,0.0135,z0]);add(rg,'road_cap',CZ(0.0055,0.0025,24),mat.chrome,[x,0.0135,z0+sd*0.0135]);}
- const fr=G(model,sd>0?'track_frame_R':'track_frame_L',{label:sd>0?'Track frame · CF-nylon, idler tension slot':null,ex:[0,-0.02,sd*0.015]});
+ const fr=G(model,sd>0?'track_frame_R':'track_frame_L',{label:sd>0?'Track frame · PLA, idler tension slot':null,ex:[0,-0.02,sd*0.015]});
  add(fr,'inner_plate',BX(0.19,0.026,0.003),mat.cf,[0,0.026,sd*0.0455]);
  add(fr,'tension_block',BX(0.014,0.01,0.004),mat.cf,[ID.x-0.004,ID.y,sd*0.0455]);
- const fd=G(model,sd>0?'fender_R':'fender_L',{label:sd>0?'Fenders · PETG sea foam, chrome edge, red pinstripe':null,ex:[0,0.04,sd*0.03]});
+ const fd=G(model,sd>0?'fender_R':'fender_L',{label:sd>0?'Fenders · PLA sea foam, chrome edge, red pinstripe':null,ex:[0,0.04,sd*0.03]});
  {const s=rr(new THREE.Shape(),0.103,0.0035,0.0035);const g=new THREE.ExtrudeGeometry(s,{depth:0.034,bevelEnabled:true,bevelThickness:0.002,bevelSize:0.002,bevelSegments:3,curveSegments:12});g.translate(0,0,-0.017);add(fd,'fender',g,mat.teal,[0,0.057,z0]);}
  add(fd,'fender_chrome',BX(0.206,0.0018,0.0018),mat.chrome,[0,0.057,z0+sd*0.0195]);
  add(fd,'pinstripe',BX(0.15,0.0016,0.0008),mat.red,[0,0.0535,z0+sd*0.0193]);}
 // hull
-const hull=G(model,'hull',{label:'Hull tub · PETG sea foam',ex:[0,-0.05,0]});
+const hull=G(model,'hull',{label:'Hull tub · PLA sea foam',ex:[0,-0.05,0]});
 {const s=rr(new THREE.Shape(),0.092,0.016,0.012);const g=new THREE.ExtrudeGeometry(s,{depth:0.07,bevelEnabled:true,bevelThickness:0.004,bevelSize:0.004,bevelSegments:4,curveSegments:16});g.translate(0,0,-0.035);add(hull,'hull',g,mat.teal,[0,0.036,0]);}
 add(hull,'l8cx_bezel',BX(0.003,0.012,0.024),mat.chrome,[0.0965,0.042,0]);
 add(hull,'l8cx_window',BX(0.002,0.008,0.018),mat.glass,[0.0978,0.042,0]);
@@ -129,9 +129,9 @@ add(hull,'usbc_bezel',BX(0.003,0.007,0.014),mat.chrome,[-0.0965,0.042,0.016]);
 add(hull,'usbc_port',BX(0.002,0.0034,0.009),mat.servo15,[-0.0978,0.042,0.016]);
 add(hull,'switch_base',CX(0.0045,0.004,20),mat.chrome,[-0.0965,0.043,-0.016]);
 add(hull,'switch_lever',new THREE.CylinderGeometry(0.0013,0.0018,0.013,10),mat.brass,[-0.101,0.047,-0.016],[0,0,0.9]);
-const trays=G(model,'trays',{label:'Electronics trays · CF-nylon, insert grid',ex:[0,0.04,0]});
+const trays=G(model,'trays',{label:'Electronics trays · PLA, insert grid',ex:[0,0.04,0]});
 add(trays,'tray_rear',BX(0.068,0.0055,0.068),mat.cf,[-0.035,0.043,0]);add(trays,'tray_front',BX(0.034,0.0055,0.068),mat.cf,[0.069,0.043,0]);
-const deck=G(model,'deck',{label:'Deck lid · PETG cream, chrome band',ex:[0,0.05,0]});
+const deck=G(model,'deck',{label:'Deck lid · PLA cream, chrome band',ex:[0,0.05,0]});
 {const s=rr(new THREE.Shape(),0.088,0.006,0.006);const g=new THREE.ExtrudeGeometry(s,{depth:0.068,bevelEnabled:true,bevelThickness:0.003,bevelSize:0.003,bevelSegments:3,curveSegments:12});g.translate(0,0,-0.034);add(deck,'deck',g,mat.shell,[0,0.062,0]);}
 for(const s of [-1,1])add(deck,'deck_band',BX(0.18,0.002,0.002),mat.chrome,[0,0.0545,s*0.0395]);
 for(let i=0;i<4;i++)add(deck,'grille_bar',BX(0.0022,0.0015,0.024),mat.chrome,[-0.074+i*0.006,0.0712,0]);
@@ -141,7 +141,7 @@ add(tt,'brg_6806',new THREE.TorusGeometry(0.0185,0.003,10,48).rotateX(Math.PI/2)
 // pan stage
 const PIV=0.061;
 const pan=G(model,'pan_stage',{pos:[0.015,0.075,0],ex:[0,0.1,0]});pan.rotation.y=PO.pan*D;
-const yoke=G(pan,'yoke',{label:'Yoke · CF-nylon, brushed-alu finish'});
+const yoke=G(pan,'yoke',{label:'Yoke · PLA, brushed-alu finish'});
 add(yoke,'neck',CY(0.011,0.01,32),mat.alu,[0,0.005,0]);
 add(yoke,'yoke_base',BX(0.026,0.006,0.1),mat.alu,[0,0.013,0]);
 for(const s of [-1,1]){add(yoke,'yoke_arm',BX(0.016,PIV-0.013,0.006),mat.alu,[0,(PIV+0.013)/2,s*0.047]);add(yoke,'yoke_boss',CZ(0.009,0.006,32),mat.alu,[0,PIV,s*0.047]);add(yoke,'pivot_cap',CZ(0.0068,0.003,32),mat.brass,[0,PIV,s*0.0515]);}
@@ -151,7 +151,7 @@ tube(hr,'harness',hp,mat.power,0.0028);tube(hr,'trace',hp.map(p=>[p[0]-0.0006,p[
 for(const c of [hp[1],hp[3]])add(hr,'p_clip',new THREE.TorusGeometry(0.004,0.0011,8,24).rotateX(Math.PI/2),mat.brass,c);
 // head (drum, tilt about its own axis)
 const head=G(pan,'head',{pos:[0,PIV,0],ex:[0,0.08,0]});head.rotation.z=PO.tilt*D;
-const drum=G(head,'drum',{label:'Helmet drum · PETG cream tube + two screwed end caps',ex:[0,0.03,0]});
+const drum=G(head,'drum',{label:'Helmet drum · PLA cream tube + two screwed end caps',ex:[0,0.03,0]});
 add(drum,'drum',CZ(0.042,0.08,72),mat.shell);
 for(const s of [-1,1]){add(drum,'end_disc',CZ(0.039,0.002,64),mat.teal,[0,0,s*0.0405]);add(drum,'end_ring',new THREE.TorusGeometry(0.0405,0.0022,12,72),mat.chrome,[0,0,s*0.04]);
  add(drum,'mic_port',new THREE.TorusGeometry(0.0024,0.0008,8,24),mat.chrome,[0.02,0.01,s*0.0418]);}

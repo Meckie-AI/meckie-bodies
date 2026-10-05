@@ -20,7 +20,7 @@ OPENING THE HTML FILES
   python3 -m http.server, then open http://localhost:8000
 
 PRINTING
-  Materials: PETG for shells and trim, CF-nylon for structure, TPU 95A for the foot and strap.
+  Materials: PLA for shells, trim and structure; TPU 95A for the foot and strap.
   Each STL is in its print orientation except: swivel tier (flip top face to the bed)
   and yoke (lay it on its back). No supports needed. Quantities are in the file names (-x2).
   Insert bores: M2 3.2 mm, M2.5 3.6 mm, M3 4.0 mm, M4 5.6 mm, M5 6.4 mm, standard short

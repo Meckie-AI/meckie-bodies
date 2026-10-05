@@ -18,7 +18,7 @@ OPENING THE HTML FILES
   python3 -m http.server, then open http://localhost:8000
 
 PRINTING
-  PETG for hull, deck, fenders, drum and trim; CF-nylon for frames, wheels, sprockets,
+  PLA for hull, deck, fenders, drum, trim, frames, wheels, sprockets,
   turntable, yoke and trays; black TPU 95A for the tracks. No supports. Quantities are in the
   file names (-x6 road wheels). Exceptions to "as exported": flip the deck lid top face down,
   lay the yoke on its back. Inserts: M2 3.2, M2.5 3.6, M3 4.0, M5 6.4 mm bores.

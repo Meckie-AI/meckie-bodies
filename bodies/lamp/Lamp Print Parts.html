@@ -97,7 +97,7 @@ const bigOf=g=>g.decompose().reduce((a,b)=>b.volume()>a.volume()?b:a);
 const lathe=pts=>new THREE.LatheGeometry([new THREE.Vector2(0,pts[0][1]),...pts.map(p=>new THREE.Vector2(p[0],p[1]))],128).rotateX(P/2);
 const horn=(c,dir)=>{let g=toM(AXC(4,20,c,dir,24));for(let i=0;i<4;i++){const a=i*P/2+P/4;g=U(g,AXC(CLR.M3,20,[c[0]+HPCD*Math.cos(a),c[1]+HPCD*Math.sin(a),c[2]],dir,20));}return g;};
 
-part('base_shell','Base shell',1,'PETG sea foam','Top face down. No supports.',()=>{
+part('base_shell','Base shell',1,'PLA sea foam','Top face down. No supports.',()=>{
  let g=S(lathe([[BR-4,FZ+3],[BR,FZ+7],[BR,BZ1-10],[BR-6,BZ1-2],[44,BZ1],[0,BZ1]]),lathe([[BR-4-WT,FZ+2.9],[BR-WT,FZ+7],[BR-WT,BZ1-10.5],[BR-7,BZ1-WT-1.5],[44,BZ1-WT],[0,BZ1-WT]]));
  g=I(g,CYL(BR+2,BZ1-FZ-3,0,0,FZ+3,128));
  g=U(g,RING(41,30.5,BZ1-49,49));
@@ -111,7 +111,7 @@ part('base_shell','Base shell',1,'PETG sea foam','Top face down. No supports.',(
  g=S(g,BOX(6,9.6,3.8,-BR,0,14),AXC(3.25,8,[-BR,-34,16],[1,0,0],32));
  return bigOf(g);});
 
-part('base_floor','Base floor',1,'CF-nylon','Flat.',()=>{
+part('base_floor','Base floor',1,'PLA','Flat.',()=>{
  let g=CYL(BR-WT-.4,3,0,0,0,128);
  g=U(g,BOX(49.6,3,14,SVX+2,14.05,3),BOX(49.6,3,14,SVX+2,-14.05,3),BOX(3,31.1,14,SVX+28.3,0,3));
  for(let i=0;i<4;i++){const a=i*P/2+P/4;g=U(g,CYL(3.5,18.6,55*Math.cos(a),55*Math.sin(a),3));}
@@ -122,7 +122,7 @@ part('base_floor','Base floor',1,'CF-nylon','Flat.',()=>{
 
 part('tpu_foot','Foot',1,'TPU 95A','Flat.',()=>U(CYL(BR+1,2,0,0,0,128),RING(BR+1,BR-.2,6,0),RING(BR+1,BR-1.4,1.2,4.6)));
 
-part('tray','Electronics tray (ring, Pi bosses + M2 grid)',1,'CF-nylon','Flat.',()=>{
+part('tray','Electronics tray (ring, Pi bosses + M2 grid)',1,'PLA','Flat.',()=>{
  let g=S(CYL(76,4,0,0,0,128),RR(56,36,4,10,SVX+2,0,-1));
  for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,clr('M25',55*Math.cos(a),55*Math.sin(a),-1,6),csk('M25',55*Math.cos(a),55*Math.sin(a),4,true));}
  for(const[x,y]of [[-29,-11.5],[29,-11.5],[-29,11.5],[29,11.5]])g=U(g,CYL(3,4,x-10,y+42,4));
@@ -130,9 +130,9 @@ part('tray','Electronics tray (ring, Pi bosses + M2 grid)',1,'CF-nylon','Flat.',
  for(let x=-50;x<=50;x+=10)for(let y=-60;y<=-20;y+=10){if(Math.hypot(x,y)<BR-14)g=S(g,CYL(INS.M2[0],6,x,y,-1));}
  return bigOf(g);});
 
-part('clamp_ring','Bearing clamp ring',1,'CF-nylon','Flat.',()=>{let g=RING(42,31,3,0);for(let i=0;i<6;i++){const a=i*P/3,x=37*Math.cos(a),y=37*Math.sin(a);g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));}return g;});
+part('clamp_ring','Bearing clamp ring',1,'PLA','Flat.',()=>{let g=RING(42,31,3,0);for(let i=0;i<6;i++){const a=i*P/3,x=37*Math.cos(a),y=37*Math.sin(a);g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));}return g;});
 
-part('turret','Turret',1,'CF-nylon, brushed-alu finish','Disc down, spigot up. 6 walls, 60%.',()=>{
+part('turret','Turret',1,'PLA, brushed-alu finish','Disc down, spigot up. 6 walls, 60%.',()=>{
  let g=U(CYL(36,6,0,0,0,96),CYL(24.95,9,0,0,6,96));
  g=S(g,CYL(10.4,4.1,0,0,11),CYL(4.5,20,0,0,-1));
  for(let i=0;i<4;i++){const a=i*P/2+P/4,x=HPCD*Math.cos(a),y=HPCD*Math.sin(a);g=S(g,clr('M3',x,y,-1,20),csk('M3',x,y,0,false));}
@@ -140,7 +140,7 @@ part('turret','Turret',1,'CF-nylon, brushed-alu finish','Disc down, spigot up. 6
  for(const s of [-1,1])g=U(g,BOX(12,8,10,-30,s*31,0));for(const s of [-1,1])g=S(g,CYL(1.6,12,-30,s*31,-1));
  return bigOf(g);});
 
-const podHalf=(key,name,sd)=>part(key,name,1,'PETG cream','Split face down. No supports.',()=>{
+const podHalf=(key,name,sd)=>part(key,name,1,'PLA cream','Split face down. No supports.',()=>{
  const W=74,H=50,X0=-11;
  let g=S(RR(W,H,16,50,X0,0,0),RR(W-2*WT,H-2*WT,16-WT,47.6,X0,0,-.1));
  g=U(g,S(BOX(53.6,31,42,-11,0,3.2),BOX(49.6,25.1,44,-13,0,3.1)));
@@ -154,14 +154,14 @@ const podHalf=(key,name,sd)=>part(key,name,1,'PETG cream','Split face down. No s
 podHalf('pod_right','Shoulder pod, right half (shoulder servo ID 2)',1);
 podHalf('pod_left','Shoulder pod, left half (elbow-drive servo ID 3)',-1);
 
-part('pod_cap','Pod side cap (chrome)',2,'PETG, chrome paint','Flat.',()=>S(CYL(15,2,0,0,0,48),CYL(11.5,4,0,0,-1)));
+part('pod_cap','Pod side cap (chrome)',2,'PLA, chrome paint','Flat.',()=>S(CYL(15,2,0,0,0,48),CYL(11.5,4,0,0,-1)));
 
-part('drive_crank','Elbow drive crank (on ID 3 horn)',1,'CF-nylon','Flat. 100% infill.',()=>{
+part('drive_crank','Elbow drive crank (on ID 3 horn)',1,'PLA','Flat. 100% infill.',()=>{
  let g=U(CYL(7.45,8.5,0,0,0,48),CYL(10,4,0,0,8.5,48),BOX(8,RC+8,4,0,-RC/2,8.5),CYL(5,4,0,-RC,8.5,32));
  g=S(g,CYL(4.2,30,0,0,-1));for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,clr('M3',HPCD*Math.cos(a),HPCD*Math.sin(a),-1,20),CYL(3,3,HPCD*Math.cos(a),HPCD*Math.sin(a),10));}
  g=S(g,insUp('M3',0,-RC,12.5));return g;});
 
-const rail=(key,name,L,lowCut,hiCut,rl=11)=>part(key,name,1,'CF-nylon, brushed-alu finish','Flat. 6 walls, 60%.',()=>{
+const rail=(key,name,L,lowCut,hiCut,rl=11)=>part(key,name,1,'PLA, brushed-alu finish','Flat. 6 walls, 60%.',()=>{
  let g=U(BOX(11,L,4,0,L/2,0),CYL(rl,5,0,0,0,48),CYL(10,5,0,L,0,48));
  g=S(g,lowCut(),hiCut());
  for(const y of [60,L*0.6])g=S(g,CYL(CLR.M3,10,0,y,-1));
@@ -172,12 +172,12 @@ rail('lower_rail_L','Lower arm rail, left (rides a 6802 on the drive crank)',L1,
 rail('upper_rail_R','Upper arm rail, right (tilt horn side)',L2,()=>CYL(CLR.M5,10,0,0,-1),()=>horn([0,L2,-5],[0,0,1]));
 rail('upper_rail_L','Upper arm rail, left (elbow crank)',L2,()=>CYL(CLR.M5,10,0,0,-1),()=>CYL(CLR.M5,10,0,L2,-1));
 
-part('elbow_crank','Elbow crank (on the left upper rail)',1,'CF-nylon','Flat.',()=>{let g=U(CYL(9,4,0,0,0,40),BOX(8,RC+6,4,0,-RC/2,0),CYL(5,4,0,-RC,0,32));
+part('elbow_crank','Elbow crank (on the left upper rail)',1,'PLA','Flat.',()=>{let g=U(CYL(9,4,0,0,0,40),BOX(8,RC+6,4,0,-RC/2,0),CYL(5,4,0,-RC,0,32));
  g=S(g,CYL(CLR.M5,10,0,0,-1));for(const y of [-6,6])g=S(g,clr('M3',6,y,-1,6));g=S(g,insUp('M3',0,-RC,4));return bigOf(g);});
 
-part('rail_tie','Arm cross tie',2,'CF-nylon','Flat.',()=>{let g=BOX(8,117,6,0,0,0);for(const y of [-56,56])g=S(g,clr('M3',0,y,-1,8),csk('M3',0,y,6,true));return g;});
+part('rail_tie','Arm cross tie',2,'PLA','Flat.',()=>{let g=BOX(8,117,6,0,0,0);for(const y of [-56,56])g=S(g,clr('M3',0,y,-1,8),csk('M3',0,y,6,true));return g;});
 
-part('knuckle_half','Head knuckle half (holds tilt servo ID 4)',2,'PETG signal red','Split face down.',()=>{
+part('knuckle_half','Head knuckle half (holds tilt servo ID 4)',2,'PLA signal red','Split face down.',()=>{
  // print coords: x = head X, y = head Z (up), z = |Y| from the split plane; tilt axis at (0,0)
  let g=S(RR(KX,KZ,12,KL/2,0,KZc,0),RR(KX-2*WT,KZ-2*WT,12-WT,KL/2-WT,0,KZc,-.1));
  g=U(g,S(BOX(31,55.6,40,0,-11,0),BOX(25.1,49.6,42,0,-11,-.1)));
@@ -189,7 +189,7 @@ part('knuckle_half','Head knuckle half (holds tilt servo ID 4)',2,'PETG signal r
  for(const[x,z]of [[-15,-37],[15,-37],[-15,15],[15,15]])g=S(g,insDn('M25',x,z,0));
  return bigOf(g);});
 
-part('hood','Hood',1,'PETG sea foam','Rim down. Under 45° all the way; no supports.',()=>{
+part('hood','Hood',1,'PLA sea foam','Rim down. Under 45° all the way; no supports.',()=>{
  const prof=[[24,0],[26.5,8],[40,40],[50,66],[53.5,74]];
  let g=S(new THREE.LatheGeometry([new THREE.Vector2(0,0),...prof.map(p=>new THREE.Vector2(p[0],p[1])),new THREE.Vector2(0,74)],96),new THREE.LatheGeometry([new THREE.Vector2(0,2),...prof.slice(1).map(p=>new THREE.Vector2(p[0]-WT,p[1])),new THREE.Vector2(0,74.1)],96));
  g=new THREE.Group?g:g;
@@ -199,7 +199,7 @@ part('hood','Hood',1,'PETG sea foam','Rim down. Under 45° all the way; no suppo
  g=U(g,BOX(10,6,8,0,40,36));for(const x of [-3.5,3.5])g=S(g,AXC(INS.M2[0],6,[x,40,40],[0,0,1],20));
  return bigOf(g);});
 
-part('liner','Reflector liner (LED ring + display carrier)',1,'PETG white','Small end down.',()=>{
+part('liner','Reflector liner (LED ring + display carrier)',1,'PLA white','Small end down.',()=>{
  const prof=[[22,6],[36,38],[46,64],[50,71]];
  let g=S(new THREE.LatheGeometry([new THREE.Vector2(0,6),...prof.map(p=>new THREE.Vector2(p[0]-WT-.5,p[1])),new THREE.Vector2(0,71)],96),new THREE.LatheGeometry([new THREE.Vector2(0,7.6),...prof.map(p=>new THREE.Vector2(p[0]-WT-2.1,p[1]+.1)),new THREE.Vector2(0,71.2)],96));
  g=toM(g).rotate([90,0,0]);
@@ -208,16 +208,16 @@ part('liner','Reflector liner (LED ring + display carrier)',1,'PETG white','Smal
  g=U(g,RING(34,29,2,30));g=S(g,RING(32.2,28.2,2,32));
  return bigOf(g);});
 
-part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
+part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
-part('led_diffuser','LED ring diffuser',1,'PETG natural (translucent)','Flat.',()=>RING(33.9,28.3,1.6,0));
-part('face_bezel','Face bezel',1,'PETG, chrome paint','Face down.',()=>RING(23.4,16.2,2.4,0));
-part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
+part('led_diffuser','LED ring diffuser',1,'PLA natural (translucent)','Flat.',()=>RING(33.9,28.3,1.6,0));
+part('face_bezel','Face bezel',1,'PLA, chrome paint','Face down.',()=>RING(23.4,16.2,2.4,0));
+part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PLA','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-3.5,3.5])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
-part('mic_clamp','Mic retainer plate',2,'PETG','Flat.',()=>{let g=S(RR(8,20,2,2),BOX(4,4,4,0,0,-1));for(const y of [-6,6])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
-part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
-part('finial','Finial',1,'PETG, brass paint','Ball up.',()=>U(CYL(1.9,8,0,0,0,20),new THREE.SphereGeometry(4.2,24,16).translate(0,0,10)));
+part('mic_clamp','Mic retainer plate',2,'PLA','Flat.',()=>{let g=S(RR(8,20,2,2),BOX(4,4,4,0,0,-1));for(const y of [-6,6])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
+part('speaker_ring','Speaker ring',1,'PLA','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
+part('finial','Finial',1,'PLA, brass paint','Ball up.',()=>U(CYL(1.9,8,0,0,0,20),new THREE.SphereGeometry(4.2,24,16).translate(0,0,10)));
 part('ballast_note','Steel ballast ring (laser-cut, not printed)',1,'Mild steel 14 mm','Preview only: Ø150 / Ø90 × 14, 4× M4 tapped at R62, 4× Ø9 standoff holes at R55.',()=>{let g=RING(75,45,14,0);for(let i=0;i<4;i++){const a=i*P/2;g=S(g,CYL(1.65,10,62*Math.cos(a),62*Math.sin(a),-1));}for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,CYL(4.5,10,55*Math.cos(a),55*Math.sin(a),-1));}return g;});
 
 // ---------- viewer ----------

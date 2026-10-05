@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'peek';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -94,7 +94,7 @@ const LL=[0.07,0.065,0.06,0.06,0.045],AX=['z','x','z','x','z'];
 function rbox(w,h,d,r){const bv=Math.min(r,d/2-0.0006);const g=new THREE.ExtrudeGeometry(rr(new THREE.Shape(),w/2-bv,h/2-bv,Math.max(0.0012,r-bv)),{depth:d-2*bv,bevelEnabled:true,bevelThickness:bv,bevelSize:bv,bevelSegments:4,curveSegments:12});g.translate(0,0,-(d-2*bv)/2);return g;}
 const INT=G(model,'internals');
 // base
-const base=G(model,'base',{label:'Base dome · PETG cream over sea-foam band',ex:[0,-0.04,0]});
+const base=G(model,'base',{label:'Base dome · PLA cream over sea-foam band',ex:[0,-0.04,0]});
 add(base,'dome',lathe([[0.09,0.012],[0.088,0.022],[0.08,0.034],[0.066,0.046],[0.045,0.056],[0.022,0.061],[0,0.062]]),mat.shell);
 add(base,'band',CY(0.09,0.012,96),mat.teal,[0,0.006,0]);
 add(base,'ring',new THREE.TorusGeometry(0.0902,0.0016,10,120).rotateX(Math.PI/2),mat.chrome,[0,0.012,0]);
@@ -125,7 +125,7 @@ for(let i=0;i<5;i++){
  add(J,'joint_ring',new THREE.TorusGeometry(0.019,0.0024,10,48).rotateX(Math.PI/2),mat.chrome,[0,0.004,0],[0,0,0],[1.1,1,1.3]);
  const Lk=LL[i];
  if(i<4){
-  const sg=G(J,'segment_'+(i+1),{label:i===0?'Segment shells ×4 · PETG, glow ribs, TPU prolegs':null,ex:[0.03,0,0]});
+  const sg=G(J,'segment_'+(i+1),{label:i===0?'Segment shells ×4 · PLA, glow ribs, TPU prolegs':null,ex:[0.03,0,0]});
   add(sg,'segment',new THREE.SphereGeometry(1,40,24),segCol[i],[0,Lk/2,0],[0,0,0],[0.024,Lk*0.62,0.029]);
   for(const f of [0.3,0.7])add(sg,'glow_rib',new THREE.TorusGeometry(1,0.08,8,48).rotateX(Math.PI/2),mat.glowRing,[0,Lk*f,0],[0,0,0],[0.0222*Math.sin(Math.PI*f)+0.0003,0.02,0.0272*Math.sin(Math.PI*f)+0.0003]);
   for(const z of [-0.012,0.012])add(sg,'proleg',new THREE.SphereGeometry(0.0042,14,10),mat.bump,[0.0215,Lk*0.5,z],[0,0,0],[1,0.8,1]);
@@ -143,7 +143,7 @@ INT.children.slice().forEach(o=>INT.remove(o));
 for(let i=0;i<4;i++){const s=add(jg[i],'servo_J'+(i+2),BX(0.022,0.034,0.028),mat.servo15,[0,LL[i]/2,0]);lx(s,i===0?'STS3215 · J2 yaw':i===1?'STS3215 · J3 pitch':i===2?'STS3215 · J4 yaw':'STS3215 · J5 pitch');s.userData.int=true;}
 // head on J5
 const J5=jg[4];
-const head=G(J5,'head',{label:'Head · caterpillar dome, PETG cream',ex:[0,0.04,0]});
+const head=G(J5,'head',{label:'Head · caterpillar dome, PLA cream',ex:[0,0.04,0]});
 add(head,'neck',CY(0.012,0.012,32),mat.chrome,[0,0.006,0]);
 add(head,'head_shell',new THREE.SphereGeometry(1,48,28),mat.shell,[0,0.032,0],[0,0,0],[0.025,0.024,0.034]);
 add(head,'head_band',new THREE.TorusGeometry(1,0.06,8,64).rotateX(Math.PI/2),mat.teal,[0,0.024,0],[0,0,0],[0.0242,0.03,0.0332]);

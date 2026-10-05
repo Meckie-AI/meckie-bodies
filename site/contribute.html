@@ -130,8 +130,8 @@ npm run check</pre>
         every signal on it, and says how it is shared.</p>
 
       <h3 style="font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em">5. Fabrication</h3>
-      <p class="muted" style="margin:8px 0 0">Fits a 256 × 256 mm bed. PETG shells, CF-nylon
-        structure, TPU bumpers and tyres. Bearings at every pivot, metal servo horns, hidden
+      <p class="muted" style="margin:8px 0 0">Fits a 256 × 256 mm bed. PLA shells and structure,
+        TPU bumpers and tyres. Bearings at every pivot, metal servo horns, hidden
         fasteners. Insert bores: M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4. Supplier links
         stay plain — no affiliate tags, and prefer a search URL to a specific listing, because
         listings rot and searches do not.</p>
@@ -140,53 +140,56 @@ npm run check</pre>
 
   <section>
     <div class="section-head"><span class="section-num">3b</span>
-      <h2 class="section-title">Why those three materials</h2></div>
+      <h2 class="section-title">Why those two materials</h2></div>
+
+    <p class="muted" style="margin:0 0 20px;max-width:800px">The constraint that decided this was not
+      strength. It was that <strong>a stock printer with no modifications should be able to make
+      every rigid part</strong>. PLA needs no hardened nozzle, no dry box, no enclosure and no
+      260&nbsp;°C hotend, which is the difference between a pack most people can print and a pack
+      most people can only read. Contributed packs are held to the same rule.</p>
 
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:0">
       <div class="card" style="padding:20px 22px">
-        <h3 style="font:700 17px 'Jost'">PETG</h3>
-        <p class="label" style="margin:5px 0 10px">shells and enclosures</p>
-        <p class="muted small" style="margin:0">Heat tolerance, toughness at a snap hook, and a wide
-          enough window to take a heat-set insert without slumping the boss around it.</p>
-      </div>
-      <div class="card" style="padding:20px 22px">
-        <h3 style="font:700 17px 'Jost'">CF-nylon</h3>
-        <p class="label" style="margin:5px 0 10px">structure</p>
-        <p class="muted small" style="margin:0">The parts that actually carry load. Stiffness and
-          fatigue life where a bracket or a yoke is what holds the body together.</p>
+        <h3 style="font:700 17px 'Jost'">PLA</h3>
+        <p class="label" style="margin:5px 0 10px">everything rigid</p>
+        <p class="muted small" style="margin:0">Shells, structure, brackets, bezels. Stiff,
+          dimensionally accurate, prints unsupported on more surfaces than anything else, and
+          stocked in every colour the briefs name.</p>
       </div>
       <div class="card" style="padding:20px 22px">
         <h3 style="font:700 17px 'Jost'">TPU 95A</h3>
-        <p class="label" style="margin:5px 0 10px">anything compliant</p>
-        <p class="muted small" style="margin:0">Tyres, bumpers, feet. Grip, and a surface that
-          absorbs a knock instead of transmitting it into the shell.</p>
+        <p class="label" style="margin:5px 0 10px">only where flex is the function</p>
+        <p class="muted small" style="margin:0">Tyres, tracks, soles, feet, bumpers, grommets,
+          straps. Parts a rigid version would not perform at all. Nothing is TPU for toughness
+          alone — if a rigid part would do, it is PLA.</p>
       </div>
     </div>
 
     <div class="card" style="padding:26px 28px;margin-top:24px">
-      <h3 style="font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em">Why not PLA</h3>
-      <p class="muted" style="margin:10px 0 16px"><strong>Heat is the one that settles it.</strong>
-        Every body with serial servos sets them to warn at 65&nbsp;°C and cut torque at 70&nbsp;°C.
-        PLA's glass transition is about 55 to 60&nbsp;°C, which is <em>below the temperature the
-        body's own thermal protection is still treating as normal</em>. The shell would start going
-        soft while the servos inside it were still inside their rated envelope. PETG softens around
-        80 to 85&nbsp;°C, which puts the enclosure above the limits of what it encloses. The
-        ordinary case says the same thing: a desk in a sunny window, or a car, reaches 60&nbsp;°C
-        without trying.</p>
-      <p class="muted" style="margin:0 0 16px"><strong>Creep and impact.</strong> PLA deforms slowly
-        under a steady room-temperature load, and the arms hold a pose for hours with the mass of a
-        head on a moment arm. The drivers, the balancer and the walker have the opposite problem:
-        they hit things and fall over while a gait is being tuned, and PLA is brittle where PETG
-        yields.</p>
-      <p class="muted" style="margin:0 0 16px"><strong>Snap fits and inserts.</strong> Nothing here
-        is glued. Every shell closes on cantilever hooks that flex each time it is opened, which is
-        the exact geometry PLA fails at. Same for the brass inserts every screw lands in: setting
-        one means a 200&nbsp;°C iron against the wall, and PLA's narrow window lets the boss slump.</p>
-      <p class="small muted" style="margin:0"><strong>Where PLA is genuinely better:</strong> it is
-        stiffer, holds a dimension more tightly, and prints more easily without supports. For a test
-        fit, a mock-up, or a part that never gets warm and never flexes, print it in PLA. It is the
-        production shells that want PETG. Each body's brief carries this argument with that body's
-        own numbers, in section 06b.</p>
+      <h3 style="font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em">What PLA costs you</h3>
+      <p class="muted" style="margin:10px 0 16px"><strong>Snap hooks are the weak point.</strong>
+        The snap features in these packs were drawn to stay under 2.5% strain, which suits PETG.
+        PLA's safe cantilever strain is nearer 1.5%, so the hooks work harder than the geometry
+        assumed. Print them with the layer lines running across the hook rather than along it, and
+        treat a hook as a part you may have to reprint. <strong>Nothing in this catalogue has been
+        test-printed</strong>, so this is the first place to look for trouble, and a report that a
+        hook snapped is worth more to us than a report that one held.</p>
+      <p class="muted" style="margin:0 0 16px"><strong>Heat is a storage rule, not a running
+        problem.</strong> PLA's glass transition is about 55 to 60&nbsp;°C and the serial-servo
+        bodies do not warn until 65&nbsp;°C. Indoors that gap never opens: the shell sits near room
+        temperature and the servos are the only thing that gets hot. Left in a closed car in summer,
+        or on a sill in direct sun, a shell can soften while the electronics still consider
+        themselves fine.</p>
+      <p class="muted" style="margin:0 0 16px"><strong>Heat-set inserts want a cooler iron.</strong>
+        Every screw lands in a brass insert, and PLA's window is narrower than PETG's: run the iron
+        around 180 to 200&nbsp;°C, go in slowly, and let the boss cool before loading it. Rushing
+        one slumps the wall around it.</p>
+      <p class="small muted" style="margin:0"><strong>If you want the margin back:</strong> the
+        geometry does not change. Print the shells in PETG and the load-bearing structure in
+        CF-nylon and every part still fits, because that was the original specification and the only
+        thing that changed is which spool is on the shelf. The cost is a hardened nozzle, a dry box
+        and a printer that holds 260&nbsp;°C. Each body's brief carries this argument with that
+        body's own numbers, in section 06b.</p>
     </div>
   </section>
 

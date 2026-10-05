@@ -442,32 +442,31 @@ a:hover{color:#23292b;text-decoration:underline}
       <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Why these materials</h2>
     </div>
 
+    <p style="margin:0;max-width:820px;font:400 16px/1.6 'Jost';text-wrap:pretty">Two filaments, and one of them only where flex is the point. The constraint that decided this was not strength: it was that <strong>a stock printer with no modifications should be able to make every rigid part on this body</strong>. PLA needs no hardened nozzle, no dry box, no enclosure and no 260&nbsp;&deg;C hotend, which is the difference between a pack most people can print and a pack most people can only read.</p>
+
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
       <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
-        <div style="font:700 17px 'Jost'">PETG</div>
-        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">59% of the printed pieces</div>
-        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Shells and enclosures. Heat tolerance, toughness at a snap hook, and a wide enough window to take a heat-set insert without slumping the boss around it.</div>
-      </div>
-      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
-        <div style="font:700 17px 'Jost'">CF-nylon</div>
-        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">24% of the printed pieces</div>
-        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Structure: the parts that actually carry load. Stiffness and fatigue life where a bracket or a yoke is the thing holding the body together.</div>
+        <div style="font:700 17px 'Jost'">PLA</div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">82% of the printed pieces</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Everything rigid: shells, structure, brackets, bezels. Stiff, dimensionally accurate, prints unsupported on more surfaces than anything else, and stocked in every colour this body names.</div>
       </div>
       <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
         <div style="font:700 17px 'Jost'">TPU 95A</div>
         <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">18% of the printed pieces</div>
-        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Anything compliant: tyres, bumpers, feet. Grip and a surface that absorbs a knock instead of transmitting it into the shell.</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Only where compliance is the function and a rigid part would not work at all: foot, proleg nub. Nothing here is TPU for toughness alone.</div>
       </div>
     </div>
 
     <div style="border:2px solid #23292b;border-radius:20px;padding:22px 24px;background:#f7f0de;display:flex;flex-direction:column;gap:14px">
-      <div style="font:700 20px 'Jost';text-transform:uppercase;letter-spacing:.05em">Why not PLA</div>
-      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty">This body's servos warn at 65 °C and cut torque at 70 °C. PLA's glass transition is about 55 to 60 °C, which is <strong>below the temperature its own thermal protection is still treating as normal</strong>. The shell would start going soft while the servos inside it were still inside their rated envelope. PETG softens around 80 to 85 °C, which puts the enclosure above the limits of what it encloses.</p>
-      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Creep.</strong> PLA deforms slowly under a steady room-temperature load. This arm holds a pose for hours at a time, with the mass of a head on a moment arm. Over weeks that sags. PETG holds.</p>
-      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Snap fits.</strong> Nothing here is glued. Every shell closes on cantilever hooks and latches that flex each time it is opened, and that is the exact geometry PLA fails at. The same goes for the brass inserts every screw lands in: setting one means a 200 °C iron against the wall, and PLA's narrow window lets the boss slump where PETG holds its shape.</p>
-      <p style="margin:0;font:400 15px/1.6 'Jost';color:#3d4344;text-wrap:pretty"><strong>Where PLA is genuinely better:</strong> it is stiffer, it holds a dimension more tightly, and it prints more easily without supports. If you are making a test fit, a mock-up, or a part that never gets warm and never flexes, print it in PLA. It is the production shells that want PETG.</p>
+      <div style="font:700 20px 'Jost';text-transform:uppercase;letter-spacing:.05em">What PLA costs you</div>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Snap hooks are the weak point.</strong> The snap features on this body were drawn to stay under 2.5% strain, which suits PETG. PLA's safe cantilever strain is nearer 1.5%, so the hooks are working harder than the geometry assumed. Print them with the layer lines running across the hook rather than along it, open the shell gently, and treat a hook as a part you may have to reprint. <strong>Nothing in this pack has been test-printed</strong>, so this is the first place to look for trouble and the most useful thing you can report back.</p>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Heat.</strong> PLA's glass transition is about 55 to 60 &deg;C, and this body's servos do not warn until 65 &deg;C. Indoors that gap never opens: the shell sits near room temperature and the servos are the only thing that gets hot. Left in a closed car in summer, or on a sill in direct sun, the shell can soften while the electronics still consider themselves fine. That is a storage rule, not a design flaw, and it is the main thing PETG would buy back.</p>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Heat-set inserts.</strong> Every screw lands in a brass insert, and PLA's window is narrower than PETG's: run the iron cooler, around 180 to 200&nbsp;&deg;C, go in slowly, and let the boss cool before loading it. Rushing one slumps the wall around it.</p>
+      <p style="margin:0;font:400 15px/1.6 'Jost';color:#3d4344;text-wrap:pretty"><strong>If you want the margin back:</strong> the geometry does not change. Print the shells in PETG and the load-bearing structure in CF-nylon and every part still fits, because that was the original specification and the only thing that changed is which spool is on the shelf. The cost is a hardened nozzle, a dry box, and a printer that holds 260&nbsp;&deg;C. If you have that printer, the tougher parts are yours for a filament swap.</p>
     </div>
   </section>
+
+
 
 
   
@@ -599,10 +598,10 @@ class Component extends DCLogic {
     };
     const raw = [
       ['STS3215 servo, 12 V · J1–J5', 'act', 5, 55], ['Metal servo horn', 'hw', 5, 3], ['685ZZ + M5 shoulder bolt + nyloc nut', 'hw', 5, 2.5],
-      ['Link frames · CF-nylon (avg)', 'hw', 4, 20.5], ['Link sleeve caps · CF-nylon', 'hw', 4, 1.5], ['Base floor + J1 tower · CF-nylon', 'hw', 1, 82.5], ['J1 tower cap · CF-nylon', 'hw', 1, 3.4],
-      ['Segment shell halves · PETG (avg)', 'prt', 8, 4.2], ['Glow ribs · translucent PETG', 'prt', 8, 3.5], ['SK6812 2020 LEDs · 6 per rib', 'elec', 8, 0.6], ['Prolegs · TPU 95A', 'prt', 8, 0.1],
-      ['Head frame · CF-nylon', 'hw', 1, 14.8], ['Head shells front + rear · PETG', 'prt', 1, 10.6], ['Face bezel, retainer, XIAO cradle, hood, glow tips', 'prt', 1, 9.8],
-      ['Base dome · PETG', 'prt', 1, 71], ['Base glow ring diffuser · translucent PETG', 'prt', 1, 11.5], ['Electronics tray · CF-nylon', 'prt', 1, 41.4], ['TPU foot', 'prt', 1, 34.4], ['Clamp plates + speaker ring · PETG', 'prt', 1, 1.9],
+      ['Link frames · PLA (avg)', 'hw', 4, 20.5], ['Link sleeve caps · PLA', 'hw', 4, 1.5], ['Base floor + J1 tower · PLA', 'hw', 1, 82.5], ['J1 tower cap · PLA', 'hw', 1, 3.4],
+      ['Segment shell halves · PLA (avg)', 'prt', 8, 4.2], ['Glow ribs · translucent PLA', 'prt', 8, 3.5], ['SK6812 2020 LEDs · 6 per rib', 'elec', 8, 0.6], ['Prolegs · TPU 95A', 'prt', 8, 0.1],
+      ['Head frame · PLA', 'hw', 1, 14.8], ['Head shells front + rear · PLA', 'prt', 1, 10.6], ['Face bezel, retainer, XIAO cradle, hood, glow tips', 'prt', 1, 9.8],
+      ['Base dome · PLA', 'prt', 1, 71], ['Base glow ring diffuser · translucent PLA', 'prt', 1, 11.5], ['Electronics tray · PLA', 'prt', 1, 41.4], ['TPU foot', 'prt', 1, 34.4], ['Clamp plates + speaker ring · PLA', 'prt', 1, 1.9],
       ['Steel ballast disc Ø160 × ' + disc, 'bal', 1, discMass],
       ['XIAO ESP32-S3 Sense', 'sens', 1, 4], ['1.28" GC9A01 round display', 'sens', 1, 8], ['ICS-43434 I²S mic', 'sens', 2, 1], ['VL53L1X chin lidar', 'sens', 1, 1.5],
       ['ESP32-S3 N16R8 dev board', 'elec', 1, 10], ['Servo bus adapter', 'elec', 1, 6], ['USB-C PD sink + port + bezel', 'elec', 1, 4],
@@ -647,7 +646,7 @@ class Component extends DCLogic {
       ['XIAO ESP32-S3 Sense', 'brain', 1, 14], ['1.28" GC9A01 round display', 'brain', 1, 6], ['ICS-43434 mic breakout', 'brain', 2, 4], ['VL53L1X chin lidar', 'brain', 1, 7],
       ['ESP32-S3 N16R8 dev board', 'brain', 1, 9], ['Serial bus adapter', 'brain', 1, 6],
       ['Ø28 speaker + MAX98357A', 'pwr', 1, 7], ['USB-C PD sink (15 V)', 'pwr', 1, 4], ['12 V / 5 A buck', 'pwr', 1, 6], ['5 V / 5 A buck', 'pwr', 1, 6], ['SK6812 2020 LEDs (48 + 16 + 2 tips)', 'brain', 1, 13], ['Servo eFuse', 'pwr', 1, 4], ['Brass toggle + fuse', 'pwr', 1, 6],
-      ['Steel ballast disc Ø160, laser-cut', 'mech', 1, 10], ['Filament: PETG, CF-nylon, TPU', 'mech', 1, 10], ['Fasteners + heat-set inserts', 'mech', 1, 6], ['Wire, silicone ribbon, braid', 'mech', 1, 8],
+      ['Steel ballast disc Ø160, laser-cut', 'mech', 1, 10], ['Filament: PLA, TPU', 'mech', 1, 10], ['Fasteners + heat-set inserts', 'mech', 1, 6], ['Wire, silicone ribbon, braid', 'mech', 1, 8],
     ];
     if (pi) craw.splice(9, 0, ['Raspberry Pi Zero 2 W + microSD', 'brain', 1, 21]);
     const cs = {}; let ct = 0;
@@ -663,10 +662,10 @@ class Component extends DCLogic {
     const aS = '#5ea49b', aC = '#e9a79f', aP = '#efe3c8';
     const assembly = [
       { j: 'Steel disc → base floor', m: 'Screw', bg: aS, d: 'Four M4 countersunk from below into the disc; the TPU foot hides the heads.' },
-      { j: 'Base floor + J1 tower', m: 'Screw', bg: aS, d: 'One CF-nylon part. Six M3 up through the floor into dome-boss inserts.' },
+      { j: 'Base floor + J1 tower', m: 'Screw', bg: aS, d: 'One PLA part. Six M3 up through the floor into dome-boss inserts.' },
       { j: 'J1 servo → tower', m: 'Clamp', bg: aP, d: 'Drops into the tower sleeve spline-up; shim under it so the spline lands on the J1 axis; side cap closes the sleeve (four M3).' },
       { j: 'Electronics tray', m: 'Screw', bg: aS, d: 'On six floor standoffs (M2.5). Pi Zero on its 58 × 23 bosses; ESP32-S3, bucks, bus adapter, eFuse and PD sink on the M2.5 grid.' },
-      { j: 'Every link frame', m: 'Screw', bg: aS, d: 'CF-nylon frame: a U-bracket at the near end and a sleeve for the next servo at the far end. Servo slides in from the top, shims set its spline on the axis, the cap screws down (four M3).' },
+      { j: 'Every link frame', m: 'Screw', bg: aS, d: 'PLA frame: a U-bracket at the near end and a sleeve for the next servo at the far end. Servo slides in from the top, shims set its spline on the axis, the cap screws down (four M3).' },
       { j: 'Horn side of every joint', m: 'Screw', bg: aS, d: 'Metal horn on the spline (M3 centre screw); four M3 through the horn cheek into the horn.' },
       { j: 'Idler side of every joint', m: 'Screw', bg: aS, d: '685ZZ in the ear behind each servo; M5 shoulder bolt through the idler cheek into a captive nyloc nut.' },
       { j: 'Segment shells', m: 'Screw', bg: aS, d: 'Two oval halves per link, two M2.5 each into inserts in the sleeve walls.' },
@@ -682,7 +681,7 @@ class Component extends DCLogic {
       { j: 'USB-C, toggle, foot', m: 'Screw / stretch', bg: aS, d: 'PD sink behind a chrome bezel, toggle by its bushing nut; TPU foot stretches over the dome rim.' },
     ];
 
-    const pm = { pe: ['PETG', '#efe3c8'], ps: ['PETG', '#5ea49b'], cf: ['CF-nylon', '#d7d4cf'], tpu: ['TPU 95A', '#e9a79f'] };
+    const pm = { pe: ['PLA', '#efe3c8'], ps: ['PLA', '#5ea49b'], cf: ['PLA', '#d7d4cf'], tpu: ['TPU 95A', '#e9a79f'] };
     const P = (part, kk, how, settings) => ({ part, mat: pm[kk][0], bg: pm[kk][1], how, settings });
     const prints = [
       P('Link frames ×4, head frame', 'cf', 'Back face down as exported; cheeks and sleeve print upright.', '6 walls · 60% · 0.15 mm · dry filament · no supports'),
@@ -691,7 +690,7 @@ class Component extends DCLogic {
       P('Segment shell halves ×8', 'ps', 'Split face down. Alternate sea foam and cream.', '3 walls · 15% · 0.16 mm · no supports'),
       P('Head shells', 'pe', 'Front face down; rear rim down.', '3 walls · 15% · 0.12 mm · no supports'),
       P('Base dome', 'pe', 'Rim down; the dome stays under 45°.', '3 walls · 15% · 0.2 mm · no supports'),
-      P('Glow ribs ×8, base glow ring, antenna tips', 'pe', 'Natural (translucent) PETG. Flat; tips hole up.', '100% infill for even glow · 0.12 mm · no supports'),
+      P('Glow ribs ×8, base glow ring, antenna tips', 'pe', 'Natural (translucent) PLA. Flat; tips hole up.', '100% infill for even glow · 0.12 mm · no supports'),
       P('Bezel, retainer, cradle, clamps, hood', 'pe', 'Flat / face down.', '100% · 0.12 mm · no supports'),
       P('Foot, prolegs', 'tpu', 'Flat; pegs up.', '2 walls · 20% · 20 mm/s · no supports'),
     ];

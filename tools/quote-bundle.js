@@ -26,20 +26,28 @@ const OUT = path.join(P.ROOT, 'quotes');
 // Service-side names for what the packs specify. The packs name a filament; a
 // service sells a process and a product, and the two are not the same thing.
 const SERVICE_MATERIAL = {
-  'PETG': {
-    ask_for: 'PETG',
+  'PLA': {
+    ask_for: 'PLA',
     process: 'FDM',
-    caveat: null,
-  },
-  'CF-nylon': {
-    ask_for: 'carbon-filled nylon (Markforged Onyx, or PA-CF)',
-    process: 'industrial FDM',
-    caveat: 'Onyx is a specific product, not a generic PA-CF. Confirm the substitution before treating a quote as equivalent.',
+    caveat: 'Colour is cosmetic here and the pack names one per part, but services stock a short list. Quote in whatever they carry; the colour is a filament choice, not a dimension.',
   },
   'TPU 95A': {
     ask_for: 'TPU 95A',
     process: 'FDM, or MJF',
     caveat: 'Services commonly stock 88A, which is softer than the 95A these parts specify. A quote against 88A is a substitution, not a match.',
+  },
+  // Not used by the official packs. Kept so a contributed pack that names them
+  // still gets a sane service-side description rather than its raw filament
+  // string passed through to whoever reads the bundle.
+  'PETG': {
+    ask_for: 'PETG',
+    process: 'FDM',
+    caveat: 'Protolabs Network stocks PETG in black, grey and white only.',
+  },
+  'CF-nylon': {
+    ask_for: 'carbon-filled nylon (Markforged Onyx, or PA-CF)',
+    process: 'industrial FDM',
+    caveat: 'Onyx is a specific product, not a generic PA-CF. Confirm the substitution before treating a quote as equivalent.',
   },
 };
 

@@ -18,7 +18,7 @@ OPENING THE HTML FILES
   blocks local files, serve the folder: python3 -m http.server, then open http://localhost:8000
 
 PRINTING
-  PETG for shells, hubs and trim; CF-nylon for the deck and motor straps; TPU 95A for
+  PLA for shells, hubs, trim, the deck and motor straps; TPU 95A for
   tyres, bumpers and ears. No supports needed. Quantities are in the file names (-x2).
   Insert bores: M2 3.2 mm, M2.5 3.6 mm, M3 4.0 mm (standard short brass heat-set inserts).
   Chrome parts: gloss black, chrome-effect spray, gloss clear.

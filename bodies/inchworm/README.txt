@@ -14,8 +14,8 @@ WHAT'S IN HERE
   support.js, three-d-stage.js    Needed by the HTML files. Keep everything in one folder.
 
 PRINTING
-  CF-nylon for the five frames, base floor/tower, tray and caps; PETG for shells, head,
-  dome and trim; TPU 95A for the foot and prolegs; natural (translucent) PETG for the glow ribs,
+  PLA for the five frames, base floor/tower, tray, caps, shells, head, dome and
+  trim; TPU 95A for the foot and prolegs; natural (translucent) PLA for the glow ribs,
   base glow ring and antenna tips (100% infill for an even glow). No supports.
   Inserts: M2 3.2, M2.5 3.6, M3 4.0, M4 5.6 mm bores. Steel disc Ø160 x 6 is laser-cut
   with 4x M4 tapped holes at R62.

@@ -14,8 +14,8 @@ WHAT'S IN HERE
   support.js, three-d-stage.js    Needed by the HTML files. Keep everything in one folder.
 
 PRINTING
-  PETG for base shell, pod, knuckle, hood and trim; white PETG liner; translucent PETG
-  diffuser; CF-nylon for floor, tray, turret, arm rails and cranks; TPU 95A foot.
+  PLA for base shell, pod, knuckle, hood, trim, floor, tray, turret, arm rails and
+  cranks; white PLA liner; translucent PLA diffuser; TPU 95A foot.
   No supports. Inserts: M2 3.2, M2.5 3.6, M3 4.0, M4 5.6, M5 6.4 mm bores.
   Steel ballast ring Ø150 / Ø90 x 14 mm (about 1.24 kg) is laser-cut with 4x M4 tapped holes at R62 and
   4x 9 mm clearance holes at R55 for the tray standoffs.

@@ -91,7 +91,7 @@ const groove=(z0)=>S(RR(W+4,H+4,RC+2,1.5,0,0,z0),RR(W-1.6,H-1.6,RC-.8,3.5,0,0,z0
 const PARTS=[];
 const part=(key,name,qty,mat,orient,fn)=>PARTS.push({key,name,qty,mat,orient,fn});
 
-part('base_pan','Base pan',1,'CF-nylon','Floor on the bed. No supports.',()=>{
+part('base_pan','Base pan',1,'PLA','Floor on the bed. No supports.',()=>{
  let g=S(CYL(72,32,0,0,0,128),CYL(69.6,31,0,0,3,128));
  g=U(g,RING(72,46,3,29));
  // TPU foot groove
@@ -120,7 +120,7 @@ part('base_pan','Base pan',1,'CF-nylon','Floor on the bed. No supports.',()=>{
 part('tpu_foot','Foot',1,'TPU 95A','Flat, floor down. 3 walls, 15% gyroid.',()=>{
  let g=U(CYL(73.5,2,0,0,0,128),RING(73.5,72.2,6,0),RING(73.5,71.1,1.2,4.6));return g;});
 
-part('swivel_tier','Swivel tier',1,'PETG cream','Top face down on the bed. No supports.',()=>{
+part('swivel_tier','Swivel tier',1,'PLA cream','Top face down on the bed. No supports.',()=>{
  // modelled assembly-up; flip in the slicer (top face to bed)
  let g=S(CYL(56,12,0,0,0,128),CYL(53.6,9,0,0,-1,128));
  g=U(g,RING(42,30.5,12,0));
@@ -129,10 +129,10 @@ part('swivel_tier','Swivel tier',1,'PETG cream','Top face down on the bed. No su
  for(let i=0;i<6;i++){const a=i*P/3;g=S(g,insDn('M3',50*Math.cos(a),50*Math.sin(a),0));g=S(g,insUp('M3',38.5*Math.cos(a+P/6),38.5*Math.sin(a+P/6),12));}
  return g;});
 
-part('clamp_ring','Bearing clamp ring',1,'CF-nylon','Flat. No supports.',()=>{
+part('clamp_ring','Bearing clamp ring',1,'PLA','Flat. No supports.',()=>{
  let g=RING(44,31,3,0);for(let i=0;i<6;i++){const a=i*P/3+P/6,x=38.5*Math.cos(a),y=38.5*Math.sin(a);g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));}return g;});
 
-part('turntable','Turntable',1,'CF-nylon','Disc down, spigot up. No supports.',()=>{
+part('turntable','Turntable',1,'PLA','Disc down, spigot up. No supports.',()=>{
  let g=U(CYL(32,6,0,0,0,96),CYL(24.95,6,0,0,6,96));
  g=S(g,CYL(10.4,5.1,0,0,7),CYL(4.5,14,0,0,-1));
  for(let i=0;i<4;i++){const a=i*P/2+P/4;const x=HPCD*Math.cos(a),y=HPCD*Math.sin(a);g=S(g,clr('M3',x,y,-1,14),csk('M3',x,y,0,false));}
@@ -140,7 +140,7 @@ part('turntable','Turntable',1,'CF-nylon','Disc down, spigot up. No supports.',(
  for(const x of [-24,24])g=S(g,insDn('M3',x,0,0));
  return g;});
 
-part('yoke','Yoke',1,'CF-nylon','Lay on its back (−X face). 6 walls, 60% infill.',()=>{
+part('yoke','Yoke',1,'PLA','Lay on its back (−X face). 6 walls, 60% infill.',()=>{
  let g=BOX(30,164,8,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(20,8,74,0,s*78,6),CYLY(11,8,PIV,s*78,80));
  g=U(g,CYLY(11,2,PIV,-73,80));g=S(g,CYLY(4,14,PIV,-77,80));
@@ -150,41 +150,41 @@ part('yoke','Yoke',1,'CF-nylon','Lay on its back (−X face). 6 walls, 60% infil
  for(const z of [36,56])g=S(g,CYLX(1.6,5,-8,-78,z));
  return g;});
 
-part('pan_sleeve','Pan servo clamp sleeve',1,'CF-nylon','Flange down. No supports. Servo stands shaft-up; slotted flange sets the shaft on the bearing axis.',()=>{
+part('pan_sleeve','Pan servo clamp sleeve',1,'PLA','Flange down. No supports. Servo stands shaft-up; slotted flange sets the shaft on the bearing axis.',()=>{
  const Lp=45.6,Wp=25.1,Hs=22;
  let g=U(BOX(Lp+6,Wp+6,Hs,0,0,0),BOX(Lp+6,2*(CRAD+4.5),3,0,0,0));
  g=S(g,BOX(Lp,Wp,Hs+2,0,0,2),BOX(Lp-6,Wp-6,4,0,0,-1),BOX(8,Wp+8,6,-(Lp/2+1),0,Hs-8));
  for(const s2 of [-1,1])for(const x of [-2,-1,0,1,2])g=S(g,clr('M3',x,s2*CRAD,-1,5));
  for(const s2 of [-1,1])for(const t of [-1,1])g=S(g,insUp('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),Hs));
  return g;});
-part('pan_sleeve_cap','Pan servo clamp sleeve cap',1,'CF-nylon','Flat. No supports.',()=>{
+part('pan_sleeve_cap','Pan servo clamp sleeve cap',1,'PLA','Flat. No supports.',()=>{
  const Lp=45.6,Wp=25.1;let g=S(RR(Lp+6,Wp+6,3,3),RR(Lp-7,Wp-7,2,5,0,0,-1));
  for(const s2 of [-1,1])for(const t of [-1,1])g=S(g,clr('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),-1,5),csk('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),3,true));
  return g;});
 
-part('tilt_sleeve','Tilt servo clamp sleeve',1,'CF-nylon','Flange down. No supports. Bolts to the chassis rear face; the servo passes through the chassis window. Shim between cap and servo to set the spline on the pivot axis.',()=>{
+part('tilt_sleeve','Tilt servo clamp sleeve',1,'PLA','Flange down. No supports. Bolts to the chassis rear face; the servo passes through the chassis window. Shim between cap and servo to set the spline on the pivot axis.',()=>{
  const Lp=35.4,Wp=25.1,Hs=29;
  let g=U(BOX(Lp+6,Wp+6,Hs,0,0,0),BOX(Lp+6,2*(CRAD+4),3,0,0,0));
  g=S(g,BOX(Lp,Wp,Hs+2,0,0,-1),BOX(8,Wp+8,6,0,0,Hs-8),BOX(6,8,8,-(Lp/2+3)+1,CRAD+4-2,-1),BOX(6,8,8,(Lp/2+3)-1,CRAD+4-2,-1),BOX(6,8,8,-(Lp/2+3)+1,-(CRAD+4-2),-1),BOX(6,8,8,(Lp/2+3)-1,-(CRAD+4-2),-1));
  for(const s2 of [-1,1])for(const x of [-14,14])g=S(g,clr('M3',x,s2*CRAD,-1,5),csk('M3',x,s2*CRAD,3,true));
  for(const s2 of [-1,1])for(const t of [-1,1])g=S(g,insUp('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),Hs));
  return g;});
-part('tilt_stop','Tilt servo front stop strap',1,'CF-nylon','Bar down. No supports.',()=>{
+part('tilt_stop','Tilt servo front stop strap',1,'PLA','Bar down. No supports.',()=>{
  let g=U(BOX(10,2*CRAD+8,3,0,0,0),BOX(8,8,10,0,CRAD,0),BOX(8,8,10,0,-CRAD,0));
  for(const s2 of [-1,1])g=S(g,clr('M3',0,s2*CRAD,-1,12),CYL(3.2,3.1,0,s2*CRAD,-.1));
  return g;});
-part('tilt_sleeve_cap','Tilt servo clamp sleeve cap',1,'CF-nylon','Flat. No supports.',()=>{
+part('tilt_sleeve_cap','Tilt servo clamp sleeve cap',1,'PLA','Flat. No supports.',()=>{
  const Lp=35.4,Wp=25.1;let g=S(RR(Lp+6,Wp+6,3,3),RR(Lp-7,Wp-7,2,5,0,0,-1));
  for(const s2 of [-1,1])for(const t of [-1,1])g=S(g,clr('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),-1,5),csk('M3',s2*(Lp/2+1.5),t*(Wp/2+1.5),3,true));
  return g;});
 
-part('tray','Electronics tray (10 mm insert grid)',1,'CF-nylon','Flat. No supports.',()=>{
+part('tray','Electronics tray (10 mm insert grid)',1,'PLA','Flat. No supports.',()=>{
  let g=RR(84,40,4,5.5);
  for(let x=-30;x<=30;x+=10)for(let y=-10;y<=10;y+=10){if(Math.abs(x)>30)continue;g=S(g,insUp('M25',x,y,5.5));}
  for(const x of [-36,36])g=S(g,clr('M3',x,0,-1,8),csk('M3',x,0,5.5,true));
  return g;});
 
-part('esp_cradle','ESP32-S3 DevKitC snap cradle',1,'PETG','Base down. Rails flex to click the board in.',()=>{
+part('esp_cradle','ESP32-S3 DevKitC snap cradle',1,'PLA','Base down. Rails flex to click the board in.',()=>{
  const Lb=63.6,Wb=25.9;
  let g=BOX(Lb+4,Wb+4,2,0,0,0);
  for(const s of [-1,1]){g=U(g,BOX(Lb+4,1.6,11,0,s*(Wb/2+.8),0),BOX(Lb-10,1.5,1.2,0,s*(Wb/2-.5),8),BOX(Lb-10,1.2,1,0,s*(Wb/2-.4),9.9));}
@@ -192,7 +192,7 @@ part('esp_cradle','ESP32-S3 DevKitC snap cradle',1,'PETG','Base down. Rails flex
  for(const x of [-20,20])g=S(g,clr('M25',x,0,-1,4),csk('M25',x,0,2,true));
  return g;});
 
-part('battery_hatch','Battery hatch',1,'PETG cream','Stand on its bottom edge (hinge pins down). Brim.',()=>{
+part('battery_hatch','Battery hatch',1,'PLA cream','Stand on its bottom edge (hinge pins down). Brim.',()=>{
  let g=EX(sectorS(69.6,72,P/2-.585,P/2+.585),19.4,0);
  for(const s of [-1,1]){const a=P/2+s*.585,tx=-Math.sin(a)*s,ty=Math.cos(a)*s;
   g=U(g,new THREE.CylinderGeometry(1,1,5,20).rotateZ(Math.atan2(ty,tx)-P/2).translate(70.8*Math.cos(a)+tx*1.6,70.8*Math.sin(a)+ty*1.6,2));}
@@ -201,7 +201,7 @@ part('battery_hatch','Battery hatch',1,'PETG cream','Stand on its bottom edge (h
 
 part('strap','Battery strap',1,'TPU 95A','Flat.',()=>S(RR(100,10,4,1.6),CYL(2.4,4,-44,0,-1),CYL(2.4,4,44,0,-1)));
 
-part('front_shell','Cabinet front shell',1,'PETG cream','Face down. Snap hooks print upright. No supports.',()=>{
+part('front_shell','Cabinet front shell',1,'PLA cream','Face down. Snap hooks print upright. No supports.',()=>{
  let g=S(RR(W,H,RC,D),RR(W-2*WL,H-2*WL,RC-WL,D,0,0,WL));
  for(const[x,y]of CORN)g=U(g,CYL(3.5,D-3-WL,x,y,WL));
  for(const[x,y]of CORN)g=S(g,insUp('M25',x,y,D-3));
@@ -230,7 +230,7 @@ part('front_shell','Cabinet front shell',1,'PETG cream','Face down. Snap hooks p
  g=S(g,groove(D-1.5));
  return g;});
 
-part('rear_shell','Cabinet rear cover + tube bell',1,'PETG cream','Bell end down. Taper under 45°, vents bridge. No supports.',()=>{
+part('rear_shell','Cabinet rear cover + tube bell',1,'PLA cream','Bell end down. Taper under 45°, vents bridge. No supports.',()=>{
  const Z0=24,ZS=Z0+D; // rear coords: X mirrored
  const fr=(rb,rt,h,z)=>new THREE.CylinderGeometry(rt,rb,h,4).rotateY(P/4).rotateX(P/2).translate(-8,0,z+h/2);
  let g=U(RR(W,H,RC,D,0,0,Z0),fr(28,42,Z0+.5,0));
@@ -247,7 +247,7 @@ part('rear_shell','Cabinet rear cover + tube bell',1,'PETG cream','Bell end down
  g=S(g,groove(ZS-1.5));
  return g;});
 
-part('chassis','Head chassis plate',1,'CF-nylon','Flat, bosses up (front-facing side up). No supports.',()=>{
+part('chassis','Head chassis plate',1,'PLA','Flat, bosses up (front-facing side up). No supports.',()=>{
  let g=RR(128,88,10,3);
  for(const[x,y]of CORN)g=S(g,clr('M25',x,y,-1,5));
  g=S(g,BOX(35.6,25.4,10,TX,0,-1));
@@ -265,45 +265,45 @@ part('lcd_retainer','LCD retainer (clamps the module)',1,'TPU 95A','Flat. 3 wall
  for(const s2 of [-1,1])g=U(g,BOX(10,8,1.5,s2*28,0,2));
  return g;});
 
-part('camera_bracket','Camera bracket',1,'PETG','Foot down. No supports.',()=>{
+part('camera_bracket','Camera bracket',1,'PLA','Foot down. No supports.',()=>{
  let g=U(BOX(28,8,2.5,0,0,0),BOX(28,5,30,0,-1.5,0));
  for(const x of [-10,10])g=S(g,clr('M2',x,2,-1,5));
  for(const[x,z]of [[-10.5,8],[10.5,8],[-10.5,20.5],[10.5,20.5]])g=S(g,new THREE.CylinderGeometry(INS.M2[0],INS.M2[0],5.2,24).rotateX(P/2).rotateX(P/2).translate(x,-1.5,z).rotateX(0));
  return g;});
 
-part('camera_pod','Camera pod (snap-on)',1,'PETG, chrome paint','Top face down; hooks print upright.',()=>{
+part('camera_pod','Camera pod (snap-on)',1,'PLA, chrome paint','Top face down; hooks print upright.',()=>{
  let g=S(BOX(30,14,14,0,0,0),BOX(26.8,10.8,13,0,0,1.6));
  g=S(g,CYLY(4,6,0,-7,8));
  for(const y of [-5.5,5.5])g=U(g,hook(0,y,14,y>0?P/2:-P/2,{L:6,t:1.2,w:6,barb:.8,root:4,gap:.0}));
  return g;});
 
-part('screen_surround','Screen surround',1,'PETG, chrome paint','Face down; tabs print upright.',()=>{
+part('screen_surround','Screen surround',1,'PLA, chrome paint','Face down; tabs print upright.',()=>{
  let g=S(RR(74,58,5.5,3),RR(61.4,47.4,1.5,5,0,0,-1));
  for(const s of [-1,1]){g=U(g,hook(0,s*26,3,s>0?P/2:-P/2,{L:5,t:1,w:5,barb:.5,root:2.5,gap:-.95}));g=U(g,hook(s*33,0,3,s>0?0:P,{L:5,t:1,w:5,barb:.5,root:2.5,gap:-.95}));}
  return g;});
 
-part('knob_panel','Knob panel',1,'PETG sea foam','Front face down; tabs print upright.',()=>{
+part('knob_panel','Knob panel',1,'PLA sea foam','Front face down; tabs print upright.',()=>{
  let g=RR(24,72,2,1.5);
  for(const y of [20,4])g=S(g,CYL(2.05,4,0,y,-1));
  for(let i=0;i<5;i++)g=S(g,BOX(16,1.8,4,0,-14-i*4.5,-1));
  for(const s of [-1,1])g=U(g,hook(0,s*33,1.5,s>0?P/2:-P/2,{L:4.6,t:1.2,w:4,barb:.6,root:1.5,gap:-.75}));
  return g;});
 
-part('knob','Knob (snap pin, free-turning)',2,'PETG, brass paint','Face down, pin up.',()=>{
+part('knob','Knob (snap pin, free-turning)',2,'PLA, brass paint','Face down, pin up.',()=>{
  let g=U(CYL(6.2,6,0,0,0,48),CYL(1.9,5.6,0,0,6),CONE(2.35,1.9,1,0,0,11.6));
  g=S(g,BOX(.9,6,4,0,0,9),BOX(1,4,.6,0,4,5.5));
  return g;});
 
-part('seam_band','Seam band (split ring)',1,'PETG, chrome paint','Flat.',()=>{
+part('seam_band','Seam band (split ring)',1,'PLA, chrome paint','Flat.',()=>{
  let g=S(RR(W+1.2,H+1.2,RC+.6,1.4),RR(W-1.4,H-1.4,RC-.7,3,0,0,-1));return S(g,BOX(1.2,6,4,0,-H/2,-1));});
 
-part('mic_clamp','Mic retainer plate',2,'PETG','Flat.',()=>{let g=S(RR(8,22,2,2),BOX(4,4,4,0,0,-1));for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
-part('speaker_ring','Speaker ring (Ø40)',1,'PETG','Flat.',()=>{let g=S(CYL(24,2,0,0,0,64),CYL(18,4,0,0,-1,64));for(let i=0;i<3;i++){const q=i*2*Math.PI/3;g=S(g,clr('M2',21*Math.cos(q),21*Math.sin(q),-1,4),csk('M2',21*Math.cos(q),21*Math.sin(q),2,true));}return g;});
-part('tof_bezel','ToF window bezel (red)',1,'PETG signal red','Face down.',()=>{let g=S(RR(22,12,3,2.4),RR(16,6,1.5,4,0,0,-1));for(const x of [-8.5,8.5])g=S(g,clr('M2',x,0,-1,4));return g;});
-part('carry_handle','Carry handle (chrome, M3 into rear-cover inserts)',1,'PETG, chrome paint','Flat on its side.',()=>{const sh=new THREE.Shape();sh.moveTo(-48,0);sh.lineTo(-48,14);sh.quadraticCurveTo(-48,22,-40,22);sh.lineTo(40,22);sh.quadraticCurveTo(48,22,48,14);sh.lineTo(48,0);sh.lineTo(40,0);sh.lineTo(40,12);sh.quadraticCurveTo(40,15,37,15);sh.lineTo(-37,15);sh.quadraticCurveTo(-40,15,-40,12);sh.lineTo(-40,0);sh.lineTo(-48,0);
+part('mic_clamp','Mic retainer plate',2,'PLA','Flat.',()=>{let g=S(RR(8,22,2,2),BOX(4,4,4,0,0,-1));for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
+part('speaker_ring','Speaker ring (Ø40)',1,'PLA','Flat.',()=>{let g=S(CYL(24,2,0,0,0,64),CYL(18,4,0,0,-1,64));for(let i=0;i<3;i++){const q=i*2*Math.PI/3;g=S(g,clr('M2',21*Math.cos(q),21*Math.sin(q),-1,4),csk('M2',21*Math.cos(q),21*Math.sin(q),2,true));}return g;});
+part('tof_bezel','ToF window bezel (red)',1,'PLA signal red','Face down.',()=>{let g=S(RR(22,12,3,2.4),RR(16,6,1.5,4,0,0,-1));for(const x of [-8.5,8.5])g=S(g,clr('M2',x,0,-1,4));return g;});
+part('carry_handle','Carry handle (chrome, M3 into rear-cover inserts)',1,'PLA, chrome paint','Flat on its side.',()=>{const sh=new THREE.Shape();sh.moveTo(-48,0);sh.lineTo(-48,14);sh.quadraticCurveTo(-48,22,-40,22);sh.lineTo(40,22);sh.quadraticCurveTo(48,22,48,14);sh.lineTo(48,0);sh.lineTo(40,0);sh.lineTo(40,12);sh.quadraticCurveTo(40,15,37,15);sh.lineTo(-37,15);sh.quadraticCurveTo(-40,15,-40,12);sh.lineTo(-40,0);sh.lineTo(-48,0);
  let g=EX(sh,8,0);for(const x of [-44,44])g=S(g,CYLY(CLR.M3,12,x,4,4),CYLY(3.2,8,x,18,4));return g;});
-part('handle_caps','Handle boss caps (brass, snap over the screw heads)',2,'PETG, brass paint','Flat.',()=>U(CYL(3.6,1.5,0,0,0,24),CYL(3.05,2.5,0,0,-2.5,24)));
-part('cable_clock','Cable clock (1.25-turn spool, screws to the turntable underside)',1,'PETG','Flange down.',()=>{let g=U(RING(28,15,2,0),RING(18,15,12,2),RING(22,15,2,14));g=S(g,BOX(4,10,10,0,18,4));for(const x of [-24,24])g=S(g,clr('M3',x,0,-1,4),csk('M3',x,0,0,false));return g;});
+part('handle_caps','Handle boss caps (brass, snap over the screw heads)',2,'PLA, brass paint','Flat.',()=>U(CYL(3.6,1.5,0,0,0,24),CYL(3.05,2.5,0,0,-2.5,24)));
+part('cable_clock','Cable clock (1.25-turn spool, screws to the turntable underside)',1,'PLA','Flange down.',()=>{let g=U(RING(28,15,2,0),RING(18,15,12,2),RING(22,15,2,14));g=S(g,BOX(4,10,10,0,18,4));for(const x of [-24,24])g=S(g,clr('M3',x,0,-1,4),csk('M3',x,0,0,false));return g;});
 part('rear_grommet','Neck harness grommet',1,'TPU 95A','Flange down.',()=>S(U(CYL(6,1.5,0,0,0,24),CYL(4.1,3,0,0,1.5,24),CYL(5,1,0,0,4.5,24)),CYL(2.5,8,0,0,-1,20)));
 part('ballast_dxf_note','Steel ballast disc (laser-cut, not printed)',1,'Mild steel 4 mm','Preview only: Ø130, 3× M4 tapped at R50 (30°, 150°, 270°).',()=>{
  let g=CYL(65,4,0,0,0,96);for(const a of [30,150,270])g=S(g,CYL(1.65,6,50*Math.cos(a*P/180),50*Math.sin(a*P/180),-1));return g;});

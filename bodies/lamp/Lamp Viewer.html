@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'attentive';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -99,11 +99,11 @@ function rod(p,n,A,B,r,m){const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,
 const base=G(model,'base');
 const foot=G(base,'tpu_foot',{label:'TPU foot · stretch-fit, hides 8× M3',ex:[0,-0.16,0]});
 add(foot,'foot',CY(0.087,0.004,96),mat.tpu,[0,0.002,0]);
-const floor=G(base,'base_floor',{label:'Base floor · CF-nylon, insert bosses',ex:[0,-0.12,0]});
+const floor=G(base,'base_floor',{label:'Base floor · PLA, insert bosses',ex:[0,-0.12,0]});
 add(floor,'floor',CY(0.084,0.003,96),mat.tealDeep,[0,0.0055,0]);
 const disc=G(base,'steel_disc',{label:'Steel ballast ring Ø150 / Ø90 · M4 ×4',ex:[0,-0.085,0]});
 lx(add(disc,'steel_ring',new THREE.RingGeometry(0.045,0.075,72).rotateX(-Math.PI/2),mat.steel,[0,0.021,0]),'Steel ballast ring Ø150 / Ø90');add(disc,'ring_wall_o',new THREE.CylinderGeometry(0.075,0.075,0.014,72,1,true),mat.steel,[0,0.014,0]);add(disc,'ring_wall_i',new THREE.CylinderGeometry(0.045,0.045,0.014,72,1,true),mat.steel,[0,0.014,0]);
-const shell=G(base,'base_shell',{label:'Base shell · PETG sea foam, chrome band',ex:[0,-0.035,0]});
+const shell=G(base,'base_shell',{label:'Base shell · PLA sea foam, chrome band',ex:[0,-0.035,0]});
 add(shell,'shell',lathe([[0.082,0.007],[0.086,0.011],[0.086,0.046],[0.08,0.054],[0.044,0.056],[0.036,0.056]]),mat.teal);
 add(shell,'band',new THREE.CylinderGeometry(0.0866,0.0866,0.006,96,1,true),mat.chrome,[0,0.034,0]);
 for(let i=0;i<4;i++)add(shell,'grille_slot',BX(0.002,0.0018,0.026),mat.chrome,[0.0862,0.012+i*0.0035,0]);
@@ -139,11 +139,11 @@ tube(PIN,'spk_lead',[[0.054,0.019,0.018],[0.066,0.02,0.008],[0.072,0.021,0.0]],m
 const yaw=G(model,'yaw_stage',{pos:[0,0.062,0],ex:[0,0.09,0]});
 yaw.rotation.y=P.yaw*D;
 const S=V(0,0.04,0);
-const tur=G(yaw,'turret',{label:'Turret · CF-nylon, brushed-alu finish, spring lugs',ex:[0,-0.03,0]});
+const tur=G(yaw,'turret',{label:'Turret · PLA, brushed-alu finish, spring lugs',ex:[0,-0.03,0]});
 add(tur,'turret',lathe([[0.036,-0.004],[0.036,0.006],[0.03,0.016],[0.02,0.022],[0,0.022]]),mat.alu);
 add(tur,'yaw_horn',CY(0.011,0.003),mat.chrome,[0,-0.0055,0]);
 for(const z of [0.074,-0.08]){add(tur,'spring_lug',BX(0.012,0.008,0.006),mat.alu,[-0.032,0.012,z]);add(tur,'lug_arm',BX(0.006,0.006,Math.abs(z)-0.03),mat.alu,[-0.032,0.012,Math.sign(z)*(Math.abs(z)+0.03)/2]);}
-const pod=G(yaw,'shoulder_pod',{label:'Shoulder pod · PETG cream, holds ID 2 + ID 3',ex:[0,0.06,0]});
+const pod=G(yaw,'shoulder_pod',{label:'Shoulder pod · PLA cream, holds ID 2 + ID 3',ex:[0,0.06,0]});
 {const s=rr(new THREE.Shape(),0.031,0.019,0.016);const g=new THREE.ExtrudeGeometry(s,{depth:0.088,bevelEnabled:true,bevelThickness:0.006,bevelSize:0.006,bevelSegments:5,curveSegments:16});g.translate(-0.011,0,-0.044);add(pod,'pod',g,mat.shell,[S.x,S.y,0]);
  for(const z of [-0.0505,0.0505])add(pod,'pod_cap',CZ(0.015,0.002,40),mat.chrome,[0,S.y,z]);
  add(pod,'pod_stripe',BX(0.074,0.004,0.002),mat.red,[-0.011,S.y+0.008,0.0505]);add(pod,'pod_stripe',BX(0.074,0.004,0.002),mat.red,[-0.011,S.y+0.008,-0.0505]);}
@@ -169,7 +169,7 @@ spring(spB,'spring_B',V(S.x-0.032,S.y-0.028,-0.08),V(C1.x,C1.y,-0.08));
 // lower arm
 const lower=G(yaw,'lower_arm',{pos:[S.x,S.y,0]});
 lower.rotation.z=-P.t1*D;
-const lrA=G(lower,'lower_rail_R',{label:'Lower arm rail · CF-nylon, brushed-alu',ex:[0,0,0.03]});
+const lrA=G(lower,'lower_rail_R',{label:'Lower arm rail · PLA, brushed-alu',ex:[0,0,0.03]});
 const lrB=G(lower,'lower_rail_L',{label:'Lower arm rail · rides 6802 on crank hub',ex:[0,0,-0.03]});
 for(const [g,z] of [[lrA,0.0605],[lrB,-0.0605]]){add(g,'rail',BX(0.011,L1,0.004),mat.alu,[0,L1/2,z]);add(g,'hub_low',CZ(0.0095,0.005,32),mat.alu,[0,0,z]);add(g,'hub_high',CZ(0.0095,0.005,32),mat.alu,[0,L1,z]);add(g,'cap',CZ(0.006,0.0025,24),mat.brass,[0,L1,z+Math.sign(z)*0.0035]);}
 add(lrA,'cap_low',CZ(0.006,0.0025,24),mat.brass,[0,0,0.064]);
@@ -181,7 +181,7 @@ for(const y of [0.05,0.11])add(hl,'p_clip',new THREE.TorusGeometry(0.0042,0.0012
 // upper arm
 const upper=G(lower,'upper_arm',{pos:[0,L1,0],ex:[0,0.05,0]});
 upper.rotation.z=-(P.t2-P.t1)*D;
-const ur=G(upper,'upper_rails',{label:'Upper arm rails · CF-nylon, brushed-alu'});
+const ur=G(upper,'upper_rails',{label:'Upper arm rails · PLA, brushed-alu'});
 for(const z of [0.0525,-0.0525]){add(ur,'rail',BX(0.01,L2,0.004),mat.alu,[0,L2/2,z]);add(ur,'hub',CZ(0.009,0.005,32),mat.alu,[0,0,z]);add(ur,'hub_head',CZ(0.009,0.005,32),mat.alu,[0,L2,z]);}
 add(ur,'tie',BX(0.006,0.006,0.1),mat.alu,[0,0.06,0]);
 const ec=G(upper,'elbow_crank',{label:'Elbow crank + 685ZZ ×2',ex:[0,0,-0.05]});
@@ -197,14 +197,14 @@ head.rotation.z=(P.t2-P.psi)*D;
 const knuckle=G(head,'head_knuckle',{label:'Head knuckle · two red halves, sleeve for ID 4'});
 {const s=rr(new THREE.Shape(),0.02,0.029,0.012);const g=new THREE.ExtrudeGeometry(s,{depth:0.094,bevelEnabled:false,curveSegments:16});g.translate(0,-0.011,-0.047);add(knuckle,'knuckle',g,mat.red);}
 add(knuckle,'pivot_cap',CZ(0.007,0.003,24),mat.brass,[0,0,0.0485]);add(knuckle,'pivot_cap',CZ(0.007,0.003,24),mat.brass,[0,0,-0.0485]);
-const hoodO=G(head,'hood',{label:'Hood · PETG sea foam, chrome rim',pos:[0.008,0,0],ex:[0.06,0.03,0]});
+const hoodO=G(head,'hood',{label:'Hood · PLA sea foam, chrome rim',pos:[0.008,0,0],ex:[0.06,0.03,0]});
 const prof=[[0.024,0.012],[0.0265,0.02],[0.04,0.052],[0.05,0.078],[0.0535,0.086]];
 {const g=lathe(prof.map(p=>[p[0],p[1]]));g.rotateZ(-Math.PI/2);add(hoodO,'hood_outer',g,mat.teal);}
 add(hoodO,'hood_back',CX(0.024,0.002,48),mat.teal,[0.012,0,0]);
 add(hoodO,'rim',new THREE.TorusGeometry(0.0535,0.0026,14,96).rotateY(Math.PI/2),mat.chrome,[0.086,0,0]);
 add(hoodO,'finial_stem',CY(0.0016,0.008,12),mat.brass,[0.042,0.04,0]);add(hoodO,'finial',new THREE.SphereGeometry(0.0042,18,12),mat.brass,[0.042,0.0455,0]);
 for(const s of [-1,1])add(hoodO,'mic_port',new THREE.TorusGeometry(0.0024,0.0008,8,24),mat.chrome,[0.06,0,s*0.0445]);
-const liner=G(head,'liner',{label:'Reflector liner · white PETG, snap ring',ex:[0.1,0,0]});
+const liner=G(head,'liner',{label:'Reflector liner · white PLA, snap ring',ex:[0.1,0,0]});
 {const g=lathe(prof.slice(1).map(p=>[p[0]*0.93,p[1]]));g.rotateZ(-Math.PI/2);add(liner,'liner',g,mat.shell);}
 const face=G(head,'face',{label:'Ø32 display · snap ring in the liner, snap-on bezel',ex:[0.15,0,0]});
 add(face,'face_disc',CX(0.022,0.003,64),mat.shell,[0.042,0,0]);

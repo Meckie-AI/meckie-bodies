@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'balance';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -100,7 +100,7 @@ const bodyG=G(model,'body_assembly',{pos:[0,AY,0]});bodyG.rotation.z=-PO.p*D;
 const B=new THREE.Group();B.position.y=-AY;bodyG.add(B);
 const INT=G(B,'internals');
 const BEV=0.012,DEP=2*(FX-BEV);
-const lower=G(B,'lower_shell',{label:'Belly tub · PETG sea foam',ex:[0,-0.05,0]});
+const lower=G(B,'lower_shell',{label:'Belly tub · PLA sea foam',ex:[0,-0.05,0]});
 add(lower,'belly',slabX(rrS(HW-BEV,0.016+BEV,0.075,0.012,0),DEP,BEV),mat.teal);
 add(lower,'usbc_bezel',BX(0.003,0.007,0.013),mat.chrome,[-FX-0.0005,0.055,0.018]);
 add(lower,'usbc_port',BX(0.002,0.0032,0.009),mat.servo15,[-FX-0.0018,0.055,0.018]);
@@ -112,7 +112,7 @@ add(lower,'lidar_window',BX(0.002,0.004,0.014),mat.glass,[FX+0.0018,0.088,0]);
 const trim=G(B,'trim');
 add(trim,'band_low',bandRing(0.075,0.003),mat.chrome);
 add(trim,'band_head',bandRing(0.122,0.0024),mat.chrome);
-const up=G(B,'upper_shell',{label:'Upper shell · PETG cream, one piece',ex:[0,0.06,0]});
+const up=G(B,'upper_shell',{label:'Upper shell · PLA cream, one piece',ex:[0,0.06,0]});
 add(up,'upper',slabX(rrS(HW-BEV,0.075,0.198-BEV,0,0.018),DEP,BEV),mat.shell);
 for(let i=0;i<5;i++)add(up,'grille_bar',BX(0.002,0.0016,0.03),mat.chrome,[FX+0.0006,0.099+i*0.0042,0]);
 for(const z of [0.032,-0.032])add(up,'mic_port',new THREE.TorusGeometry(0.0023,0.0008,8,24).rotateY(Math.PI/2),mat.chrome,[FX+0.0004,0.148,z]);
@@ -137,7 +137,7 @@ const cam=G(B,'camera',{label:'Camera hood · chrome, XIAO lens',ex:[0.07,0.03,0
 add(cam,'cam_hood',new THREE.SphereGeometry(0.0066,24,16,0,Math.PI*2,0,Math.PI/2),mat.chrome,[FX-0.001,0.18,0],[0,0,-Math.PI/2]);
 add(cam,'cam_lens',CX(0.0027,0.002,24),mat.glass,[FX+0.0055,0.18,0]);
 for(const sd of [1,-1]){const L=0.047,ang=(PO.legs?(sd>0?-33.7:213.7):90)*D;
- const lg=G(B,sd>0?'leg_front':'leg_rear',{label:sd>0?'Kickstand legs ×2 · CF-nylon, TPU feet, over-centre lock':null,pos:[sd*0.036,0.03,0],ex:[sd*0.05,-0.02,0]});
+ const lg=G(B,sd>0?'leg_front':'leg_rear',{label:sd>0?'Kickstand legs ×2 · PLA, TPU feet, over-centre lock':null,pos:[sd*0.036,0.03,0],ex:[sd*0.05,-0.02,0]});
  lg.rotation.z=ang;
  add(lg,'strut',new THREE.BoxGeometry(L,0.004,0.014).translate(L/2,0,0),mat.alu);
  add(lg,'strut_stripe',new THREE.BoxGeometry(L*0.7,0.0006,0.003).translate(L*0.45,0.0023,0),mat.red);
@@ -147,7 +147,7 @@ const hr=G(B,'harness',{label:'Head harness · 4c in red braid, brass P-clips',e
 {const hp=[0.085,0.1,0.12,0.14,0.158,0.172].map((y,i)=>[-FX-0.0035,y,0.034+Math.sin(i*1.1)*0.002]);tube(hr,'harness',hp,mat.power,0.0026);tube(hr,'trace',hp.map(p=>[p[0]-0.0024,p[1],p[2]]),mat.shell,0.0007);
  for(const y of [0.105,0.148])add(hr,'p_clip',new THREE.TorusGeometry(0.0037,0.001,8,24).rotateX(Math.PI/2),mat.brass,[-FX-0.0035,y,0.034]);
  for(const y of [0.085,0.172])add(hr,'grommet',new THREE.TorusGeometry(0.0034,0.0012,8,24).rotateY(Math.PI/2),mat.servo15,[-FX-0.0005,y,0.034]);}
-const blk=G(B,'motor_block',{label:'Motor block · CF-nylon, IMU bracket on axle line',ex:[0,-0.028,0]});
+const blk=G(B,'motor_block',{label:'Motor block · PLA, IMU bracket on axle line',ex:[0,-0.028,0]});
 add(blk,'block_plate',BX(0.02,0.003,0.108),mat.cf,[0,0.0245,0]);
 for(const sd of [-1,1])add(blk,'strap',BX(0.014,0.0025,0.01),mat.cf,[0,AY+0.0065,sd*0.05]);
 for(const sd of [-1,1]){const m=G(B,sd>0?'motor_R':'motor_L',{label:sd>0?'N20 gearmotors + hall encoders ×2':null,ex:[0,0,sd*0.026]});
@@ -155,7 +155,7 @@ for(const sd of [-1,1]){const m=G(B,sd>0?'motor_R':'motor_L',{label:sd>0?'N20 ge
  add(m,'motor_can',CZ(0.006,0.015,24),mat.steel,[0,AY,sd*0.0375]);
  add(m,'encoder',CZ(0.0066,0.0024,24),mat.pcb,[0,AY,sd*0.0287]);
  add(m,'shaft',CZ(0.0015,0.012,12),mat.steel,[0,AY,sd*0.06]);}
-const spine=G(B,'spine',{label:'Spine · CF-nylon, every board mounts here'});
+const spine=G(B,'spine',{label:'Spine · PLA, every board mounts here'});
 add(spine,'spine',BX(0.005,0.125,0.09),mat.cf,[0,0.1135,0]);
 lx(add(INT,'bno085',BX(0.016,0.016,0.0016),mat.pcb2,[0,AY,0]),'BNO085 IMU · on the axle line');
 lx(add(INT,'servo',BX(0.012,0.024,0.023),mat.servo15,[0.015,0.058,0]),'MG90S kickstand servo');

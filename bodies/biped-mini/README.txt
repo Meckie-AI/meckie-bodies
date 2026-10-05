@@ -19,8 +19,8 @@ SERVOS
   own bus adapter, UART2). Never connect an STS3032 to the 12 V bus.
 
 PRINTING
-  CF-nylon for brackets, thighs, shin plates, pelvis, skid, ring and tray; PETG for feet,
-  torso, head and trim; TPU 95A for soles, belt, skid shoe and mitts. No supports.
+  PLA for brackets, thighs, shin plates, pelvis, skid, ring, tray, feet, torso,
+  head and trim; TPU 95A for soles, belt, skid shoe and mitts. No supports.
   Inserts: M2 3.2, M2.5 3.6, M3 4.0, M5 6.4 mm bores.
 
 JOINTS

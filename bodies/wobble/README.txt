@@ -18,7 +18,7 @@ OPENING THE HTML FILES
   then open http://localhost:8000
 
 PRINTING
-  PETG for the shells, hubs, cradles and trim; CF-nylon for the spine, plates, straps and
+  PLA for the shells, hubs, cradles, trim, spine, plates, straps and
   legs; TPU 95A for tyres, feet, bumpers and antenna balls. No supports. Quantities are in
   the file names. Inserts: M2 3.2, M2.5 3.6, M3 4.0 mm bores.
 

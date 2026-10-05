@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'happy';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -89,7 +89,7 @@ function ellTube(p,n,a,b,y,r,m){const pts=[];for(let i=0;i<72;i++){const t=i/72*
 const INT=G(model,'internals');
 const AX=0.012,AY=0.02,WZ=0.0475;
 // lower shell
-const lower=G(model,'lower_shell',{label:'Lower shell · PETG sea foam',ex:[0,-0.06,0]});
+const lower=G(model,'lower_shell',{label:'Lower shell · PLA sea foam',ex:[0,-0.06,0]});
 {const s=rr(new THREE.Shape(),0.05,0.04,0.022);const g=new THREE.ExtrudeGeometry(s,{depth:0.021,bevelEnabled:true,bevelThickness:0.002,bevelSize:0.002,bevelSegments:3,curveSegments:20});g.rotateX(-Math.PI/2);add(lower,'lower_shell',g,mat.teal,[0,0.008,0]);}
 add(lower,'usbc_bezel',BX(0.003,0.006,0.013),mat.chrome,[-0.0545,0.011,0.012]);
 add(lower,'usbc_port',BX(0.002,0.0032,0.009),mat.servo15,[-0.0558,0.011,0.012]);
@@ -99,7 +99,7 @@ for(const [x,n] of [[0.0545,'tof_front'],[-0.0545,'tof_rear']]){add(lower,n+'_be
 const bump=G(model,'bumper',{label:'Bumpers front + rear · TPU 95A, flange clamped in the rim',ex:[0,-0.025,0]});
 {const sh=rr(new THREE.Shape(),0.0575,0.0475,0.0295);const P=sh.getPoints(64);for(const f of [1,-1]){const pts=P.filter(p=>f*p.x>0.036).map(p=>V(p.x,0.0365,p.y)).sort((a,b)=>Math.atan2(a.z,f*a.x)-Math.atan2(b.z,f*b.x));add(bump,f>0?'bumper_front':'bumper_rear',new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts),64,0.0055,14,false),mat.bump);}}
 // upper shell
-const upper=G(model,'upper_shell',{label:'Upper shell · PETG cream',ex:[0,0.07,0]});
+const upper=G(model,'upper_shell',{label:'Upper shell · PLA cream',ex:[0,0.07,0]});
 {const g=new THREE.SphereGeometry(1,72,36,0,Math.PI*2,0,Math.PI/2);add(upper,'upper_shell',g,mat.shell,[0,0.031,0],[0,0,0],[0.052,0.04,0.042]);}
 for(let i=0;i<4;i++)add(upper,'grille_bar',BX(0.0025,0.0016,0.018-i*0.002),mat.chrome,[-0.0478+i*0.0022,0.044+i*0.0045,0],[0,0,-0.5]);
 add(upper,'switch',BX(0.006,0.003,0.009),mat.brass,[-0.044,0.049,0.018],[0,0,-0.6]);
@@ -138,7 +138,7 @@ const caster=G(model,'caster',{label:'Ball caster Ø12 · steel, M2 ×2',ex:[0,-
 add(caster,'caster_ball',new THREE.SphereGeometry(0.006,24,16),mat.steel,[-0.044,0.006,0]);
 add(caster,'caster_housing',CY(0.0085,0.006,24),mat.chrome,[-0.044,0.012,0]);
 // chassis
-const chassis=G(model,'chassis',{label:'Motor straps · CF-nylon, M2 into floor saddles',ex:[0,0.02,0]});
+const chassis=G(model,'chassis',{label:'Motor straps · PLA, M2 into floor saddles',ex:[0,0.02,0]});
 
 for(const sd of [-1,1])add(chassis,'motor_strap',BX(0.022,0.013,0.008),mat.cf,[AX,AY+0.0015,sd*0.035]);
 // motors
@@ -150,7 +150,7 @@ for(const sd of [-1,1]){const m=G(model,sd>0?'motor_R':'motor_L',{label:sd>0?'N2
 // battery + hatch
 const batt=G(model,'battery',{label:'1S LiPo 1000 mAh · gauge on I²C',ex:[0,-0.11,0]});
 lx(add(batt,'lipo_1s',BX(0.034,0.005,0.05),mat.batt,[-0.019,0.0105,0]),'1S LiPo 503450 · snap-in floor cradle');
-const deck=G(model,'deck',{label:'Electronics deck · CF-nylon, M2 insert grid',ex:[0,0.03,0]});
+const deck=G(model,'deck',{label:'Electronics deck · PLA, M2 insert grid',ex:[0,0.03,0]});
 add(deck,'deck',BX(0.048,0.005,0.068),mat.cf,[-0.024,0.0265,0]);
 // internals (hidden in exploded)
 lx(add(INT,'xiao_s3_sense',BX(0.004,0.0215,0.0175),mat.pcb2,[0.016,0.049,0],[0,0,-0.75]),'XIAO ESP32-S3 Sense · brain + camera + mic');

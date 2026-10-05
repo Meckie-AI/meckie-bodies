@@ -117,8 +117,13 @@ function volumeCm3(file) {
 }
 
 // Filament densities, g/cm3. Spool figures vary by brand; these are mid-range
-// published values for the stock the packs specify.
-const DENSITY = { 'PETG': 1.27, 'CF-nylon': 1.15, 'TPU 95A': 1.21 };
+// published values.
+//
+// The official packs specify PLA and TPU only. PETG and CF-nylon stay in the
+// table because a contributed pack may name them: new-body.js lets anyone add a
+// body, and a density table that only knows our own choices would silently fall
+// back to a default for theirs.
+const DENSITY = { 'PLA': 1.24, 'TPU 95A': 1.21, 'PETG': 1.27, 'CF-nylon': 1.15 };
 
 /**
  * What a print of this part is likely to consume, as a RANGE.

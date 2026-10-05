@@ -51,12 +51,18 @@ function serviceEstimate(parts) {
 }
 const OUT = path.join(P.ROOT, 'site', 'data');
 
-// "PETG sea foam" / "TPU 95A black" / "CF-nylon" -> the stock you buy.
+// "PLA sea foam" / "TPU 95A black" / "PLA, chrome paint" -> the stock you buy.
+//
+// The official packs specify PLA and TPU only. PETG and CF-nylon are still
+// recognised rather than folded into PLA, because a contributed pack may name
+// them and classifying someone else's PETG as PLA would misprice it and tell
+// them to buy the wrong spool.
 function material(mat) {
   const m = String(mat || '').toLowerCase();
   if (m.includes('cf-nylon') || m.includes('nylon')) return 'CF-nylon';
   if (m.includes('tpu')) return 'TPU 95A';
   if (m.includes('petg')) return 'PETG';
+  if (m.includes('pla')) return 'PLA';
   return String(mat || 'unspecified');
 }
 

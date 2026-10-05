@@ -116,13 +116,13 @@ const shellHalf=(L,s)=>{const c=(SY0+L-16)/2,ay=(L-16-SY0)/2+7;let g=S(shellE(L)
  return bigOf(g);};
 const cap=L=>{let g=BOX(31.2,L-41,3,0,(L-19+22)/2,0);for(const x of [-14,14])for(const y of [L-22,25])g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));return g;};
 LK.forEach((L,i)=>{
- part('link'+(i+1)+'_frame','Link '+(i+1)+' frame (holds J'+(i+2)+' servo), '+L+' mm',1,'CF-nylon, chrome paint on cheeks','Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.',()=>frame(L));
- part('link'+(i+1)+'_cap','Link '+(i+1)+' sleeve cap',1,'CF-nylon','Flat.',()=>cap(L));
- for(const s of [1,-1])part('link'+(i+1)+'_shell_'+(s>0?'R':'L'),'Link '+(i+1)+' shell, '+(s>0?'right':'left')+' half',1,i%2?'PETG cream':'PETG sea foam','Split face down. No supports.',()=>shellHalf(L,s).rotate([0,s>0?-90:90,0]));
- part('link'+(i+1)+'_ribs','Link '+(i+1)+' glow rib (snaps over shell screws, holds 6 LEDs)',2,'PETG natural (translucent)','Flat. 100% infill for even glow.',()=>{const f=.82;const el=(dx,dz,h,z)=>{const sh=new THREE.Shape();sh.absellipse(0,0,24*f+dx,30*f+dz,0,2*P);return EX(sh,h,z);};
+ part('link'+(i+1)+'_frame','Link '+(i+1)+' frame (holds J'+(i+2)+' servo), '+L+' mm',1,'PLA, chrome paint on cheeks','Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.',()=>frame(L));
+ part('link'+(i+1)+'_cap','Link '+(i+1)+' sleeve cap',1,'PLA','Flat.',()=>cap(L));
+ for(const s of [1,-1])part('link'+(i+1)+'_shell_'+(s>0?'R':'L'),'Link '+(i+1)+' shell, '+(s>0?'right':'left')+' half',1,i%2?'PLA cream':'PLA sea foam','Split face down. No supports.',()=>shellHalf(L,s).rotate([0,s>0?-90:90,0]));
+ part('link'+(i+1)+'_ribs','Link '+(i+1)+' glow rib (snaps over shell screws, holds 6 LEDs)',2,'PLA natural (translucent)','Flat. 100% infill for even glow.',()=>{const f=.82;const el=(dx,dz,h,z)=>{const sh=new THREE.Shape();sh.absellipse(0,0,24*f+dx,30*f+dz,0,2*P);return EX(sh,h,z);};
   let g=S(el(4.6,4.6,6,0),el(.1,.1,8,-1));g=S(g,S(el(3.2,3.2,4.4,.8),el(1.2,1.2,6,0)));g=S(g,BOX(2,12,10,0,-30*f-2,-1));return bigOf(g);});
 });
-part('j1_tower','Base floor + J1 tower',1,'CF-nylon','Floor on the bed. 5 walls, 40%. No supports.',()=>{
+part('j1_tower','Base floor + J1 tower',1,'PLA','Floor on the bed. 5 walls, 40%. No supports.',()=>{
  let g=CYL(87.6,3,0,0,0,128);
  let t=BOX(31.2,44.4,J1Z-19-3,0,-1.5,3);t=S(t,BOX(25.1,35.4,40,0,0,J1Z-32.8-4),BOX(26,30,J1Z-32.8-4-8,4,0,8));t=S(t,BOX(10,35.4,J1Z,15.6,0,J1Z-32.8-4));
  t=U(t,BOX(18,6,25,0,-20.7,J1Z-19),AXC(9,6,[0,-20.7,J1Z],[0,1,0],40));
@@ -134,8 +134,8 @@ part('j1_tower','Base floor + J1 tower',1,'CF-nylon','Floor on the bed. 5 walls,
  for(const[x,y]of [[-50,35],[-50,-35],[-10,45],[-10,-45],[40,45],[40,-45]])g=U(g,CYL(3.5,6,x,y,3));
  for(const[x,y]of [[-50,35],[-50,-35],[-10,45],[-10,-45],[40,45],[40,-45]])g=S(g,insUp('M25',x,y,9));
  return bigOf(g);});
-part('j1_cap','J1 tower side cap',1,'CF-nylon','Flat.',()=>{let g=BOX(3,44.4,J1Z-19-(J1Z-52),0,-1.5,0);g=BOX(36,44.4,3,0,-1.5,0);for(const y of [-14,14])for(const x of [-11,11])g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));return g;});
-part('base_dome','Base dome',1,'PETG cream','Rim down; the dome closes in under 45°. No supports.',()=>{
+part('j1_cap','J1 tower side cap',1,'PLA','Flat.',()=>{let g=BOX(3,44.4,J1Z-19-(J1Z-52),0,-1.5,0);g=BOX(36,44.4,3,0,-1.5,0);for(const y of [-14,14])for(const x of [-11,11])g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));return g;});
+part('base_dome','Base dome',1,'PLA cream','Rim down; the dome closes in under 45°. No supports.',()=>{
  const prof=[[90,3],[88,13],[80,25],[66,37],[45,47],[22,52],[0,53]];
  const lath=(pp)=>toM(new THREE.LatheGeometry(pp.map(p=>new THREE.Vector2(p[0],p[1])),128).rotateX(P/2));
  let g=S(lath([[0,3],...prof]),lath([[0,2.9],...prof.map(p=>[Math.max(0,p[0]-2.4),p[1]-(p[0]>0?2.4:2.4)])]));
@@ -147,21 +147,21 @@ part('base_dome','Base dome',1,'PETG cream','Rim down; the dome closes in under 
  g=S(g,S(CYL(50.2,10,0,0,42,128),CYL(43.8,12,0,0,41,128)));g=U(g,I(S(CYL(51,4,0,0,40,128),CYL(43,6,0,0,39,128)),CYL(60,20,0,0,30,128)));g=S(g,S(CYL(49,3.5,0,0,40.5,128),CYL(45,5,0,0,40,128)));
  g=S(g,BOX(8,9.6,3.8,-89,18,6),AXC(3.25,10,[-89,-18,9],[1,0,0],32));
  return bigOf(g);});
-part('glow_ring','Base glow ring diffuser (snaps into the dome groove)',1,'PETG natural (translucent)','Flat. 100% infill.',()=>{let g=U(RING(50,44,3,0),RING(48.6,45.4,4,3));for(let i=0;i<6;i++){const q=i*P/3;g=U(g,BOX(3,1.2,1,47.2*Math.cos(q),47.2*Math.sin(q),6.2));}return g;});
+part('glow_ring','Base glow ring diffuser (snaps into the dome groove)',1,'PLA natural (translucent)','Flat. 100% infill.',()=>{let g=U(RING(50,44,3,0),RING(48.6,45.4,4,3));for(let i=0;i<6;i++){const q=i*P/3;g=U(g,BOX(3,1.2,1,47.2*Math.cos(q),47.2*Math.sin(q),6.2));}return g;});
 part('tpu_foot','Foot',1,'TPU 95A red','Flat.',()=>U(CYL(91,2,0,0,0,128),RING(91,89.8,8,0),RING(91,88.6,1.2,6.6)));
-part('tray','Electronics tray (Pi Zero + ESP32 + M2.5 grid)',1,'CF-nylon','Flat.',()=>{let g=S(RR(150,108,10,4,-5,0,0),BOX(36,52,10,0,-1.5,-1));
+part('tray','Electronics tray (Pi Zero + ESP32 + M2.5 grid)',1,'PLA','Flat.',()=>{let g=S(RR(150,108,10,4,-5,0,0),BOX(36,52,10,0,-1.5,-1));
  for(const[x,y]of [[-50,35],[-50,-35],[-10,45],[-10,-45],[40,45],[40,-45]])g=S(g,clr('M25',x,y,-1,6),csk('M25',x,y,4,true));
  for(const[x,y]of [[-29,-11.5],[29,-11.5],[-29,11.5],[29,11.5]])g=U(g,CYL(3,4,x-35,y,4));for(const[x,y]of [[-29,-11.5],[29,-11.5],[-29,11.5],[29,11.5]])g=S(g,insUp('M25',x-35,y,8));
  for(let x=30;x<=60;x+=10)for(let y=-40;y<=40;y+=10)g=S(g,CYL(INS.M25[0],6,x,y,-1));return bigOf(g);});
 // head: proximal U on J5 + plate; shell front/rear halves; face on +z
 const HC=[0,38,-4],HA=[30,23,31];
 const headE=()=>I(ELL(HA[0],HA[1],HA[2],...HC),BOX(100,100,200,0,HC[1]-HA[1]+3+50,-100));
-part('head_frame','Head frame (on J5)',1,'CF-nylon','Back face down. 6 walls, 60%.',()=>{
+part('head_frame','Head frame (on J5)',1,'PLA','Back face down. 6 walls, 60%.',()=>{
  let g=U(proxU(),BOX(12,30,12-ZB,0,36,ZB));g=S(g,BOX(8,26,12-ZB-4,0,37,ZB+4));
  for(const y of [30,44])g=S(g,AXC(INS.M25[0],INS.M25[1]+.5,[0,y,ZB+INS.M25[1]/2-.25],[0,0,1],20),insUp('M2',0,y,12));
  return bigOf(g);});
 const FACE=[0,HC[1]+2,HC[2]+HA[2]];
-part('head_front','Head shell, front (face)',1,'PETG cream','Face down. No supports.',()=>{
+part('head_front','Head shell, front (face)',1,'PLA cream','Face down. No supports.',()=>{
  let g=I(S(headE(),ELL(HA[0]-2.4,HA[1]-2.4,HA[2]-2.4,...HC)),BOX(100,100,100,0,0,HC[2]));
  g=U(g,I(S(AXC(23,14,[FACE[0],FACE[1],FACE[2]-7],[0,0,1],64),AXC(19.8,16,[FACE[0],FACE[1],FACE[2]-7],[0,0,1],64)),headE()));
  g=S(g,AXC(16.5,30,FACE,[0,0,1],64),AXC(20.6,1.6,[FACE[0],FACE[1],FACE[2]-9.2],[0,0,1],64));
@@ -169,7 +169,7 @@ part('head_front','Head shell, front (face)',1,'PETG cream','Face down. No suppo
  g=S(g,BOX(12,4,8,0,HC[1]-HA[1]+8,HC[2]+24));
  for(const x of [-20,20])g=U(g,I(BOX(6,6,8,x,HC[1]+14,HC[2]-4),ELL(HA[0]-1,HA[1]-1,HA[2]-1,...HC)));
  return bigOf(g).rotate([0,0,0]);});
-part('head_rear','Head shell, rear',1,'PETG cream','Rim down. No supports.',()=>{
+part('head_rear','Head shell, rear',1,'PLA cream','Rim down. No supports.',()=>{
  let g=I(S(headE(),ELL(HA[0]-2.4,HA[1]-2.4,HA[2]-2.4,...HC)),BOX(100,100,100,0,0,HC[2]-100));
  for(const y of [30,44])g=U(g,I(CYL(3.5,40,0,y,-60),ELL(HA[0]-1,HA[1]-1,HA[2]-1,...HC)));
  for(const y of [30,44])g=S(g,clr('M25',0,y,-80,80),CYL(2.6,40,0,y,-HA[2]+HC[2]-38));
@@ -177,17 +177,17 @@ part('head_rear','Head shell, rear',1,'PETG cream','Rim down. No supports.',()=>
  for(const s of [-1,1])g=S(g,AXC(1,10,[s*HA[0],HC[1],HC[2]],[1,0,0],16));
  
  return bigOf(g);});
-part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
+part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const q=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(q),19.6*Math.sin(q),2.4,q,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
-part('face_bezel','Face bezel + red TPU-look ring',1,'PETG, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
+part('face_bezel','Face bezel + red TPU-look ring',1,'PLA, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<3;i++){const q=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(q),22.7*Math.sin(q),5.9));const b2=q+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}return g;});
-part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PETG','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
+part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PLA','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-7,7])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
-part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
-part('sensor_clamp','Lidar / mic clamp plate',3,'PETG','Flat.',()=>{let g=S(RR(8,22,2,2.5),BOX(4,10,4,0,0,-1));for(const y of [-9,9])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
-part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
-part('antenna_tip','Antenna glow tip (over a 2020 LED)',2,'PETG natural (translucent)','Hole up. 100% infill.',()=>bigOf(S(new THREE.SphereGeometry(4.5,24,16).translate(0,0,4.5),CYL(1.6,3.2,0,0,-.1),CYL(.9,6,0,0,2))));
+part('camera_hood','Camera hood',1,'PLA, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
+part('sensor_clamp','Lidar / mic clamp plate',3,'PLA','Flat.',()=>{let g=S(RR(8,22,2,2.5),BOX(4,10,4,0,0,-1));for(const y of [-9,9])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
+part('speaker_ring','Speaker ring',1,'PLA','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
+part('antenna_tip','Antenna glow tip (over a 2020 LED)',2,'PLA natural (translucent)','Hole up. 100% infill.',()=>bigOf(S(new THREE.SphereGeometry(4.5,24,16).translate(0,0,4.5),CYL(1.6,3.2,0,0,-.1),CYL(.9,6,0,0,2))));
 part('proleg','Proleg nub',8,'TPU 95A red','Peg up.',()=>U(I(ELL(4.2,4.2,3.4,0,0,0),BOX(10,10,4,0,0,0)),CYL(1.9,4,0,0,-3.9),CONE(2.4,1.9,.8,0,0,-4.4)));
 part('ballast_note','Steel disc (laser-cut, not printed)',1,'Mild steel 6 mm','Preview only: Ø160 × 6, 4× M4 tapped at R62.',()=>{let g=CYL(80,6,0,0,0,96);for(let i=0;i<4;i++){const q=i*P/2+P/4;g=S(g,CYL(1.65,8,62*Math.cos(q),62*Math.sin(q),-1));}return g;});
 

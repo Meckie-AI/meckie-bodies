@@ -43,14 +43,14 @@ const pose=Q.get('pose')||'stand';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -101,7 +101,7 @@ function ellRing(p,n,y,off,r,m){const a2=TR(y)+off,pts=[];for(let i=0;i<72;i++){
 function rbox(w,h,d,r){const bv=Math.min(r,d/2-0.0006);const g=new THREE.ExtrudeGeometry(rr(new THREE.Shape(),w/2-bv,h/2-bv,Math.max(0.0012,r-bv)),{depth:d-2*bv,bevelEnabled:true,bevelThickness:bv,bevelSize:bv,bevelSegments:4,curveSegments:12});g.translate(0,0,-(d-2*bv)/2);return g;}
 const SF=(y,sd=0,off=0)=>{const r=TR(y)+off;return sd?[0,y,sd*r*TZ]:[r,y,0];};
 // torso
-const lowT=G(bodyG,'torso_lower',{label:'Lower torso · PETG sea foam, pack bay',ex:[0,-0.03,0]});
+const lowT=G(bodyG,'torso_lower',{label:'Lower torso · PLA sea foam, pack bay',ex:[0,-0.03,0]});
 {const m=add(lowT,'lower',new THREE.LatheGeometry(prof(TC-TB+0.0005,0.045).map(p=>new THREE.Vector2(p[0],p[1])),72),mat.teal);m.scale.z=TZ;}
 add(lowT,'usbc_bezel',BX(0.003,0.007,0.013),mat.chrome,[-TR(0.06)-0.0003,0.06,0.016]);
 add(lowT,'usbc_port',BX(0.002,0.0032,0.009),mat.servo15,[-TR(0.06)-0.0016,0.06,0.016]);
@@ -111,7 +111,7 @@ add(lowT,'lidar_bezel',BX(0.003,0.007,0.022),mat.chrome,[TR(0.034)+0.0003,0.034,
 add(lowT,'lidar_window',BX(0.002,0.004,0.016),mat.glass,[TR(0.034)+0.0015,0.0345,0],[0,0,-0.6]);
 add(lowT,'drop_front_bezel',BX(0.003,0.006,0.012),mat.red,[TR(0.026)+0.0003,0.026,0],[0,0,-1.0]);
 add(lowT,'drop_front_window',BX(0.002,0.0035,0.008),mat.glass,[TR(0.026)+0.0015,0.0265,0],[0,0,-1.0]);
-const upT=G(bodyG,'torso_upper',{label:'Upper torso · PETG cream',ex:[0,0.05,0]});
+const upT=G(bodyG,'torso_upper',{label:'Upper torso · PLA cream',ex:[0,0.05,0]});
 {const m=add(upT,'upper',new THREE.LatheGeometry(prof(0.045,TC+TB-0.0005).map(p=>new THREE.Vector2(p[0],p[1])).concat([new THREE.Vector2(0,TC+TB)]),72),mat.shell);m.scale.z=TZ;}
 ellRing(upT,'chrome_band',0.108,0.0004,0.0013,mat.chrome);
 for(let i=0;i<4;i++)add(upT,'grille_bar',BX(0.002,0.0015,0.024),mat.chrome,[-TR(0.078+i*0.005)-0.0004,0.078+i*0.005,0]);
@@ -126,7 +126,7 @@ for(let i=0;i<8;i++){const q=i/8*Math.PI*2;add(face,'rivet',new THREE.SphereGeom
 for(const z of [-0.0068,0.0068]){add(face,'eye',new THREE.SphereGeometry(0.0054,24,16),mat.glow,[FXc+0.0018,FY+0.001,z],[0,0,0],sl?[0.35,0.22,1]:[0.35,1.1,1]);if(!sl){add(face,'pupil',new THREE.SphereGeometry(0.0026,16,12),mat.servo15,[FXc+0.0037,FY,z],[0,0,0],[0.35,1,1]);add(face,'glint',new THREE.SphereGeometry(0.0009,8,6),mat.ww,[FXc+0.0044,FY+0.0013,z+0.001]);}}
 lx(add(face,'display_pcb',CX(0.0185,0.003,40),mat.pcb,[FXc-0.008,FY,0]),'Ø32 round display · GC9A01');
 // head
-const head=G(bodyG,'head',{label:'Head · Camera Module 3, mics, PETG cream',pos:[0,TC+TB-0.002,0],ex:[0,0.07,0]});
+const head=G(bodyG,'head',{label:'Head · Camera Module 3, mics, PLA cream',pos:[0,TC+TB-0.002,0],ex:[0,0.07,0]});
 add(head,'neck',CY(0.012,0.008,32),mat.chrome,[0,0.003,0]);
 add(head,'brim',new THREE.CylinderGeometry(1,1,0.006,48),mat.teal,[0,0.009,0],[0,0,0],[0.023,1,0.031]);
 add(head,'dome',new THREE.SphereGeometry(1,48,24,0,Math.PI*2,0,Math.PI/2),mat.shell,[0,0.012,0],[0,0,0],[0.022,0.019,0.03]);
@@ -137,7 +137,7 @@ for(const sd of [-1,1])add(head,'mic_port',new THREE.TorusGeometry(0.0022,0.0008
 add(head,'antenna',CY(0.0011,0.016,10),mat.chrome,[-0.004,0.038,0]);add(head,'antenna_ball',new THREE.SphereGeometry(0.0045,18,12),mat.red,[-0.004,0.047,0]);
 lx(add(head,'cam_pcb',BX(0.003,0.024,0.025),mat.pcb,[0.016,0.016,0]),'Camera Module 3 · head');
 // tail sled
-const skid=G(bodyG,'skid',{label:'Rear sled · CF-nylon struts, TPU pad, rear drop ToF',ex:[-0.05,-0.02,0]});
+const skid=G(bodyG,'skid',{label:'Rear sled · PLA struts, TPU pad, rear drop ToF',ex:[-0.05,-0.02,0]});
 for(const z of [-0.03,0.03]){const A=V(-0.038,0.028,z),Bp=V(-0.063,-0.036,z),d=Bp.clone().sub(A);const o=add(skid,'strut',BX(0.008,d.length(),0.006),mat.tealDeep);o.position.copy(A).addScaledVector(d,0.5);o.quaternion.setFromUnitVectors(V(0,1,0),d.clone().normalize());}
 add(skid,'sled_plate',rbox(0.026,0.005,0.078,0.0024),mat.tealDeep,[-0.065,-0.0375,0]);
 add(skid,'sled_trim',BX(0.002,0.0018,0.074),mat.chrome,[-0.0515,-0.0365,0]);
@@ -153,11 +153,11 @@ for(const sd of [-1,1]){const arm=G(bodyG,sd>0?'arm_R':'arm_L',{label:sd>0?(arms
  add(arm,'arm',new THREE.CapsuleGeometry(0.0085,0.026,6,16).translate(0,-0.022,0),mat.teal,[0,0,sd*(arms?0.014:0.006)]);
  add(arm,'mitt',new THREE.SphereGeometry(0.011,20,14),mat.bump,[0,-0.044,sd*(arms?0.014:0.006)],[0,0,0],[1,0.9,0.9]);}
 // pelvis + hips
-const pel=G(bodyG,'pelvis',{label:'Pelvis frame · CF-nylon'});
+const pel=G(bodyG,'pelvis',{label:'Pelvis frame · PLA'});
 add(pel,'pelvis_plate',BX(0.028,0.004,0.036),mat.cf,[0,0.025,0]);
 const legs={};
 for(const sd of [1,-1]){const side=sd>0?'R':'L',stance=sd>0,ang=stance?P0.st:P0.sw,s=ang[0]*D,t=ang[1]*D;
- const pod=G(bodyG,'hip_pod_'+side,{label:sd>0?'Hip pods · roll + pitch servos, PETG sea foam':null,ex:[0,0,sd*0.04]});
+ const pod=G(bodyG,'hip_pod_'+side,{label:sd>0?'Hip pods · roll + pitch servos, PLA sea foam':null,ex:[0,0,sd*0.04]});
  add(pod,'pod',rbox(0.042,0.03,0.036,0.009),mat.teal,[0,0.011,sd*HZ]);
  add(pod,'roll_horn',CX(0.0105,0.003,28),mat.chrome,[0.0225,0.014,sd*HZ]);
  if(cfg==='spec')add(pod,'yaw_horn',CY(0.0105,0.003,28),mat.chrome,[0,0.0275,sd*HZ]);
@@ -182,7 +182,7 @@ for(const sd of [1,-1]){const side=sd>0?'R':'L',stance=sd>0,ang=stance?P0.st:P0.
  const fr=new THREE.Group();foot.add(fr);
  if(cfg==='ar'){fr.rotation.x=-th;lx(add(fr,'ankle_roll',BX(0.032,0.012,0.024),mat.servo15,[0.004,-0.011,0]),sd>0?'STS3215 · ankle roll ×2 (recommended)':'');add(fr,'ankle_roll_horn',CX(0.0095,0.003,24),mat.chrome,[0.022,-0.011,0]);}
  for(const z of [-0.0175,0.0175])add(fr,'ankle_bracket',BX(0.016,0.022,0.003),mat.alu,[0,-0.011,z]);
- const fp=G(fr,'foot_plate_'+side,{label:sd>0?'Feet · 92 × 60, PETG plate, red TPU sole':null,ex:[0,-0.025,0]});
+ const fp=G(fr,'foot_plate_'+side,{label:sd>0?'Feet · 92 × 60, PLA plate, red TPU sole':null,ex:[0,-0.025,0]});
  {const g=new THREE.ExtrudeGeometry(rr(new THREE.Shape(),0.043,0.027,0.014),{depth:0.004,bevelEnabled:true,bevelThickness:0.0015,bevelSize:0.0015,bevelSegments:3,curveSegments:16});g.rotateX(-Math.PI/2);add(fp,'foot_plate',g,mat.teal,[0.012,-0.0225,0]);}
  {const g=new THREE.ExtrudeGeometry(rr(new THREE.Shape(),0.044,0.028,0.015),{depth:0.004,bevelEnabled:true,bevelThickness:0.0008,bevelSize:0.0008,bevelSegments:2,curveSegments:16});g.rotateX(-Math.PI/2);add(fp,'sole',g,mat.bump,[0.012,-0.0272,0]);}
  add(fp,'toe_cap',BX(0.006,0.0025,0.03),mat.chrome,[0.052,-0.018,0]);

@@ -12,33 +12,58 @@
     "",
     "To replace them with something real: npm run quote-bundle <slug> makes a zip",
     "a provider's quote page will accept. Put one through, then set `source` and",
-    "`quoted` below to what came back and narrow the band to match."
+    "`calibrated` below to what came back and narrow the band to match."
   ],
 
-  "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+  "source": "industry band for FDM service pricing",
   "calibrated": false,
   "currency": "USD",
 
+  "_materials_why": [
+    "The official packs specify PLA and TPU only. PETG and CF-nylon are priced",
+    "here anyway because a contributed pack may name them, and an unpriced",
+    "material drops silently out of the estimate rather than announcing itself."
+  ],
+
   "materials": {
-    "PETG": {
-      "usd_per_cm3_low": 0.10,
-      "usd_per_cm3_high": 0.50,
-      "note": "The common case. Every FDM service carries it."
-    },
-    "CF-nylon": {
-      "usd_per_cm3_low": 0.35,
-      "usd_per_cm3_high": 1.10,
-      "note": "Carbon-filled nylon is an industrial-FDM material, not a desktop one. Protolabs Network quotes it as Markforged Onyx, which is a specific product rather than a generic PA-CF: confirm the substitution before quoting it as equivalent."
+    "PLA": {
+      "usd_per_cm3_low": 0.08,
+      "usd_per_cm3_high": 0.40,
+      "note": "What the packs specify. The cheapest and most widely stocked FDM material; every service and every printer carries it, and it needs no hardened nozzle, dry box or enclosure."
     },
     "TPU 95A": {
       "usd_per_cm3_low": 0.30,
       "usd_per_cm3_high": 0.90,
       "note": "Services quote TPU by shore hardness and the common service grade is 88A, softer than the 95A these packs specify. Treat a TPU quote as a substitution until confirmed."
+    },
+    "PETG": {
+      "usd_per_cm3_low": 0.10,
+      "usd_per_cm3_high": 0.50,
+      "note": "Not used by the official packs; priced for contributed ones. Note that Protolabs Network stocks PETG in black, grey and white only, so a coloured PETG pack cannot be serviced as drawn."
+    },
+    "CF-nylon": {
+      "usd_per_cm3_low": 0.35,
+      "usd_per_cm3_high": 1.10,
+      "note": "Not used by the official packs; priced for contributed ones. An industrial-FDM material, not a desktop one, and the single most expensive thing a pack can ask for. Protolabs Network quotes it as Markforged Onyx, a specific product rather than a generic PA-CF."
     }
   },
 
-  "setup_usd": 25,
-  "setup_note": "Per order, not per part. Services charge a floor that dominates a small order: it is most of the cost of printing one bracket and almost none of the cost of a whole body.",
+  "setup_usd": 40,
+  "setup_note": "MEASURED, not assumed: a real quote for one 12 cm3 PLA part came back at $40, which at that size is essentially all floor. Was guessed at $25 before that. A floor dominates a small order: it is almost the entire cost of printing one bracket and a small fraction of the cost of a whole body.",
+
+  "_what_the_quote_did_not_tell_us": [
+    "A 12 cm3 part never clears a $40 minimum, so that quote fixes the intercept",
+    "and says nothing about the slope. The per_cm3 figures below are still the",
+    "industry band, which is why `calibrated` is still false.",
+    "",
+    "To get the slope, quote something whose volume bill exceeds the floor: at",
+    "the high end that is about 100 cm3. Scout's whole PLA set is 111 cm3 and",
+    "Rover Lite's is 624 cm3, so a full-body plate answers it.",
+    "",
+    "Still unknown, and it is the difference between a $120 body and a $760 one:",
+    "whether that $40 is charged per ORDER or per PART. Quoting two parts at",
+    "once settles it - about $40 means per order, about $80 means per part."
+  ],
 
   "_pricing_model": [
     "estimate = setup_usd + sum over parts of (volume_cm3 x qty x usd_per_cm3)",

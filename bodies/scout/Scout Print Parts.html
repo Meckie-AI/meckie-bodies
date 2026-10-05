@@ -102,7 +102,7 @@ function bumperPath(front){return rrS(L+11,WD+11,RC+5.5).getPoints(64).filter(p=
 const PARTS=[];
 const part=(key,name,qty,mat,orient,fn)=>PARTS.push({key,name,qty,mat,orient,fn});
 
-part('lower_shell','Lower shell (tub)',1,'PETG sea foam','Floor on the bed. No supports.',()=>{
+part('lower_shell','Lower shell (tub)',1,'PLA sea foam','Floor on the bed. No supports.',()=>{
  let g=S(RR(L,WD,RC,ZR-Z0,0,0,Z0),RR(L-2*WT,WD-2*WT,RC-WT,ZR,0,0,Z0+WT));
  // corner screw tubes (M2.5 from below into upper-shell inserts), counterbored
  for(const[x,y]of CORN)g=U(g,CYL(3.5,ZR-Z0-WT,x,y,Z0+WT));
@@ -128,7 +128,7 @@ part('lower_shell','Lower shell (tub)',1,'PETG sea foam','Floor on the bed. No s
  for(const y of [-14,-34])g=S(g,new THREE.CylinderGeometry(INS.M2[0],INS.M2[0],5,24).rotateZ(P/2).translate(-L/2+WT+3.5,y,19));
  return g;});
 
-part('upper_shell','Upper shell (dome)',1,'PETG cream','Rim on the bed. Dome closes under 45°; no supports.',()=>{
+part('upper_shell','Upper shell (dome)',1,'PLA cream','Rim on the bed. Dome closes under 45°; no supports.',()=>{
  let o=outerU();
  o=U(o,AXC(23,16,along(FACE.p,FACE.d,-6),FACE.d,64));
   let g=S(o,innerU(),BOX(200,200,40,0,0,ZR-40));
@@ -158,12 +158,12 @@ const bumper=(key,name,front)=>part(key,name,1,'TPU 95A','Flange down. 2 walls, 
 bumper('bumper_front','Bumper, front',true);
 bumper('bumper_rear','Bumper, rear',false);
 
-part('motor_strap','Motor strap',2,'CF-nylon','Flat. No supports.',()=>{
+part('motor_strap','Motor strap',2,'PLA','Flat. No supports.',()=>{
  let g=S(BOX(22,8,13,0,0,0),BOX(12.4,10,10.2,0,0,-.1));
  for(const x of [-7.5,7.5])g=S(g,clr('M2',x,0,-1,16),CYL(2.2,2,x,0,11.1));
  return g;});
 
-part('wheel_hub','Wheel hub',2,'PETG cream','Outer face down. No supports.',()=>{
+part('wheel_hub','Wheel hub',2,'PLA cream','Outer face down. No supports.',()=>{
  let g=U(CYL(15,7,0,0,0,96),CYL(5,4,0,0,7));
  g=S(g,RING(16,14,1.4,2.8),CYL(11,1.2,0,0,-.1,64));
  const d=new THREE.Shape();d.absarc(0,0,1.55,-1.23,P+1.23,false);d.lineTo(1.55*Math.cos(-1.23),1.55*Math.sin(-1.23));
@@ -178,17 +178,17 @@ part('tyre','Tyre',2,'TPU 95A black','Flat. 3 walls, 30% gyroid, 20 mm/s.',()=>{
  for(let i=0;i<36;i++){const a=i*P/18;g=S(g,BOX(1.2,1,11,20*Math.cos(a),20*Math.sin(a),-1).rotateZ?.(0)||BOX(1.2,1,11,20*Math.cos(a),20*Math.sin(a),-1));}
  return g;});
 
-part('hubcap','Hubcap + whitewall',2,'PETG, chrome paint (whitewall in cream)','Face down; pins print upright.',()=>{
+part('hubcap','Hubcap + whitewall',2,'PLA, chrome paint (whitewall in cream)','Face down; pins print upright.',()=>{
  let g=U(I(ELL(11,11,4,0,0,0),BOX(30,30,4,0,0,0)),RING(14.2,10.4,1,0));
  for(let i=0;i<3;i++){const a=i*2*P/3,x=7.5*Math.cos(a),y=7.5*Math.sin(a);g=U(g,CYL(1.4,4.2,x,y,-4.2+.01),CONE(1.75,1.4,.8,x,y,-4.2));g=S(g,BOX(.7,4,3.2,x,y,-4.4));}
  return I(g,BOX(40,40,9,0,0,-4.4));});
 
-part('caster_cap','Caster ball cap',1,'PETG','Flange down.',()=>{
+part('caster_cap','Caster ball cap',1,'PLA','Flange down.',()=>{
  let g=U(CYL(9,2,0,0,0),CYL(7.6,6.5,0,0,2));g=S(g,CYL(6.25,6.6,0,0,-.1),new THREE.SphereGeometry(6.2,24,16).translate(0,0,1.9));
  for(const s of [-1,1])g=U(g,BOX(6,8,2,0,s*11,0));for(const s of [-1,1])g=S(g,clr('M2',0,s*12,-1,4),csk('M2',0,s*12,2,true));
  return g;});
 
-part('deck','Electronics deck (8 mm insert grid)',1,'CF-nylon','Flat. No supports.',()=>{
+part('deck','Electronics deck (8 mm insert grid)',1,'PLA','Flat. No supports.',()=>{
  let g=S(RR(48,68,6,5),CYL(4.2,12,-16,-30,-1),CYL(4.2,12,-16,30,-1),BOX(6,54,12,-24,0,-1),BOX(6,8,12,-24,-34,-1));
  for(const[x,y]of [[-20,-30],[-20,30],[20,-30],[20,30]])g=S(g,clr('M25',x,y,-1,7),csk('M25',x,y,5,true));
  for(let x=-16;x<=16;x+=8)for(let y=-20;y<=20;y+=8)g=S(g,insUp('M2',x,y,5));
@@ -196,31 +196,31 @@ part('deck','Electronics deck (8 mm insert grid)',1,'CF-nylon','Flat. No support
  g=I(g,RR(L-6,WD-6,RC-3,20,24,0,-5));
  return g.decompose().reduce((a,b)=>b.volume()>a.volume()?b:a);});
 
-part('sensor_clamp','Sensor clamp plate',3,'PETG','Flat.',()=>{
+part('sensor_clamp','Sensor clamp plate',3,'PLA','Flat.',()=>{
  let g=S(RR(9,26,2,2.5),BOX(5,12,4,0,0,-1));for(const y of [-11,11])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
 
-part('display_retainer','Display retainer ring (snap)',1,'PETG','Flange down; hooks upright.',()=>{
+part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{
  let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}
  return g;});
 
-part('face_bezel','Face bezel',1,'PETG, chrome paint','Face down; hooks upright.',()=>{
+part('face_bezel','Face bezel',1,'PLA, chrome paint','Face down; hooks upright.',()=>{
  let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9).rotateZ?BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9):0);const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}
  return g;});
 
-part('xiao_bracket','XIAO ESP32-S3 Sense snap cradle',1,'PETG','Base down. Screws to the camera mount disc inside the dome so the lens looks out of the camera hole.',()=>{
+part('xiao_bracket','XIAO ESP32-S3 Sense snap cradle',1,'PLA','Base down. Screws to the camera mount disc inside the dome so the lens looks out of the camera hole.',()=>{
  let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));
  g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));
  return g;});
 
-part('camera_hood','Camera hood',1,'PETG, chrome paint','Rim down.',()=>{
+part('camera_hood','Camera hood',1,'PLA, chrome paint','Rim down.',()=>{
  let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));
  g=U(g,RING(7.4,6.6,1.8,-1.5));return g;});
 
-part('speaker_ring','Speaker ring',1,'PETG','Flat.',()=>{
+part('speaker_ring','Speaker ring',1,'PLA','Flat.',()=>{
  let g=S(RR(36,10,2,2),CYL(9,4,0,0,-1));g=U(g,RING(11,9,2,0));for(const y of [-14,14])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
 
 part('ear','Floppy ear',2,'TPU 95A red','Flat, peg up.',()=>{
@@ -229,7 +229,7 @@ part('ear','Floppy ear',2,'TPU 95A red','Flat, peg up.',()=>{
 
 part('tail_ball','Tail ball',1,'TPU 95A red','Hole up.',()=>S(new THREE.SphereGeometry(4.5,28,18).translate(0,0,4.5),CYL(.75,5,0,0,4)));
 
-part('switch_clamp','Slide-switch clamp',1,'PETG','Flat.',()=>{let g=S(RR(26,8,2,2),BOX(9.2,4.2,4,0,0,-1));for(const x of [-10,10])g=S(g,clr('M2',x,0,-1,4),csk('M2',x,0,2,true));return g;});
+part('switch_clamp','Slide-switch clamp',1,'PLA','Flat.',()=>{let g=S(RR(26,8,2,2),BOX(9.2,4.2,4,0,0,-1));for(const x of [-10,10])g=S(g,clr('M2',x,0,-1,4),csk('M2',x,0,2,true));return g;});
 
 // ---------- viewer ----------
 const cv=document.getElementById('cv'),info=document.getElementById('info'),busy=document.getElementById('busy');

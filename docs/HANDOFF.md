@@ -72,7 +72,7 @@ Each `bodies/<slug>/` contains:
 1. **No glue, ever.** Everything screws into heat-set inserts or snaps together. No adhesive, tape, epoxy, foam pads or adhesive cable mounts. Press-fits only when a screw or clamp retains them. Every internal component has a listed mount (screws into inserts or standoffs, snap-in cradle with latch, strap on hooks, or screw-down retainer).
 2. **Sensing rule for anything that drives:** at least a forward lidar (VL53L8CX / VL53L1X class) plus drop-off ToF front and rear, shown in the views, BOM, wiring, manifest and safety reflex.
 3. **Safety reflex:** on Central heartbeat loss (≈500 ms), low battery or servo over-temperature, the body stops, brakes, waits about 2 s, moves slowly to a safe rest pose, lowers servo torque and shows a "sleepy / lost connection" face. It resumes **only on a fresh command**.
-4. **Fabrication:** fits a 256 × 256 mm FDM bed. PETG shells, CF-nylon structure, TPU bumpers, feet and tyres. Bearings at every pivot, metal servo horns, hidden fasteners.
+4. **Fabrication:** fits a 256 × 256 mm FDM bed. PLA shells and structure, TPU bumpers, feet and tyres. Bearings at every pivot, metal servo horns, hidden fasteners.
 5. **Insert bores:** M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4 (standard short brass heat-set inserts).
 
 ## Catalog (also in `bodies.json`)

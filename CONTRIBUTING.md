@@ -112,7 +112,7 @@ cannot tell the sources apart. Say so in `safety.triggers` too: rover-lite
 declares one `fault` trigger rather than `drv_fault` and `efuse_fault`, because
 its wiring cannot distinguish them.
 
-**6. Fabrication.** Fits a 256 × 256 mm bed. PETG shells, CF-nylon structure,
+**6. Fabrication.** Fits a 256 × 256 mm bed. PLA shells and structure,
 TPU bumpers and tyres. Bearings at every pivot, metal servo horns, hidden
 fasteners. Insert bores: M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4.
 

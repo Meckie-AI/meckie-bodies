@@ -44,14 +44,14 @@ const clamp=Q.get('clamp')==='1';
 if(embed){stage.shadowRoot.querySelectorAll('.toolbar,.note').forEach(e=>e.style.display='none');document.getElementById('bar').style.display='none';}
 const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughness:o.r??0.55,metalness:o.m??0});if(o.e){m.emissive=new THREE.Color(o.e);m.emissiveIntensity=o.ei??1;}m.name=name;return m;};
 const mat={
- shell:M('PETG_cream',0xefe3c8,{r:0.42}),
- teal:M('PETG_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('CFnylon_seafoam_paint',0x3f7d76,{r:0.5}),
+ shell:M('PLA_cream',0xefe3c8,{r:0.42}),
+ teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
+ tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
  red:M('signal_red',0xc8463a,{r:0.38}),
  chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
  alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
  brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
- cf:M('CF_nylon',0x323438,{r:0.72}),
+ cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
  tpu:M('TPU_foot',0xb83e33,{r:0.85}),
@@ -92,7 +92,7 @@ const SZ=0.016;
 const ped=G(model,'pedestal');
 const foot=G(ped,'tpu_foot',{label:'TPU foot · stretch-fit, hides 6× M3',ex:[0,-0.17,0]});
 add(foot,'foot',CY(0.073,0.004,72),mat.tpu,[0,0.002,0]);
-const basePan=G(ped,'base_pan',{label:'Base pan · CF-nylon, sea-foam paint',ex:[0,-0.12,0]});
+const basePan=G(ped,'base_pan',{label:'Base pan · PLA, sea-foam paint',ex:[0,-0.12,0]});
 add(basePan,'base_wall',lathe([[0.066,0.004],[0.072,0.008],[0.072,0.034],[0.07,0.036],[0.056,0.036]]),mat.teal);
 add(basePan,'base_floor',CY(0.068,0.002,72),mat.tealDeep,[0,0.005,0]);
 add(basePan,'tof_bezel',BX(0.002,0.011,0.022),mat.red,[0.0725,0.02,0]);
@@ -103,7 +103,7 @@ add(basePan,'switch_base',CX(0.0045,0.004,20),mat.chrome,[-0.0715,0.026,-0.03]);
 add(basePan,'switch_lever',new THREE.CylinderGeometry(0.0013,0.0018,0.014,10),mat.brass,[-0.076,0.031,-0.03],[0,0,0.9]);
 const disc=G(ped,'steel_disc',{label:'Steel disc Ø130 · M4 ×3',ex:[0,-0.085,0]});
 lx(add(disc,'steel_disc',CY(0.065,0.004,64),mat.steel,[0,0.008,0]),'Steel ballast disc Ø130');
-const top=G(ped,'top_shell',{label:'Swivel tier · PETG cream, chrome rings',ex:[0,-0.02,0]});
+const top=G(ped,'top_shell',{label:'Swivel tier · PLA cream, chrome rings',ex:[0,-0.02,0]});
 add(top,'tier',lathe([[0.056,0.036],[0.056,0.046],[0.054,0.048],[0.034,0.048]]),mat.shell);
 add(top,'tier_lid',lathe([[0.034,0.048],[0.0,0.048]]),mat.shell);
 add(top,'ring_low',new THREE.TorusGeometry(0.0715,0.0016,10,96).rotateX(Math.PI/2),mat.chrome,[0,0.0355,0]);
@@ -140,7 +140,7 @@ const tt=G(pan,'turntable',{label:'Swivel turntable · chrome, M3 ×6 clamp ring
 add(tt,'turntable',CY(0.032,0.006,64),mat.chrome,[0,0.004,0]);
 const panHorn=G(pan,'pan_horn',{label:'Metal horn · pan',ex:[0,-0.06,0]});
 add(panHorn,'pan_horn',CY(0.011,0.003),mat.chrome,[0,-0.0015,0]);
-const yoke=G(pan,'yoke',{label:'Yoke · CF-nylon, brushed-alu finish'});
+const yoke=G(pan,'yoke',{label:'Yoke · PLA, brushed-alu finish'});
 const PV=0.0875,ZA=0.078;
 add(yoke,'yoke_base',BX(0.03,0.008,ZA*2+0.008),mat.alu,[0,0.0115,0]);
 for(const s of [-1,1]){add(yoke,'yoke_arm',BX(0.02,PV-0.0155,0.008),mat.alu,[0,(PV+0.0155)/2,s*ZA]);add(yoke,'yoke_boss',CZ(0.011,0.008,40),mat.alu,[0,PV,s*ZA]);add(yoke,'pivot_cap',CZ(0.0085,0.003,40),mat.brass,[0,PV,s*(ZA+0.0055)]);}
@@ -156,7 +156,7 @@ for(const c of [hp[1],hp[3]])add(harness,'p_clip',new THREE.TorusGeometry(0.0042
 const head=G(pan,'head',{pos:[0,PV,0],ex:[0,0.08,0]});
 const T={attentive:0,curious:15,sleepy:-25}[pose]??0;
 head.rotation.z=T*Math.PI/180;
-const front=G(head,'front_shell',{label:'Cabinet front shell · PETG cream',ex:[0.07,0,0]});
+const front=G(head,'front_shell',{label:'Cabinet front shell · PLA cream',ex:[0.07,0,0]});
 cab(front,'front_shell',0.0005,0.038,mat.shell);
 add(front,'grille_slot_bg',BX(0.001,0.022,0.018),mat.servo15,[0.0383,-0.024,-0.047]);
 for(const z of [SZ-0.046,SZ+0.046])add(front,'mic_port',new THREE.TorusGeometry(0.0024,0.0008,8,24).rotateY(Math.PI/2),mat.chrome,[0.0384,-0.002,z]);
@@ -192,8 +192,8 @@ lx(add(tilt,'tilt_case',BX(0.045,0.024,0.035),mat.servo15,[-0.011,0,-0.0475]),'S
 add(tilt,'tilt_spline',CZ(0.0045,0.004),mat.steel,[0,0,-0.067]);
 const tiltHorn=G(head,'tilt_horn',{label:'Metal horn · tilt, M3 ×4 to yoke',ex:[0,0,-0.05]});
 add(tiltHorn,'tilt_horn',CZ(0.011,0.003),mat.chrome,[0,0,-0.0715]);
-const chassis=G(head,'head_chassis',{label:'Cabinet chassis · CF-nylon',ex:[0,-0.07,0]});
-lx(add(chassis,'chassis_plate',BX(0.07,0.003,0.124),mat.cf,[-0.004,-0.036,0]),'Cabinet chassis · CF-nylon');
+const chassis=G(head,'head_chassis',{label:'Cabinet chassis · PLA',ex:[0,-0.07,0]});
+lx(add(chassis,'chassis_plate',BX(0.07,0.003,0.124),mat.cf,[-0.004,-0.036,0]),'Cabinet chassis · PLA');
 const HIN=G(head,'head_internals');
 lx(add(HIN,'pi_zero_2w',BX(0.004,0.03,0.065),mat.pcb,[0.022,-0.004,SZ+0.002]),'Pi Zero 2 W · face brain');
 lx(add(HIN,'amp',BX(0.018,0.003,0.018),mat.pcb2,[-0.012,-0.033,0.03]),'MAX98357A amp');
@@ -207,7 +207,7 @@ tube(HIN,'i2s',[[0.024,-0.014,SZ-0.02],[0.03,-0.012,-0.024],[0.034,-0.004,-0.03]
 tube(HIN,'spk',[[-0.003,-0.033,0.022],[0.01,-0.03,-0.02],[0.026,-0.022,-0.04]],mat.wire,0.001);
 
 // ---------- shelf clamp variant ----------
-if(clamp){const C=G(ped,'shelf_clamp',{label:'Shelf clamp · CF-nylon, M4 ×3',ex:[0,-0.22,0]});
+if(clamp){const C=G(ped,'shelf_clamp',{label:'Shelf clamp · PLA, M4 ×3',ex:[0,-0.22,0]});
  add(C,'clamp_top',BX(0.07,0.005,0.04),mat.cf,[0.045,-0.0025,0]);
  add(C,'clamp_spine',BX(0.008,0.034,0.04),mat.cf,[0.084,-0.019,0]);
  add(C,'clamp_jaw',BX(0.042,0.006,0.04),mat.cf,[0.065,-0.039,0]);
