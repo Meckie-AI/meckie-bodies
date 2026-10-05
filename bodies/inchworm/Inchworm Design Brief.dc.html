@@ -436,6 +436,43 @@ a:hover{color:#23292b;text-decoration:underline}
     <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Every part fits a 256 × 256 bed; the Ø184 base dome is the largest. Chrome parts: gloss black base, chrome-effect paint, gloss clear. Brass caps: metallic brass under satin clear.</p>
   </section>
 
+  <section data-screen-label="06 Material note" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:16px">
+      <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">06b</span>
+      <h2 style="margin:0;font:700 30px 'Jost';text-transform:uppercase;letter-spacing:.06em">Why these materials</h2>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
+        <div style="font:700 17px 'Jost'">PETG</div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">59% of the printed pieces</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Shells and enclosures. Heat tolerance, toughness at a snap hook, and a wide enough window to take a heat-set insert without slumping the boss around it.</div>
+      </div>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
+        <div style="font:700 17px 'Jost'">CF-nylon</div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">24% of the printed pieces</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Structure: the parts that actually carry load. Stiffness and fatigue life where a bracket or a yoke is the thing holding the body together.</div>
+      </div>
+      <div style="border:2px solid #23292b;border-radius:20px;padding:18px 20px;background:#f7f0de">
+        <div style="font:700 17px 'Jost'">TPU 95A</div>
+        <div style="font:600 11px 'IBM Plex Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#3d4344;margin:4px 0 8px">18% of the printed pieces</div>
+        <div style="font:400 15px/1.5 'Jost';text-wrap:pretty">Anything compliant: tyres, bumpers, feet. Grip and a surface that absorbs a knock instead of transmitting it into the shell.</div>
+      </div>
+    </div>
+
+    <div style="border:2px solid #23292b;border-radius:20px;padding:22px 24px;background:#f7f0de;display:flex;flex-direction:column;gap:14px">
+      <div style="font:700 20px 'Jost';text-transform:uppercase;letter-spacing:.05em">Why not PLA</div>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty">This body's servos warn at 65 °C and cut torque at 70 °C. PLA's glass transition is about 55 to 60 °C, which is <strong>below the temperature its own thermal protection is still treating as normal</strong>. The shell would start going soft while the servos inside it were still inside their rated envelope. PETG softens around 80 to 85 °C, which puts the enclosure above the limits of what it encloses.</p>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Creep.</strong> PLA deforms slowly under a steady room-temperature load. This arm holds a pose for hours at a time, with the mass of a head on a moment arm. Over weeks that sags. PETG holds.</p>
+      <p style="margin:0;font:400 16px/1.6 'Jost';text-wrap:pretty"><strong>Snap fits.</strong> Nothing here is glued. Every shell closes on cantilever hooks and latches that flex each time it is opened, and that is the exact geometry PLA fails at. The same goes for the brass inserts every screw lands in: setting one means a 200 °C iron against the wall, and PLA's narrow window lets the boss slump where PETG holds its shape.</p>
+      <p style="margin:0;font:400 15px/1.6 'Jost';color:#3d4344;text-wrap:pretty"><strong>Where PLA is genuinely better:</strong> it is stiffer, it holds a dimension more tightly, and it prints more easily without supports. If you are making a test fit, a mock-up, or a part that never gets warm and never flexes, print it in PLA. It is the production shells that want PETG.</p>
+    </div>
+  </section>
+
+
+  
+
+
   <section data-screen-label="07 Safety reflex" style="display:flex;flex-direction:column;gap:20px">
     <div style="display:flex;align-items:baseline;gap:16px">
       <span style="width:40px;height:40px;border-radius:50%;background:#c8463a;color:#f7f0de;display:flex;align-items:center;justify-content:center;font:700 16px 'Jost'">07</span>

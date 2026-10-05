@@ -139,6 +139,58 @@ npm run check</pre>
   </section>
 
   <section>
+    <div class="section-head"><span class="section-num">3b</span>
+      <h2 class="section-title">Why those three materials</h2></div>
+
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:0">
+      <div class="card" style="padding:20px 22px">
+        <h3 style="font:700 17px 'Jost'">PETG</h3>
+        <p class="label" style="margin:5px 0 10px">shells and enclosures</p>
+        <p class="muted small" style="margin:0">Heat tolerance, toughness at a snap hook, and a wide
+          enough window to take a heat-set insert without slumping the boss around it.</p>
+      </div>
+      <div class="card" style="padding:20px 22px">
+        <h3 style="font:700 17px 'Jost'">CF-nylon</h3>
+        <p class="label" style="margin:5px 0 10px">structure</p>
+        <p class="muted small" style="margin:0">The parts that actually carry load. Stiffness and
+          fatigue life where a bracket or a yoke is what holds the body together.</p>
+      </div>
+      <div class="card" style="padding:20px 22px">
+        <h3 style="font:700 17px 'Jost'">TPU 95A</h3>
+        <p class="label" style="margin:5px 0 10px">anything compliant</p>
+        <p class="muted small" style="margin:0">Tyres, bumpers, feet. Grip, and a surface that
+          absorbs a knock instead of transmitting it into the shell.</p>
+      </div>
+    </div>
+
+    <div class="card" style="padding:26px 28px;margin-top:24px">
+      <h3 style="font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em">Why not PLA</h3>
+      <p class="muted" style="margin:10px 0 16px"><strong>Heat is the one that settles it.</strong>
+        Every body with serial servos sets them to warn at 65&nbsp;°C and cut torque at 70&nbsp;°C.
+        PLA's glass transition is about 55 to 60&nbsp;°C, which is <em>below the temperature the
+        body's own thermal protection is still treating as normal</em>. The shell would start going
+        soft while the servos inside it were still inside their rated envelope. PETG softens around
+        80 to 85&nbsp;°C, which puts the enclosure above the limits of what it encloses. The
+        ordinary case says the same thing: a desk in a sunny window, or a car, reaches 60&nbsp;°C
+        without trying.</p>
+      <p class="muted" style="margin:0 0 16px"><strong>Creep and impact.</strong> PLA deforms slowly
+        under a steady room-temperature load, and the arms hold a pose for hours with the mass of a
+        head on a moment arm. The drivers, the balancer and the walker have the opposite problem:
+        they hit things and fall over while a gait is being tuned, and PLA is brittle where PETG
+        yields.</p>
+      <p class="muted" style="margin:0 0 16px"><strong>Snap fits and inserts.</strong> Nothing here
+        is glued. Every shell closes on cantilever hooks that flex each time it is opened, which is
+        the exact geometry PLA fails at. Same for the brass inserts every screw lands in: setting
+        one means a 200&nbsp;°C iron against the wall, and PLA's narrow window lets the boss slump.</p>
+      <p class="small muted" style="margin:0"><strong>Where PLA is genuinely better:</strong> it is
+        stiffer, holds a dimension more tightly, and prints more easily without supports. For a test
+        fit, a mock-up, or a part that never gets warm and never flexes, print it in PLA. It is the
+        production shells that want PETG. Each body's brief carries this argument with that body's
+        own numbers, in section 06b.</p>
+    </div>
+  </section>
+
+  <section>
     <div class="section-head"><span class="section-num">04</span>
       <h2 class="section-title">Submitting</h2></div>
     <pre class="code">git checkout -b my-body
