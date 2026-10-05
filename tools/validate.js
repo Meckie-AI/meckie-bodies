@@ -39,6 +39,27 @@ function group(name) {
 const slugs = P.slugs();
 const catalog = P.catalog();
 
+// Read a file, or report it missing and carry on.
+//
+// A validator that throws ENOENT is useless to the person it exists for: the
+// first thing a new body does is not have some of these files yet, and a stack
+// trace is not a checklist. Every pack file is opened through here so a missing
+// one lands as a finding next to all the others.
+function read(g, file, what, encoding = 'utf8') {
+  try { return fs.readFileSync(file, encoding); }
+  catch (e) {
+    g.fail(`${what}: ${e.code === 'ENOENT' ? 'missing' : e.message} — ${path.relative(P.ROOT, file)}`);
+    return null;
+  }
+}
+function readDir(g, dir, what) {
+  try { return fs.readdirSync(dir); }
+  catch (e) {
+    g.fail(`${what}: ${e.code === 'ENOENT' ? 'missing directory' : e.message} — ${path.relative(P.ROOT, dir)}`);
+    return null;
+  }
+}
+
 // ---------------------------------------------------------------- catalog ---
 {
   const g = group('catalog');
@@ -66,7 +87,8 @@ const catalog = P.catalog();
   if (!g.skip) {
     for (const s of slugs) {
       const dir = P.packDir(s);
-      const files = fs.readdirSync(dir);
+      const files = readDir(g, dir, `${s}: pack folder`);
+      if (!files) continue;
       for (const want of ['README.txt', 'LICENSE.txt', 'parts-list.csv', 'support.js', 'three-d-stage.js']) {
         g.check(files.includes(want), `${s}: missing ${want}`);
       }
@@ -74,17 +96,25 @@ const catalog = P.catalog();
       g.check(files.some(f => f.endsWith(' Viewer.html')), `${s}: no Viewer`);
       g.check(files.some(f => f.endsWith(' Print Parts.html')), `${s}: no Print Parts`);
 
-      const lic = fs.readFileSync(path.join(dir, 'LICENSE.txt'), 'utf8');
-      g.check(lic.includes('CERN-OHL-S-2.0') && lic.includes('MIT'),
-        `${s}: LICENSE.txt must name CERN-OHL-S-2.0 and MIT`);
+      // Only read what the listing says is there; otherwise the same missing
+      // file is reported twice, once by the listing and once by the read.
+      const lic = files.includes('LICENSE.txt')
+        ? read(g, path.join(dir, 'LICENSE.txt'), `${s}: LICENSE.txt`) : null;
+      if (lic !== null) {
+        g.check(lic.includes('CERN-OHL-S-2.0') && lic.includes('MIT'),
+          `${s}: LICENSE.txt must name CERN-OHL-S-2.0 and MIT`);
+      }
     }
     // The HTML runtime is duplicated per pack so a downloaded pack renders on
     // its own. Identical copies or it is a maintenance trap.
     for (const runtime of ['support.js', 'three-d-stage.js']) {
       const master = fs.readFileSync(path.join(P.ROOT, 'shared', runtime));
       for (const s of slugs) {
-        g.check(fs.readFileSync(path.join(P.packDir(s), runtime)).equals(master),
-          `${s}: ${runtime} differs from shared/${runtime}`);
+        const file = path.join(P.packDir(s), runtime);
+        const copy = fs.existsSync(file) ? read(g, file, `${s}: ${runtime}`, null) : null;
+        if (copy !== null) {
+          g.check(copy.equals(master), `${s}: ${runtime} differs from shared/${runtime}`);
+        }
       }
     }
   }
@@ -109,7 +139,9 @@ const catalog = P.catalog();
 
     for (const s of slugs) {
       const dir = path.join(P.packDir(s), 'stl');
-      for (const f of fs.readdirSync(dir).filter(x => x.endsWith('.stl')).sort()) {
+      const stls = readDir(g, dir, `${s}: stl/`);
+      if (!stls) continue;
+      for (const f of stls.filter(x => x.endsWith('.stl')).sort()) {
         const rel = `bodies/${s}/stl/${f}`;
         g.check(/-x\d+\.stl$/.test(f), `${rel}: filename must end -x<qty>.stl`);
         let r;
@@ -151,7 +183,10 @@ const catalog = P.catalog();
     const WANT = ['part', 'qty', 'where', 'link', 'notes'];
     for (const s of slugs) {
       const file = path.join(P.packDir(s), 'parts-list.csv');
-      const { header, rows } = csv.records(fs.readFileSync(file, 'utf8'));
+      if (!fs.existsSync(file)) continue;        // the layout group already said so
+      const raw = read(g, file, `${s}: parts-list.csv`);
+      if (raw === null) continue;
+      const { header, rows } = csv.records(raw);
       g.check(header.join(',') === WANT.join(','),
         `${s}: parts-list.csv header is "${header.join(',')}", expected "${WANT.join(',')}"`);
       g.check(rows.length > 0, `${s}: parts-list.csv has no rows`);
@@ -182,8 +217,12 @@ const catalog = P.catalog();
       'clip', 'press', 'stretch', 'fit', 'stretch-fit']);
 
     for (const s of slugs) {
-      const brief = fs.readdirSync(P.packDir(s)).find(f => f.endsWith(' Design Brief.dc.html'));
-      const text = fs.readFileSync(path.join(P.packDir(s), brief), 'utf8');
+      const packFiles = readDir(g, P.packDir(s), `${s}: pack folder`);
+      if (!packFiles) continue;
+      const brief = packFiles.find(f => f.endsWith(' Design Brief.dc.html'));
+      if (!brief) { g.fail(`${s}: no Design Brief to read the 05c assembly table from`); continue; }
+      const text = read(g, path.join(P.packDir(s), brief), `${s}: Design Brief`);
+      if (text === null) continue;
       const at = text.search(/assembly\s*=\s*\[/);
       if (at === -1) { g.fail(`${s}: brief has no 05c assembly table`); continue; }
 
@@ -224,8 +263,20 @@ const catalog = P.catalog();
     const VIRTUAL = new Set(['encoders', 'servo_load']);
     for (const s of slugs) {
       let tpl, hw;
-      try { tpl = P.readTemplate(s); } catch (e) { g.fail(`${s}: template will not parse: ${e.message.split('\n')[0]}`); continue; }
-      try { hw = P.readManifest(s); } catch (e) { g.fail(`${s}: manifest will not parse: ${e.message.split('\n')[0]}`); continue; }
+      try { tpl = P.readTemplate(s); }
+      catch (e) {
+        g.fail(e.code === 'ENOENT'
+          ? `${s}: no hangar-bay/${s}.template.yaml`
+          : `${s}: template will not parse: ${e.message.split('\n')[0]}`);
+        continue;
+      }
+      try { hw = P.readManifest(s); }
+      catch (e) {
+        g.fail(/exactly one firmware/.test(e.message)
+          ? `${s}: ${e.message}`
+          : `${s}: manifest will not parse: ${e.message.split('\n')[0]}`);
+        continue;
+      }
 
       g.check(tpl.template === 'meckie-hangar-bay/1', `${s}: template is "${tpl.template}"`);
       g.check(tpl.known_template && tpl.known_template.catalog === 'meckie-bodies',
@@ -398,7 +449,9 @@ const catalog = P.catalog();
         g.check(fs.existsSync(path.join(dir, f)), `${s}: generated/${f} is missing (run npm run emit)`);
       }
       if (!fs.existsSync(path.join(dir, 'manifest.json'))) continue;
-      const m = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8'));
+      let m;
+      try { m = JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8')); }
+      catch (e) { g.fail(`${s}: generated/manifest.json is not valid JSON — ${e.message}`); continue; }
       if (!validate(m)) {
         for (const e of validate.errors) {
           g.fail(`${s}: manifest.json ${e.instancePath || '/'} ${e.message}`);
@@ -427,7 +480,10 @@ const catalog = P.catalog();
         [path.join(P.ROOT, 'tools', 'reexport.js'), '--json'],
         { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
     } catch (e) {
-      g.fail(`could not run tools/reexport.js --json: ${e.message.split('\n')[0]}`);
+      // A pack with no Print Parts page cannot be rebuilt, which is a finding
+      // from the layout group, not a reason to abandon the whole run.
+      const detail = String((e.stderr || e.message || '')).split('\n').find(l => l.trim()) || e.message;
+      g.fail(`could not check STLs against their generators: ${detail.trim()}`);
       actual = null;
     }
     if (actual) {

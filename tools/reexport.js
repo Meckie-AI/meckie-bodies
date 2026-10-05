@@ -44,7 +44,16 @@ async function main() {
   const report = {};
 
   for (const { slug, keys } of jobs) {
-    const pack = await loadPack(slug);
+    let pack;
+    try { pack = await loadPack(slug); }
+    catch (e) {
+      // A pack without a Print Parts page has nothing to rebuild from. That is
+      // a layout problem the validator reports on its own; here it is just a
+      // pack to skip, not a reason to fail the run.
+      if (!json) console.error(`  ${slug}: cannot load its generator — ${e.message}`);
+      missing++;
+      continue;
+    }
     const stlDir = path.join(P.packDir(slug), 'stl');
     const onDisk = fs.readdirSync(stlDir).filter(f => f.endsWith('.stl'));
 
