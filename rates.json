@@ -1,0 +1,50 @@
+{
+  "_why": [
+    "Every price the catalog shows comes from this file. One place, so an",
+    "estimate can never be half-updated, and so the assumption is reviewable",
+    "rather than buried in a template.",
+    "",
+    "THESE ARE NOT QUOTES. They are a published industry band for FDM service",
+    "pricing, and nothing here has been checked against a real order. The whole",
+    "point of showing an estimate is to tell someone whether a build is a $50",
+    "decision or a $400 one before they get invested, and a number that is wrong",
+    "by 3x does that worse than no number at all.",
+    "",
+    "To replace them with something real: npm run quote-bundle <slug> makes a zip",
+    "a provider's quote page will accept. Put one through, then set `source` and",
+    "`quoted` below to what came back and narrow the band to match."
+  ],
+
+  "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+  "calibrated": false,
+  "currency": "USD",
+
+  "materials": {
+    "PETG": {
+      "usd_per_cm3_low": 0.10,
+      "usd_per_cm3_high": 0.50,
+      "note": "The common case. Every FDM service carries it."
+    },
+    "CF-nylon": {
+      "usd_per_cm3_low": 0.35,
+      "usd_per_cm3_high": 1.10,
+      "note": "Carbon-filled nylon is an industrial-FDM material, not a desktop one. Protolabs Network quotes it as Markforged Onyx, which is a specific product rather than a generic PA-CF: confirm the substitution before quoting it as equivalent."
+    },
+    "TPU 95A": {
+      "usd_per_cm3_low": 0.30,
+      "usd_per_cm3_high": 0.90,
+      "note": "Services quote TPU by shore hardness and the common service grade is 88A, softer than the 95A these packs specify. Treat a TPU quote as a substitution until confirmed."
+    }
+  },
+
+  "setup_usd": 25,
+  "setup_note": "Per order, not per part. Services charge a floor that dominates a small order: it is most of the cost of printing one bracket and almost none of the cost of a whole body.",
+
+  "_pricing_model": [
+    "estimate = setup_usd + sum over parts of (volume_cm3 x qty x usd_per_cm3)",
+    "",
+    "Volume is the solid figure from the STL, which is what a service prices on:",
+    "they choose their own walls and infill, so the printed mass that matters to",
+    "someone running their own printer is not the number a service bills."
+  ]
+}

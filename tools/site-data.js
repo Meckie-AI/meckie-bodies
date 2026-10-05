@@ -18,6 +18,37 @@ const csv = require('./lib/csv');
 const mesh = require('./lib/mesh');
 
 const check = process.argv.includes('--check');
+
+// Every price the catalog shows comes from rates.json. Loaded once so the
+// estimate and the quote bundle can never disagree about what a cm3 costs.
+const RATES = JSON.parse(fs.readFileSync(path.join(path.dirname(__dirname), 'rates.json'), 'utf8'));
+
+/**
+ * What a service would charge to print this body, as a range.
+ *
+ * Priced on the SOLID volume, not the filament estimate: a service picks its
+ * own walls and infill, so the mass that matters to someone at their own
+ * printer is not the figure a service bills against.
+ */
+function serviceEstimate(parts) {
+  let low = RATES.setup_usd, high = RATES.setup_usd;
+  const unpriced = new Set();
+  for (const p of parts) {
+    const r = RATES.materials[p.material];
+    if (!r) { unpriced.add(p.material); continue; }
+    low += p.volume_cm3 * p.qty * r.usd_per_cm3_low;
+    high += p.volume_cm3 * p.qty * r.usd_per_cm3_high;
+  }
+  return {
+    usd_low: Math.round(low),
+    usd_high: Math.round(high),
+    setup_usd: RATES.setup_usd,
+    currency: RATES.currency,
+    source: RATES.source,
+    calibrated: RATES.calibrated,
+    unpriced_materials: [...unpriced],
+  };
+}
 const OUT = path.join(P.ROOT, 'site', 'data');
 
 // "PETG sea foam" / "TPU 95A black" / "CF-nylon" -> the stock you buy.
@@ -51,10 +82,17 @@ async function main() {
     const pack = await loadPack(slug);
     const stlDir = path.join(dir, 'stl');
     const stlFiles = fs.readdirSync(stlDir).filter(f => f.endsWith('.stl'));
+    // Anchor the slug. A non-greedy prefix stops at the FIRST hyphen, so
+    // rover-lite-esp_cradle-x1.stl yielded the key "lite-esp_cradle", matched
+    // no part, and left rover-lite and biped-mini with no parts at all: empty
+    // Print tabs hiding 29 and 37 files, while the download-all zip kept
+    // working so nothing looked broken.
+    const nameRe = new RegExp(`^${slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}-(.+)-x(\\d+)\\.stl$`);
     const byKey = new Map();
     for (const f of stlFiles) {
-      const m = /^.+?-(.+)-x(\d+)\.stl$/.exec(f);
+      const m = nameRe.exec(f);
       if (m) byKey.set(m[1], { file: f, qty: Number(m[2]) });
+      else console.warn(`  ${slug}: ${f} does not match <slug>-<part>-x<qty>.stl`);
     }
 
     const parts = [];
@@ -66,12 +104,19 @@ async function main() {
         const full = path.join(stlDir, info.file);
         let tris = null;
         try { tris = mesh.check(full).triangles; } catch (e) { /* reported by validate */ }
+        const mat = material(p.mat);
+        const vol = mesh.volumeCm3(full);
+        // Settings come from the brief's own orientation line, so the estimate
+        // can never disagree with what the page tells you to print.
+        const fil = mesh.filament(vol, mat, p.orient);
         parts.push({
           key, name: p.name + (/_R$/.test(key) ? ' (right)' : /_L$/.test(key) ? ' (left)' : ''),
-          qty: info.qty, material: material(p.mat), material_full: p.mat,
+          qty: info.qty, material: mat, material_full: p.mat,
           orientation: p.orient, file: info.file,
           bytes: fs.statSync(full).size, size: prettyBytes(fs.statSync(full).size),
           triangles: tris,
+          volume_cm3: +vol.toFixed(2),
+          filament: fil,
         });
       }
     }
@@ -113,6 +158,31 @@ async function main() {
       unsupported: build.unsupported || [],
       materials: [...new Set(parts.map(p => p.material))].sort(),
       total_prints: parts.reduce((n, p) => n + p.qty, 0),
+      // What it takes to print this body, per material. Quantities are counted
+      // in: a part marked -x2 is two prints and two parts' worth of filament.
+      filament: (() => {
+        const by = {};
+        for (const p of parts) {
+          const b = by[p.material] || (by[p.material] = { volume_cm3: 0, solid_g: 0, g_low: 0, g_high: 0, assumed: 0, parts: 0 });
+          b.volume_cm3 += p.volume_cm3 * p.qty;
+          b.solid_g += p.filament.solid_g * p.qty;
+          b.g_low += p.filament.g_low * p.qty;
+          b.g_high += p.filament.g_high * p.qty;
+          b.parts += p.qty;
+          if (p.filament.assumed) b.assumed += p.qty;
+        }
+        const round = (o) => Object.fromEntries(Object.entries(o).map(([k, v]) =>
+          [k, typeof v === 'number' ? +v.toFixed(1) : v]));
+        const out = { by_material: Object.fromEntries(Object.entries(by).map(([m, b]) => [m, round(b)])) };
+        out.total = round(Object.values(by).reduce((a, b) => ({
+          volume_cm3: a.volume_cm3 + b.volume_cm3, solid_g: a.solid_g + b.solid_g,
+          g_low: a.g_low + b.g_low, g_high: a.g_high + b.g_high,
+          assumed: a.assumed + b.assumed, parts: a.parts + b.parts,
+        }), { volume_cm3: 0, solid_g: 0, g_low: 0, g_high: 0, assumed: 0, parts: 0 }));
+        return out;
+      })(),
+      // What a service would charge. Not a quote; see rates.json.
+      service_estimate: serviceEstimate(parts),
       // for the catalog filters
       esp32_only: targets.every(t => t.role),
       servo_type: /sts32/i.test(entry.servos) ? 'serial bus' : /mg90|n20/i.test(entry.servos) ? 'PWM / gearmotor' : 'other',

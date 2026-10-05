@@ -94,4 +94,77 @@ function check(file) {
   };
 }
 
-module.exports = { check, triangles, BED };
+/**
+ * Solid volume in cm3, by the signed-tetrahedron sum.
+ *
+ * Each triangle makes a tetrahedron with the origin; the signed volumes cancel
+ * everywhere except inside the mesh, so a closed surface gives its own volume
+ * regardless of where the origin sits. Every STL here is watertight, which is
+ * the condition that makes this exact rather than approximate.
+ *
+ * This is the solid figure. What a printer actually extrudes is less, because
+ * of walls and infill - see filament() for that, and do not confuse the two in
+ * anything a buyer reads.
+ */
+function volumeCm3(file) {
+  let v = 0;
+  for (const [a, b, c] of triangles(file)) {
+    v += (a[0] * (b[1] * c[2] - b[2] * c[1])
+        - a[1] * (b[0] * c[2] - b[2] * c[0])
+        + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6;
+  }
+  return Math.abs(v) / 1000;          // mm3 -> cm3
+}
+
+// Filament densities, g/cm3. Spool figures vary by brand; these are mid-range
+// published values for the stock the packs specify.
+const DENSITY = { 'PETG': 1.27, 'CF-nylon': 1.15, 'TPU 95A': 1.21 };
+
+/**
+ * What a print of this part is likely to consume, as a RANGE.
+ *
+ * A solid volume times a density is the mass of a 100%-infill part, which
+ * nobody prints. The real figure depends on walls and infill, and for a thin
+ * shell the walls dominate so heavily that the infill percentage barely moves
+ * it. Rather than invent a slicer, this takes the settings the brief states
+ * where it states them and returns a band wide enough to be honest.
+ *
+ * `settings` is the brief's own orientation string, e.g. "Flange down. 2 walls,
+ * 20% gyroid." Returns null for infill when the brief does not say.
+ */
+function filament(volumeCm3, material, settings) {
+  const density = DENSITY[material] || 1.24;
+  const solidG = volumeCm3 * density;
+
+  const infill = (() => {
+    const m = /(\d+)\s*%/.exec(String(settings || ''));
+    return m ? Number(m[1]) / 100 : null;
+  })();
+  const walls = (() => {
+    const m = /(\d+)\s*walls?/.exec(String(settings || ''));
+    return m ? Number(m[1]) : null;
+  })();
+
+  // Fraction of the solid figure that actually gets extruded. The low end is
+  // roughly the stated infill plus a wall allowance; the high end allows for
+  // parts whose walls swallow most of the section. A part printed solid is
+  // exactly itself.
+  let lo, hi;
+  if (infill !== null && infill >= 1) { lo = 1; hi = 1; }
+  else if (infill !== null) {
+    const wallAllowance = Math.min(0.45, 0.10 + 0.05 * (walls || 3));
+    lo = Math.min(1, infill + wallAllowance * 0.6);
+    hi = Math.min(1, infill + wallAllowance * 1.6);
+  } else {
+    lo = 0.35; hi = 0.65;              // documented default: no settings stated
+  }
+  return {
+    solid_g: +solidG.toFixed(1),
+    g_low: +(solidG * lo).toFixed(1),
+    g_high: +(solidG * hi).toFixed(1),
+    infill, walls,
+    assumed: infill === null,
+  };
+}
+
+module.exports = { check, triangles, volumeCm3, filament, DENSITY, BED };

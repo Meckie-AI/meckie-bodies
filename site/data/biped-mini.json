@@ -110,7 +110,785 @@
       "auto": false
     }
   ],
-  "parts": [],
+  "parts": [
+    {
+      "key": "ankle_bracket_L",
+      "name": "Ankle bracket (ankle-pitch sleeve + roll horn) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Top face down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-ankle_bracket_L-x1.stl",
+      "bytes": 66184,
+      "size": "65 KB",
+      "triangles": 1322,
+      "volume_cm3": 27.33,
+      "filament": {
+        "solid_g": 31.4,
+        "g_low": 26.4,
+        "g_high": 31.4,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "ankle_bracket_R",
+      "name": "Ankle bracket (ankle-pitch sleeve + roll horn) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Top face down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-ankle_bracket_R-x1.stl",
+      "bytes": 66184,
+      "size": "65 KB",
+      "triangles": 1322,
+      "volume_cm3": 27.33,
+      "filament": {
+        "solid_g": 31.4,
+        "g_low": 26.4,
+        "g_high": 31.4,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "ankle_cap",
+      "name": "Ankle sleeve cap (rear)",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-ankle_cap-x2.stl",
+      "bytes": 27084,
+      "size": "26 KB",
+      "triangles": 540,
+      "volume_cm3": 3.96,
+      "filament": {
+        "solid_g": 4.6,
+        "g_low": 1.6,
+        "g_high": 3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "tray",
+      "name": "Electronics tray (Pi Zero + ESP32 cradle + grid)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-tray-x1.stl",
+      "bytes": 367284,
+      "size": "359 KB",
+      "triangles": 7344,
+      "volume_cm3": 16.98,
+      "filament": {
+        "solid_g": 19.5,
+        "g_low": 6.8,
+        "g_high": 12.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "hip_bracket_L",
+      "name": "Hip bracket (roll horn + hip-pitch sleeve) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Cheek discs down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-hip_bracket_L-x1.stl",
+      "bytes": 98484,
+      "size": "96 KB",
+      "triangles": 1968,
+      "volume_cm3": 36.43,
+      "filament": {
+        "solid_g": 41.9,
+        "g_low": 35.2,
+        "g_high": 41.9,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "hip_bracket_R",
+      "name": "Hip bracket (roll horn + hip-pitch sleeve) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Cheek discs down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-hip_bracket_R-x1.stl",
+      "bytes": 98484,
+      "size": "96 KB",
+      "triangles": 1968,
+      "volume_cm3": 36.43,
+      "filament": {
+        "solid_g": 41.9,
+        "g_low": 35.2,
+        "g_high": 41.9,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "hip_cap",
+      "name": "Hip-pitch sleeve cap",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-hip_cap-x2.stl",
+      "bytes": 75884,
+      "size": "74 KB",
+      "triangles": 1516,
+      "volume_cm3": 4.55,
+      "filament": {
+        "solid_g": 5.2,
+        "g_low": 1.8,
+        "g_high": 3.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "roll_cap",
+      "name": "Hip-roll sleeve cap (horn side)",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-roll_cap-x2.stl",
+      "bytes": 17284,
+      "size": "17 KB",
+      "triangles": 344,
+      "volume_cm3": 0.62,
+      "filament": {
+        "solid_g": 0.7,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "thigh_cap",
+      "name": "Knee sleeve cap",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-thigh_cap-x2.stl",
+      "bytes": 75484,
+      "size": "74 KB",
+      "triangles": 1508,
+      "volume_cm3": 4.55,
+      "filament": {
+        "solid_g": 5.2,
+        "g_low": 1.8,
+        "g_high": 3.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "pelvis",
+      "name": "Pelvis frame (both hip-roll sleeves)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Plate face down (flip from as-modelled).",
+      "file": "biped-mini-pelvis-x1.stl",
+      "bytes": 150684,
+      "size": "147 KB",
+      "triangles": 3012,
+      "volume_cm3": 32.05,
+      "filament": {
+        "solid_g": 36.9,
+        "g_low": 12.9,
+        "g_high": 24,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "shin_inner_L",
+      "name": "Shin inner plate (idler side, bearing spacer bosses) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Outer face down; bosses up. Print one mirrored.",
+      "file": "biped-mini-shin_inner_L-x1.stl",
+      "bytes": 45484,
+      "size": "44 KB",
+      "triangles": 908,
+      "volume_cm3": 10.92,
+      "filament": {
+        "solid_g": 12.6,
+        "g_low": 4.4,
+        "g_high": 8.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "shin_inner_R",
+      "name": "Shin inner plate (idler side, bearing spacer bosses) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Outer face down; bosses up. Print one mirrored.",
+      "file": "biped-mini-shin_inner_R-x1.stl",
+      "bytes": 45484,
+      "size": "44 KB",
+      "triangles": 908,
+      "volume_cm3": 10.92,
+      "filament": {
+        "solid_g": 12.6,
+        "g_low": 4.4,
+        "g_high": 8.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "shin_outer_L",
+      "name": "Shin outer plate (knee + ankle horn bosses) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Outer face down; bosses up. Print one mirrored.",
+      "file": "biped-mini-shin_outer_L-x1.stl",
+      "bytes": 100684,
+      "size": "98 KB",
+      "triangles": 2012,
+      "volume_cm3": 8.74,
+      "filament": {
+        "solid_g": 10.1,
+        "g_low": 3.5,
+        "g_high": 6.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "shin_outer_R",
+      "name": "Shin outer plate (knee + ankle horn bosses) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Outer face down; bosses up. Print one mirrored.",
+      "file": "biped-mini-shin_outer_R-x1.stl",
+      "bytes": 100684,
+      "size": "98 KB",
+      "triangles": 2012,
+      "volume_cm3": 8.74,
+      "filament": {
+        "solid_g": 10.1,
+        "g_low": 3.5,
+        "g_high": 6.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "shin_tie",
+      "name": "Shin tie bar",
+      "qty": 2,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "On its side.",
+      "file": "biped-mini-shin_tie-x2.stl",
+      "bytes": 7084,
+      "size": "7 KB",
+      "triangles": 140,
+      "volume_cm3": 1.65,
+      "filament": {
+        "solid_g": 1.9,
+        "g_low": 0.7,
+        "g_high": 1.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "tail_skid",
+      "name": "Tail skid (sit rest + rear drop ToF)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "On its side.",
+      "file": "biped-mini-tail_skid-x1.stl",
+      "bytes": 78984,
+      "size": "77 KB",
+      "triangles": 1578,
+      "volume_cm3": 35.95,
+      "filament": {
+        "solid_g": 41.3,
+        "g_low": 14.5,
+        "g_high": 26.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "thigh_L",
+      "name": "Thigh (knee sleeve + cheeks) (left)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Cheek discs down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-thigh_L-x1.stl",
+      "bytes": 97084,
+      "size": "95 KB",
+      "triangles": 1940,
+      "volume_cm3": 48.51,
+      "filament": {
+        "solid_g": 55.8,
+        "g_low": 46.9,
+        "g_high": 55.8,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "thigh_R",
+      "name": "Thigh (knee sleeve + cheeks) (right)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Cheek discs down (as exported). 6 walls, 60%. Print one mirrored.",
+      "file": "biped-mini-thigh_R-x1.stl",
+      "bytes": 97084,
+      "size": "95 KB",
+      "triangles": 1940,
+      "volume_cm3": 48.51,
+      "filament": {
+        "solid_g": 55.8,
+        "g_low": 46.9,
+        "g_high": 55.8,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
+    },
+    {
+      "key": "torso_ring",
+      "name": "Torso joining ring (screws both halves)",
+      "qty": 1,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Flat.",
+      "file": "biped-mini-torso_ring-x1.stl",
+      "bytes": 24084,
+      "size": "24 KB",
+      "triangles": 480,
+      "volume_cm3": 5.94,
+      "filament": {
+        "solid_g": 6.8,
+        "g_low": 2.4,
+        "g_high": 4.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "tray_posts",
+      "name": "Tray posts (screw to the torso ring)",
+      "qty": 4,
+      "material": "CF-nylon",
+      "material_full": "CF-nylon",
+      "orientation": "Upright.",
+      "file": "biped-mini-tray_posts-x4.stl",
+      "bytes": 25484,
+      "size": "25 KB",
+      "triangles": 508,
+      "volume_cm3": 1.39,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "foot_strap",
+      "name": "Ankle-roll servo strap",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Upside down (top face on the bed).",
+      "file": "biped-mini-foot_strap-x2.stl",
+      "bytes": 75684,
+      "size": "74 KB",
+      "triangles": 1512,
+      "volume_cm3": 1.49,
+      "filament": {
+        "solid_g": 1.9,
+        "g_low": 0.7,
+        "g_high": 1.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "battery_cradle",
+      "name": "Battery cradle (3S, on the pelvis)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Base down.",
+      "file": "biped-mini-battery_cradle-x1.stl",
+      "bytes": 81484,
+      "size": "80 KB",
+      "triangles": 1628,
+      "volume_cm3": 11.28,
+      "filament": {
+        "solid_g": 14.3,
+        "g_low": 5,
+        "g_high": 9.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "display_retainer",
+      "name": "Display retainer ring (snap)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flange down.",
+      "file": "biped-mini-display_retainer-x1.stl",
+      "bytes": 44984,
+      "size": "44 KB",
+      "triangles": 898,
+      "volume_cm3": 1.29,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "foot_L",
+      "name": "Foot plate + ankle-roll sleeve (left)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Plate down. Print one mirrored.",
+      "file": "biped-mini-foot_L-x1.stl",
+      "bytes": 172684,
+      "size": "169 KB",
+      "triangles": 3452,
+      "volume_cm3": 26.29,
+      "filament": {
+        "solid_g": 33.4,
+        "g_low": 11.7,
+        "g_high": 21.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "foot_R",
+      "name": "Foot plate + ankle-roll sleeve (right)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Plate down. Print one mirrored.",
+      "file": "biped-mini-foot_R-x1.stl",
+      "bytes": 172684,
+      "size": "169 KB",
+      "triangles": 3452,
+      "volume_cm3": 26.29,
+      "filament": {
+        "solid_g": 33.4,
+        "g_low": 11.7,
+        "g_high": 21.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "head_brim",
+      "name": "Head brim + visor band",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Flat.",
+      "file": "biped-mini-head_brim-x1.stl",
+      "bytes": 87984,
+      "size": "86 KB",
+      "triangles": 1758,
+      "volume_cm3": 6.38,
+      "filament": {
+        "solid_g": 8.1,
+        "g_low": 2.8,
+        "g_high": 5.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "head",
+      "name": "Head helmet (camera)",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim down.",
+      "file": "biped-mini-head-x1.stl",
+      "bytes": 189584,
+      "size": "185 KB",
+      "triangles": 3790,
+      "volume_cm3": 9.16,
+      "filament": {
+        "solid_g": 11.6,
+        "g_low": 4.1,
+        "g_high": 7.6,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "torso_lower",
+      "name": "Lower torso",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "Rim down (flip). No supports.",
+      "file": "biped-mini-torso_lower-x1.stl",
+      "bytes": 270484,
+      "size": "264 KB",
+      "triangles": 5408,
+      "volume_cm3": 20.21,
+      "filament": {
+        "solid_g": 25.7,
+        "g_low": 9,
+        "g_high": 16.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "porthole",
+      "name": "Porthole bezel with rivets",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG, chrome paint",
+      "orientation": "Face down.",
+      "file": "biped-mini-porthole-x1.stl",
+      "bytes": 110684,
+      "size": "108 KB",
+      "triangles": 2212,
+      "volume_cm3": 4.7,
+      "filament": {
+        "solid_g": 6,
+        "g_low": 2.1,
+        "g_high": 3.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "sensor_clamp",
+      "name": "Sensor / mic clamp plate",
+      "qty": 5,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "biped-mini-sensor_clamp-x5.stl",
+      "bytes": 82684,
+      "size": "81 KB",
+      "triangles": 1652,
+      "volume_cm3": 0.29,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "speaker_ring",
+      "name": "Speaker ring",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG",
+      "orientation": "Flat.",
+      "file": "biped-mini-speaker_ring-x1.stl",
+      "bytes": 117484,
+      "size": "115 KB",
+      "triangles": 2348,
+      "volume_cm3": 0.61,
+      "filament": {
+        "solid_g": 0.8,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "arm",
+      "name": "Stub arm (snap peg, swings by hand)",
+      "qty": 2,
+      "material": "PETG",
+      "material_full": "PETG sea foam",
+      "orientation": "On its side.",
+      "file": "biped-mini-arm-x2.stl",
+      "bytes": 28584,
+      "size": "28 KB",
+      "triangles": 570,
+      "volume_cm3": 7.08,
+      "filament": {
+        "solid_g": 9,
+        "g_low": 3.1,
+        "g_high": 5.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "torso_upper",
+      "name": "Upper torso + face collar",
+      "qty": 1,
+      "material": "PETG",
+      "material_full": "PETG cream",
+      "orientation": "Rim down. No supports.",
+      "file": "biped-mini-torso_upper-x1.stl",
+      "bytes": 306084,
+      "size": "299 KB",
+      "triangles": 6120,
+      "volume_cm3": 40.6,
+      "filament": {
+        "solid_g": 51.6,
+        "g_low": 18,
+        "g_high": 33.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "belt",
+      "name": "Belt bumper",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat.",
+      "file": "biped-mini-belt-x1.stl",
+      "bytes": 22484,
+      "size": "22 KB",
+      "triangles": 448,
+      "volume_cm3": 8.42,
+      "filament": {
+        "solid_g": 10.2,
+        "g_low": 3.6,
+        "g_high": 6.6,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "mitt",
+      "name": "Mitt",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Opening down.",
+      "file": "biped-mini-mitt-x2.stl",
+      "bytes": 87984,
+      "size": "86 KB",
+      "triangles": 1758,
+      "volume_cm3": 1.13,
+      "filament": {
+        "solid_g": 1.4,
+        "g_low": 0.5,
+        "g_high": 0.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "skid_shoe",
+      "name": "Skid shoe",
+      "qty": 1,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Open side down.",
+      "file": "biped-mini-skid_shoe-x1.stl",
+      "bytes": 96484,
+      "size": "94 KB",
+      "triangles": 1928,
+      "volume_cm3": 1.09,
+      "filament": {
+        "solid_g": 1.3,
+        "g_low": 0.5,
+        "g_high": 0.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
+    },
+    {
+      "key": "sole",
+      "name": "Sole",
+      "qty": 2,
+      "material": "TPU 95A",
+      "material_full": "TPU 95A red",
+      "orientation": "Flat. 3 walls, 20% gyroid.",
+      "file": "biped-mini-sole-x2.stl",
+      "bytes": 175884,
+      "size": "172 KB",
+      "triangles": 3516,
+      "volume_cm3": 22.94,
+      "filament": {
+        "solid_g": 27.8,
+        "g_low": 9.7,
+        "g_high": 16.7,
+        "infill": 0.2,
+        "walls": 3,
+        "assumed": false
+      }
+    }
+  ],
   "buy": [
     {
       "part": "STS3215 / ST3215 serial bus servo, 12 V 30 kg",
@@ -503,8 +1281,57 @@
       "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
     }
   ],
-  "materials": [],
-  "total_prints": 0,
+  "materials": [
+    "CF-nylon",
+    "PETG",
+    "TPU 95A"
+  ],
+  "total_prints": 53,
+  "filament": {
+    "by_material": {
+      "CF-nylon": {
+        "volume_cm3": 391,
+        "solid_g": 449.7,
+        "g_low": 284.2,
+        "g_high": 382.6,
+        "assumed": 22,
+        "parts": 28
+      },
+      "PETG": {
+        "volume_cm3": 165.4,
+        "solid_g": 210.3,
+        "g_low": 73.4,
+        "g_high": 136.3,
+        "assumed": 19,
+        "parts": 19
+      },
+      "TPU 95A": {
+        "volume_cm3": 57.7,
+        "solid_g": 69.9,
+        "g_low": 24.5,
+        "g_high": 42.7,
+        "assumed": 4,
+        "parts": 6
+      }
+    },
+    "total": {
+      "volume_cm3": 614,
+      "solid_g": 729.9,
+      "g_low": 382.1,
+      "g_high": 561.6,
+      "assumed": 45,
+      "parts": 53
+    }
+  },
+  "service_estimate": {
+    "usd_low": 196,
+    "usd_high": 590,
+    "setup_usd": 25,
+    "currency": "USD",
+    "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+    "calibrated": false,
+    "unpriced_materials": []
+  },
   "esp32_only": false,
   "servo_type": "serial bus"
 }

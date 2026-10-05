@@ -116,7 +116,16 @@
       "file": "lamp-rail_tie-x2.stl",
       "bytes": 37684,
       "size": "37 KB",
-      "triangles": 752
+      "triangles": 752,
+      "volume_cm3": 5.47,
+      "filament": {
+        "solid_g": 6.3,
+        "g_low": 2.2,
+        "g_high": 4.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "base_floor",
@@ -128,7 +137,16 @@
       "file": "lamp-base_floor-x1.stl",
       "bytes": 323784,
       "size": "316 KB",
-      "triangles": 6474
+      "triangles": 6474,
+      "volume_cm3": 72.56,
+      "filament": {
+        "solid_g": 83.4,
+        "g_low": 29.2,
+        "g_high": 54.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "clamp_ring",
@@ -140,7 +158,16 @@
       "file": "lamp-clamp_ring-x1.stl",
       "bytes": 151084,
       "size": "148 KB",
-      "triangles": 3020
+      "triangles": 3020,
+      "volume_cm3": 7.28,
+      "filament": {
+        "solid_g": 8.4,
+        "g_low": 2.9,
+        "g_high": 5.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "elbow_crank",
@@ -152,7 +179,16 @@
       "file": "lamp-elbow_crank-x1.stl",
       "bytes": 45684,
       "size": "45 KB",
-      "triangles": 912
+      "triangles": 912,
+      "volume_cm3": 1.42,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "drive_crank",
@@ -164,7 +200,16 @@
       "file": "lamp-drive_crank-x1.stl",
       "bytes": 119884,
       "size": "117 KB",
-      "triangles": 2396
+      "triangles": 2396,
+      "volume_cm3": 2.03,
+      "filament": {
+        "solid_g": 2.3,
+        "g_low": 2.3,
+        "g_high": 2.3,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "tray",
@@ -176,7 +221,16 @@
       "file": "lamp-tray-x1.stl",
       "bytes": 710084,
       "size": "693 KB",
-      "triangles": 14200
+      "triangles": 14200,
+      "volume_cm3": 63.01,
+      "filament": {
+        "solid_g": 72.5,
+        "g_low": 25.4,
+        "g_high": 47.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "lower_rail_L",
@@ -188,7 +242,16 @@
       "file": "lamp-lower_rail_L-x1.stl",
       "bytes": 79084,
       "size": "77 KB",
-      "triangles": 1580
+      "triangles": 1580,
+      "volume_cm3": 8.62,
+      "filament": {
+        "solid_g": 9.9,
+        "g_low": 8.3,
+        "g_high": 9.9,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "lower_rail_R",
@@ -200,7 +263,16 @@
       "file": "lamp-lower_rail_R-x1.stl",
       "bytes": 91284,
       "size": "89 KB",
-      "triangles": 1824
+      "triangles": 1824,
+      "volume_cm3": 8.58,
+      "filament": {
+        "solid_g": 9.9,
+        "g_low": 8.3,
+        "g_high": 9.9,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "turret",
@@ -212,7 +284,16 @@
       "file": "lamp-turret-x1.stl",
       "bytes": 181484,
       "size": "177 KB",
-      "triangles": 3628
+      "triangles": 3628,
+      "volume_cm3": 39.31,
+      "filament": {
+        "solid_g": 45.2,
+        "g_low": 38,
+        "g_high": 45.2,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "upper_rail_L",
@@ -224,7 +305,16 @@
       "file": "lamp-upper_rail_L-x1.stl",
       "bytes": 78884,
       "size": "77 KB",
-      "triangles": 1576
+      "triangles": 1576,
+      "volume_cm3": 9.25,
+      "filament": {
+        "solid_g": 10.6,
+        "g_low": 8.9,
+        "g_high": 10.6,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "upper_rail_R",
@@ -236,7 +326,16 @@
       "file": "lamp-upper_rail_R-x1.stl",
       "bytes": 91284,
       "size": "89 KB",
-      "triangles": 1824
+      "triangles": 1824,
+      "volume_cm3": 8.94,
+      "filament": {
+        "solid_g": 10.3,
+        "g_low": 8.6,
+        "g_high": 10.3,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "base_shell",
@@ -248,7 +347,16 @@
       "file": "lamp-base_shell-x1.stl",
       "bytes": 488884,
       "size": "477 KB",
-      "triangles": 9776
+      "triangles": 9776,
+      "volume_cm3": 119.12,
+      "filament": {
+        "solid_g": 151.3,
+        "g_low": 52.9,
+        "g_high": 98.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "display_retainer",
@@ -260,7 +368,16 @@
       "file": "lamp-display_retainer-x1.stl",
       "bytes": 44984,
       "size": "44 KB",
-      "triangles": 898
+      "triangles": 898,
+      "volume_cm3": 1.29,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "face_bezel",
@@ -272,7 +389,16 @@
       "file": "lamp-face_bezel-x1.stl",
       "bytes": 38484,
       "size": "38 KB",
-      "triangles": 768
+      "triangles": 768,
+      "volume_cm3": 2.15,
+      "filament": {
+        "solid_g": 2.7,
+        "g_low": 1,
+        "g_high": 1.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "finial",
@@ -284,7 +410,16 @@
       "file": "lamp-finial-x1.stl",
       "bytes": 40184,
       "size": "39 KB",
-      "triangles": 802
+      "triangles": 802,
+      "volume_cm3": 0.37,
+      "filament": {
+        "solid_g": 0.5,
+        "g_low": 0.2,
+        "g_high": 0.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "knuckle_half",
@@ -296,7 +431,16 @@
       "file": "lamp-knuckle_half-x2.stl",
       "bytes": 180284,
       "size": "176 KB",
-      "triangles": 3604
+      "triangles": 3604,
+      "volume_cm3": 40.89,
+      "filament": {
+        "solid_g": 51.9,
+        "g_low": 18.2,
+        "g_high": 33.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "hood",
@@ -308,7 +452,16 @@
       "file": "lamp-hood-x1.stl",
       "bytes": 107984,
       "size": "105 KB",
-      "triangles": 2158
+      "triangles": 2158,
+      "volume_cm3": 51.27,
+      "filament": {
+        "solid_g": 65.1,
+        "g_low": 22.8,
+        "g_high": 42.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "led_diffuser",
@@ -320,7 +473,16 @@
       "file": "lamp-led_diffuser-x1.stl",
       "bytes": 38484,
       "size": "38 KB",
-      "triangles": 768
+      "triangles": 768,
+      "volume_cm3": 1.75,
+      "filament": {
+        "solid_g": 2.2,
+        "g_low": 0.8,
+        "g_high": 1.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "mic_clamp",
@@ -332,7 +494,16 @@
       "file": "lamp-mic_clamp-x2.stl",
       "bytes": 84284,
       "size": "82 KB",
-      "triangles": 1684
+      "triangles": 1684,
+      "volume_cm3": 0.25,
+      "filament": {
+        "solid_g": 0.3,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "pod_cap",
@@ -344,7 +515,16 @@
       "file": "lamp-pod_cap-x2.stl",
       "bytes": 19284,
       "size": "19 KB",
-      "triangles": 384
+      "triangles": 384,
+      "volume_cm3": 0.58,
+      "filament": {
+        "solid_g": 0.7,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "liner",
@@ -356,7 +536,16 @@
       "file": "lamp-liner-x1.stl",
       "bytes": 76884,
       "size": "75 KB",
-      "triangles": 1536
+      "triangles": 1536,
+      "volume_cm3": 14.49,
+      "filament": {
+        "solid_g": 18.4,
+        "g_low": 6.4,
+        "g_high": 12,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "pod_left",
@@ -368,7 +557,16 @@
       "file": "lamp-pod_left-x1.stl",
       "bytes": 203084,
       "size": "198 KB",
-      "triangles": 4060
+      "triangles": 4060,
+      "volume_cm3": 56.33,
+      "filament": {
+        "solid_g": 71.5,
+        "g_low": 25,
+        "g_high": 46.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "pod_right",
@@ -380,7 +578,16 @@
       "file": "lamp-pod_right-x1.stl",
       "bytes": 202284,
       "size": "198 KB",
-      "triangles": 4044
+      "triangles": 4044,
+      "volume_cm3": 57.43,
+      "filament": {
+        "solid_g": 72.9,
+        "g_low": 25.5,
+        "g_high": 47.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "speaker_ring",
@@ -392,7 +599,16 @@
       "file": "lamp-speaker_ring-x1.stl",
       "bytes": 117484,
       "size": "115 KB",
-      "triangles": 2348
+      "triangles": 2348,
+      "volume_cm3": 0.61,
+      "filament": {
+        "solid_g": 0.8,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "xiao_cradle",
@@ -404,7 +620,16 @@
       "file": "lamp-xiao_cradle-x1.stl",
       "bytes": 42184,
       "size": "41 KB",
-      "triangles": 842
+      "triangles": 842,
+      "volume_cm3": 1.59,
+      "filament": {
+        "solid_g": 2,
+        "g_low": 0.7,
+        "g_high": 1.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "tpu_foot",
@@ -416,7 +641,16 @@
       "file": "lamp-tpu_foot-x1.stl",
       "bytes": 144284,
       "size": "141 KB",
-      "triangles": 2884
+      "triangles": 2884,
+      "volume_cm3": 50.91,
+      "filament": {
+        "solid_g": 61.6,
+        "g_low": 21.6,
+        "g_high": 40,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     }
   ],
   "buy": [
@@ -788,6 +1022,51 @@
     "TPU 95A"
   ],
   "total_prints": 30,
+  "filament": {
+    "by_material": {
+      "CF-nylon": {
+        "volume_cm3": 231.9,
+        "solid_g": 266.7,
+        "g_low": 136.9,
+        "g_high": 204.2,
+        "assumed": 6,
+        "parts": 12
+      },
+      "PETG": {
+        "volume_cm3": 389.8,
+        "solid_g": 494.8,
+        "g_low": 173.4,
+        "g_high": 321.9,
+        "assumed": 17,
+        "parts": 17
+      },
+      "TPU 95A": {
+        "volume_cm3": 50.9,
+        "solid_g": 61.6,
+        "g_low": 21.6,
+        "g_high": 40,
+        "assumed": 1,
+        "parts": 1
+      }
+    },
+    "total": {
+      "volume_cm3": 672.7,
+      "solid_g": 823.1,
+      "g_low": 331.9,
+      "g_high": 566.1,
+      "assumed": 24,
+      "parts": 30
+    }
+  },
+  "service_estimate": {
+    "usd_low": 160,
+    "usd_high": 521,
+    "setup_usd": 25,
+    "currency": "USD",
+    "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+    "calibrated": false,
+    "unpriced_materials": []
+  },
   "esp32_only": false,
   "servo_type": "serial bus"
 }

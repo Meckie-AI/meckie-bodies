@@ -113,7 +113,16 @@
       "file": "wobble-leg-x2.stl",
       "bytes": 25484,
       "size": "25 KB",
-      "triangles": 508
+      "triangles": 508,
+      "volume_cm3": 4.72,
+      "filament": {
+        "solid_g": 5.4,
+        "g_low": 1.9,
+        "g_high": 3.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "motor_strap",
@@ -125,7 +134,16 @@
       "file": "wobble-motor_strap-x2.stl",
       "bytes": 41084,
       "size": "40 KB",
-      "triangles": 820
+      "triangles": 820,
+      "volume_cm3": 0.58,
+      "filament": {
+        "solid_g": 0.7,
+        "g_low": 0.2,
+        "g_high": 0.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "board_plate",
@@ -137,7 +155,16 @@
       "file": "wobble-board_plate-x2.stl",
       "bytes": 165884,
       "size": "162 KB",
-      "triangles": 3316
+      "triangles": 3316,
+      "volume_cm3": 2.86,
+      "filament": {
+        "solid_g": 3.3,
+        "g_low": 1.2,
+        "g_high": 2.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "spine",
@@ -149,7 +176,16 @@
       "file": "wobble-spine-x1.stl",
       "bytes": 1096284,
       "size": "1.0 MB",
-      "triangles": 21924
+      "triangles": 21924,
+      "volume_cm3": 63.77,
+      "filament": {
+        "solid_g": 73.3,
+        "g_low": 42.5,
+        "g_high": 64.5,
+        "infill": 0.4,
+        "walls": 4,
+        "assumed": false
+      }
     },
     {
       "key": "battery_cradle",
@@ -161,7 +197,16 @@
       "file": "wobble-battery_cradle-x1.stl",
       "bytes": 81884,
       "size": "80 KB",
-      "triangles": 1636
+      "triangles": 1636,
+      "volume_cm3": 6.92,
+      "filament": {
+        "solid_g": 8.8,
+        "g_low": 3.1,
+        "g_high": 5.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "battery_door",
@@ -173,7 +218,16 @@
       "file": "wobble-battery_door-x1.stl",
       "bytes": 47884,
       "size": "47 KB",
-      "triangles": 956
+      "triangles": 956,
+      "volume_cm3": 4.6,
+      "filament": {
+        "solid_g": 5.8,
+        "g_low": 2,
+        "g_high": 3.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "belly",
@@ -185,7 +239,16 @@
       "file": "wobble-belly-x1.stl",
       "bytes": 496384,
       "size": "485 KB",
-      "triangles": 9926
+      "triangles": 9926,
+      "volume_cm3": 80.88,
+      "filament": {
+        "solid_g": 102.7,
+        "g_low": 35.9,
+        "g_high": 66.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "camera_hood",
@@ -197,7 +260,16 @@
       "file": "wobble-camera_hood-x1.stl",
       "bytes": 228584,
       "size": "223 KB",
-      "triangles": 4570
+      "triangles": 4570,
+      "volume_cm3": 0.23,
+      "filament": {
+        "solid_g": 0.3,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "band",
@@ -209,7 +281,16 @@
       "file": "wobble-band-x2.stl",
       "bytes": 91884,
       "size": "90 KB",
-      "triangles": 1836
+      "triangles": 1836,
+      "volume_cm3": 0.67,
+      "filament": {
+        "solid_g": 0.8,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "display_retainer",
@@ -221,7 +302,16 @@
       "file": "wobble-display_retainer-x1.stl",
       "bytes": 44984,
       "size": "44 KB",
-      "triangles": 898
+      "triangles": 898,
+      "volume_cm3": 1.29,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "esp_cradle",
@@ -233,7 +323,16 @@
       "file": "wobble-esp_cradle-x1.stl",
       "bytes": 43684,
       "size": "43 KB",
-      "triangles": 872
+      "triangles": 872,
+      "volume_cm3": 6.43,
+      "filament": {
+        "solid_g": 8.2,
+        "g_low": 2.9,
+        "g_high": 5.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "face_bezel",
@@ -245,7 +344,16 @@
       "file": "wobble-face_bezel-x1.stl",
       "bytes": 73284,
       "size": "72 KB",
-      "triangles": 1464
+      "triangles": 1464,
+      "volume_cm3": 3.94,
+      "filament": {
+        "solid_g": 5,
+        "g_low": 1.8,
+        "g_high": 3.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "hubcap",
@@ -257,7 +365,16 @@
       "file": "wobble-hubcap-x2.stl",
       "bytes": 180584,
       "size": "176 KB",
-      "triangles": 3610
+      "triangles": 3610,
+      "volume_cm3": 2.28,
+      "filament": {
+        "solid_g": 2.9,
+        "g_low": 1,
+        "g_high": 1.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "imu_clamp",
@@ -269,7 +386,16 @@
       "file": "wobble-imu_clamp-x1.stl",
       "bytes": 84484,
       "size": "83 KB",
-      "triangles": 1688
+      "triangles": 1688,
+      "volume_cm3": 0.34,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.2,
+        "g_high": 0.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "servo_bracket",
@@ -281,7 +407,16 @@
       "file": "wobble-servo_bracket-x1.stl",
       "bytes": 30584,
       "size": "30 KB",
-      "triangles": 610
+      "triangles": 610,
+      "volume_cm3": 2.14,
+      "filament": {
+        "solid_g": 2.7,
+        "g_low": 1,
+        "g_high": 1.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "sensor_clamp",
@@ -293,7 +428,16 @@
       "file": "wobble-sensor_clamp-x5.stl",
       "bytes": 82684,
       "size": "81 KB",
-      "triangles": 1652
+      "triangles": 1652,
+      "volume_cm3": 0.29,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "speaker_ring",
@@ -305,7 +449,16 @@
       "file": "wobble-speaker_ring-x1.stl",
       "bytes": 117484,
       "size": "115 KB",
-      "triangles": 2348
+      "triangles": 2348,
+      "volume_cm3": 0.61,
+      "filament": {
+        "solid_g": 0.8,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "upper",
@@ -317,7 +470,16 @@
       "file": "wobble-upper-x1.stl",
       "bytes": 576784,
       "size": "563 KB",
-      "triangles": 11534
+      "triangles": 11534,
+      "volume_cm3": 119.75,
+      "filament": {
+        "solid_g": 152.1,
+        "g_low": 53.2,
+        "g_high": 98.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "wheel_hub",
@@ -329,7 +491,16 @@
       "file": "wobble-wheel_hub-x2.stl",
       "bytes": 116884,
       "size": "114 KB",
-      "triangles": 2336
+      "triangles": 2336,
+      "volume_cm3": 12.31,
+      "filament": {
+        "solid_g": 15.6,
+        "g_low": 5.5,
+        "g_high": 10.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "xiao_cradle",
@@ -341,7 +512,16 @@
       "file": "wobble-xiao_cradle-x1.stl",
       "bytes": 47684,
       "size": "47 KB",
-      "triangles": 952
+      "triangles": 952,
+      "volume_cm3": 1.59,
+      "filament": {
+        "solid_g": 2,
+        "g_low": 0.7,
+        "g_high": 1.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "antenna_ball",
@@ -353,7 +533,16 @@
       "file": "wobble-antenna_ball-x2.stl",
       "bytes": 47684,
       "size": "47 KB",
-      "triangles": 952
+      "triangles": 952,
+      "volume_cm3": 0.58,
+      "filament": {
+        "solid_g": 0.7,
+        "g_low": 0.2,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "corner_bumper",
@@ -365,7 +554,16 @@
       "file": "wobble-corner_bumper-x2.stl",
       "bytes": 93584,
       "size": "91 KB",
-      "triangles": 1870
+      "triangles": 1870,
+      "volume_cm3": 12.84,
+      "filament": {
+        "solid_g": 15.5,
+        "g_low": 5.4,
+        "g_high": 10.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "leg_foot",
@@ -377,7 +575,16 @@
       "file": "wobble-leg_foot-x2.stl",
       "bytes": 83184,
       "size": "81 KB",
-      "triangles": 1662
+      "triangles": 1662,
+      "volume_cm3": 0.48,
+      "filament": {
+        "solid_g": 0.6,
+        "g_low": 0.2,
+        "g_high": 0.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "tyre",
@@ -389,7 +596,16 @@
       "file": "wobble-tyre-x2.stl",
       "bytes": 128084,
       "size": "125 KB",
-      "triangles": 2560
+      "triangles": 2560,
+      "volume_cm3": 22.71,
+      "filament": {
+        "solid_g": 27.5,
+        "g_low": 12.4,
+        "g_high": 19.2,
+        "infill": 0.3,
+        "walls": 3,
+        "assumed": false
+      }
     }
   ],
   "buy": [
@@ -726,6 +942,51 @@
     "TPU 95A"
   ],
   "total_prints": 38,
+  "filament": {
+    "by_material": {
+      "CF-nylon": {
+        "volume_cm3": 80.1,
+        "solid_g": 92.1,
+        "g_low": 49.1,
+        "g_high": 76.5,
+        "assumed": 6,
+        "parts": 7
+      },
+      "PETG": {
+        "volume_cm3": 260.7,
+        "solid_g": 331,
+        "g_low": 115.9,
+        "g_high": 215.2,
+        "assumed": 23,
+        "parts": 23
+      },
+      "TPU 95A": {
+        "volume_cm3": 73.2,
+        "solid_g": 88.6,
+        "g_low": 36.4,
+        "g_high": 60.4,
+        "assumed": 6,
+        "parts": 8
+      }
+    },
+    "total": {
+      "volume_cm3": 414,
+      "solid_g": 511.7,
+      "g_low": 201.4,
+      "g_high": 352.1,
+      "assumed": 35,
+      "parts": 38
+    }
+  },
+  "service_estimate": {
+    "usd_low": 101,
+    "usd_high": 309,
+    "setup_usd": 25,
+    "currency": "USD",
+    "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+    "calibrated": false,
+    "unpriced_materials": []
+  },
   "esp32_only": true,
   "servo_type": "PWM / gearmotor"
 }

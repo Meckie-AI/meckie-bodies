@@ -65,8 +65,12 @@
       "drives": true,
       "esp32_only": false,
       "servo_type": "serial bus",
-      "materials": [],
-      "total_prints": 0,
+      "materials": [
+        "CF-nylon",
+        "PETG",
+        "TPU 95A"
+      ],
+      "total_prints": 47,
       "viewer": "bodies/rover-lite/Rover Lite Viewer.html",
       "brief": "bodies/rover-lite/Rover Lite Design Brief.dc.html"
     },
@@ -157,8 +161,12 @@
       "drives": true,
       "esp32_only": false,
       "servo_type": "serial bus",
-      "materials": [],
-      "total_prints": 0,
+      "materials": [
+        "CF-nylon",
+        "PETG",
+        "TPU 95A"
+      ],
+      "total_prints": 53,
       "viewer": "bodies/biped-mini/Biped Mini Viewer.html",
       "brief": "bodies/biped-mini/Biped Mini Design Brief.dc.html"
     }

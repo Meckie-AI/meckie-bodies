@@ -98,7 +98,16 @@
       "file": "scout-deck-x1.stl",
       "bytes": 379784,
       "size": "371 KB",
-      "triangles": 7594
+      "triangles": 7594,
+      "volume_cm3": 13.56,
+      "filament": {
+        "solid_g": 15.6,
+        "g_low": 5.5,
+        "g_high": 10.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "motor_strap",
@@ -110,7 +119,16 @@
       "file": "scout-motor_strap-x2.stl",
       "bytes": 40484,
       "size": "40 KB",
-      "triangles": 808
+      "triangles": 808,
+      "volume_cm3": 1.13,
+      "filament": {
+        "solid_g": 1.3,
+        "g_low": 0.5,
+        "g_high": 0.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "camera_hood",
@@ -122,7 +140,16 @@
       "file": "scout-camera_hood-x1.stl",
       "bytes": 228584,
       "size": "223 KB",
-      "triangles": 4570
+      "triangles": 4570,
+      "volume_cm3": 0.23,
+      "filament": {
+        "solid_g": 0.3,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "caster_cap",
@@ -134,7 +161,16 @@
       "file": "scout-caster_cap-x1.stl",
       "bytes": 74684,
       "size": "73 KB",
-      "triangles": 1492
+      "triangles": 1492,
+      "volume_cm3": 0.96,
+      "filament": {
+        "solid_g": 1.2,
+        "g_low": 0.4,
+        "g_high": 0.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "display_retainer",
@@ -146,7 +182,16 @@
       "file": "scout-display_retainer-x1.stl",
       "bytes": 44984,
       "size": "44 KB",
-      "triangles": 898
+      "triangles": 898,
+      "volume_cm3": 1.29,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "face_bezel",
@@ -158,7 +203,16 @@
       "file": "scout-face_bezel-x1.stl",
       "bytes": 73284,
       "size": "72 KB",
-      "triangles": 1464
+      "triangles": 1464,
+      "volume_cm3": 3.94,
+      "filament": {
+        "solid_g": 5,
+        "g_low": 1.8,
+        "g_high": 3.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "hubcap",
@@ -170,7 +224,16 @@
       "file": "scout-hubcap-x2.stl",
       "bytes": 129284,
       "size": "126 KB",
-      "triangles": 2584
+      "triangles": 2584,
+      "volume_cm3": 1.33,
+      "filament": {
+        "solid_g": 1.7,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "lower_shell",
@@ -182,7 +245,16 @@
       "file": "scout-lower_shell-x1.stl",
       "bytes": 454784,
       "size": "444 KB",
-      "triangles": 9094
+      "triangles": 9094,
+      "volume_cm3": 46.02,
+      "filament": {
+        "solid_g": 58.4,
+        "g_low": 20.5,
+        "g_high": 38,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "sensor_clamp",
@@ -194,7 +266,16 @@
       "file": "scout-sensor_clamp-x3.stl",
       "bytes": 83084,
       "size": "81 KB",
-      "triangles": 1660
+      "triangles": 1660,
+      "volume_cm3": 0.39,
+      "filament": {
+        "solid_g": 0.5,
+        "g_low": 0.2,
+        "g_high": 0.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "switch_clamp",
@@ -206,7 +287,16 @@
       "file": "scout-switch_clamp-x1.stl",
       "bytes": 84384,
       "size": "82 KB",
-      "triangles": 1686
+      "triangles": 1686,
+      "volume_cm3": 0.3,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "speaker_ring",
@@ -218,7 +308,16 @@
       "file": "scout-speaker_ring-x1.stl",
       "bytes": 114484,
       "size": "112 KB",
-      "triangles": 2288
+      "triangles": 2288,
+      "volume_cm3": 0.51,
+      "filament": {
+        "solid_g": 0.6,
+        "g_low": 0.2,
+        "g_high": 0.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "upper_shell",
@@ -230,7 +329,16 @@
       "file": "scout-upper_shell-x1.stl",
       "bytes": 627584,
       "size": "613 KB",
-      "triangles": 12550
+      "triangles": 12550,
+      "volume_cm3": 26.86,
+      "filament": {
+        "solid_g": 34.1,
+        "g_low": 11.9,
+        "g_high": 22.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "wheel_hub",
@@ -242,7 +350,16 @@
       "file": "scout-wheel_hub-x2.stl",
       "bytes": 128884,
       "size": "126 KB",
-      "triangles": 2576
+      "triangles": 2576,
+      "volume_cm3": 4.55,
+      "filament": {
+        "solid_g": 5.8,
+        "g_low": 2,
+        "g_high": 3.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "xiao_bracket",
@@ -254,7 +371,16 @@
       "file": "scout-xiao_bracket-x1.stl",
       "bytes": 47684,
       "size": "47 KB",
-      "triangles": 952
+      "triangles": 952,
+      "volume_cm3": 1.59,
+      "filament": {
+        "solid_g": 2,
+        "g_low": 0.7,
+        "g_high": 1.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "bumper_front",
@@ -266,7 +392,16 @@
       "file": "scout-bumper_front-x1.stl",
       "bytes": 771584,
       "size": "754 KB",
-      "triangles": 15430
+      "triangles": 15430,
+      "volume_cm3": 12.09,
+      "filament": {
+        "solid_g": 14.6,
+        "g_low": 4.7,
+        "g_high": 7.6,
+        "infill": 0.2,
+        "walls": 2,
+        "assumed": false
+      }
     },
     {
       "key": "bumper_rear",
@@ -278,7 +413,16 @@
       "file": "scout-bumper_rear-x1.stl",
       "bytes": 770884,
       "size": "753 KB",
-      "triangles": 15416
+      "triangles": 15416,
+      "volume_cm3": 12.09,
+      "filament": {
+        "solid_g": 14.6,
+        "g_low": 4.7,
+        "g_high": 7.6,
+        "infill": 0.2,
+        "walls": 2,
+        "assumed": false
+      }
     },
     {
       "key": "ear",
@@ -290,7 +434,16 @@
       "file": "scout-ear-x2.stl",
       "bytes": 37584,
       "size": "37 KB",
-      "triangles": 750
+      "triangles": 750,
+      "volume_cm3": 1.3,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "tail_ball",
@@ -302,7 +455,16 @@
       "file": "scout-tail_ball-x1.stl",
       "bytes": 57184,
       "size": "56 KB",
-      "triangles": 1142
+      "triangles": 1142,
+      "volume_cm3": 0.37,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.2,
+        "g_high": 0.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "tyre",
@@ -314,7 +476,16 @@
       "file": "scout-tyre-x2.stl",
       "bytes": 97684,
       "size": "95 KB",
-      "triangles": 1952
+      "triangles": 1952,
+      "volume_cm3": 5.16,
+      "filament": {
+        "solid_g": 6.2,
+        "g_low": 2.8,
+        "g_high": 4.4,
+        "infill": 0.3,
+        "walls": 3,
+        "assumed": false
+      }
     }
   ],
   "buy": [
@@ -574,6 +745,51 @@
     "TPU 95A"
   ],
   "total_prints": 26,
+  "filament": {
+    "by_material": {
+      "CF-nylon": {
+        "volume_cm3": 15.8,
+        "solid_g": 18.2,
+        "g_low": 6.5,
+        "g_high": 11.7,
+        "assumed": 3,
+        "parts": 3
+      },
+      "PETG": {
+        "volume_cm3": 94.6,
+        "solid_g": 120.1,
+        "g_low": 42.1,
+        "g_high": 78.2,
+        "assumed": 16,
+        "parts": 16
+      },
+      "TPU 95A": {
+        "volume_cm3": 37.5,
+        "solid_g": 45.2,
+        "g_low": 16.4,
+        "g_high": 26.3,
+        "assumed": 3,
+        "parts": 7
+      }
+    },
+    "total": {
+      "volume_cm3": 147.9,
+      "solid_g": 183.5,
+      "g_low": 65,
+      "g_high": 116.2,
+      "assumed": 22,
+      "parts": 26
+    }
+  },
+  "service_estimate": {
+    "usd_low": 51,
+    "usd_high": 123,
+    "setup_usd": 25,
+    "currency": "USD",
+    "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+    "calibrated": false,
+    "unpriced_materials": []
+  },
   "esp32_only": true,
   "servo_type": "PWM / gearmotor"
 }

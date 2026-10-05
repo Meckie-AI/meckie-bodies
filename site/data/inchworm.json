@@ -126,7 +126,16 @@
       "file": "inchworm-j1_tower-x1.stl",
       "bytes": 357584,
       "size": "349 KB",
-      "triangles": 7150
+      "triangles": 7150,
+      "volume_cm3": 110.34,
+      "filament": {
+        "solid_g": 126.9,
+        "g_low": 77.4,
+        "g_high": 121.8,
+        "infill": 0.4,
+        "walls": 5,
+        "assumed": false
+      }
     },
     {
       "key": "tray",
@@ -138,7 +147,16 @@
       "file": "inchworm-tray-x1.stl",
       "bytes": 549784,
       "size": "537 KB",
-      "triangles": 10994
+      "triangles": 10994,
+      "volume_cm3": 55.39,
+      "filament": {
+        "solid_g": 63.7,
+        "g_low": 22.3,
+        "g_high": 41.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "head_frame",
@@ -150,7 +168,16 @@
       "file": "inchworm-head_frame-x1.stl",
       "bytes": 55884,
       "size": "55 KB",
-      "triangles": 1116
+      "triangles": 1116,
+      "volume_cm3": 19.77,
+      "filament": {
+        "solid_g": 22.7,
+        "g_low": 19.1,
+        "g_high": 22.7,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "j1_cap",
@@ -162,7 +189,16 @@
       "file": "inchworm-j1_cap-x1.stl",
       "bytes": 77484,
       "size": "76 KB",
-      "triangles": 1548
+      "triangles": 1548,
+      "volume_cm3": 4.6,
+      "filament": {
+        "solid_g": 5.3,
+        "g_low": 1.9,
+        "g_high": 3.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link1_frame",
@@ -174,7 +210,16 @@
       "file": "inchworm-link1_frame-x1.stl",
       "bytes": 114684,
       "size": "112 KB",
-      "triangles": 2292
+      "triangles": 2292,
+      "volume_cm3": 30.98,
+      "filament": {
+        "solid_g": 35.6,
+        "g_low": 29.9,
+        "g_high": 35.6,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "link1_cap",
@@ -186,7 +231,16 @@
       "file": "inchworm-link1_cap-x1.stl",
       "bytes": 65084,
       "size": "64 KB",
-      "triangles": 1300
+      "triangles": 1300,
+      "volume_cm3": 2.55,
+      "filament": {
+        "solid_g": 2.9,
+        "g_low": 1,
+        "g_high": 1.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link2_frame",
@@ -198,7 +252,16 @@
       "file": "inchworm-link2_frame-x1.stl",
       "bytes": 111384,
       "size": "109 KB",
-      "triangles": 2226
+      "triangles": 2226,
+      "volume_cm3": 28.8,
+      "filament": {
+        "solid_g": 33.1,
+        "g_low": 27.8,
+        "g_high": 33.1,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "link2_cap",
@@ -210,7 +273,16 @@
       "file": "inchworm-link2_cap-x1.stl",
       "bytes": 65084,
       "size": "64 KB",
-      "triangles": 1300
+      "triangles": 1300,
+      "volume_cm3": 2.08,
+      "filament": {
+        "solid_g": 2.4,
+        "g_low": 0.8,
+        "g_high": 1.6,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link3_frame",
@@ -222,7 +294,16 @@
       "file": "inchworm-link3_frame-x1.stl",
       "bytes": 109284,
       "size": "107 KB",
-      "triangles": 2184
+      "triangles": 2184,
+      "volume_cm3": 25.01,
+      "filament": {
+        "solid_g": 28.8,
+        "g_low": 24.2,
+        "g_high": 28.8,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "link3_cap",
@@ -234,7 +315,16 @@
       "file": "inchworm-link3_cap-x1.stl",
       "bytes": 65084,
       "size": "64 KB",
-      "triangles": 1300
+      "triangles": 1300,
+      "volume_cm3": 1.61,
+      "filament": {
+        "solid_g": 1.9,
+        "g_low": 0.6,
+        "g_high": 1.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link4_frame",
@@ -246,7 +336,16 @@
       "file": "inchworm-link4_frame-x1.stl",
       "bytes": 109284,
       "size": "107 KB",
-      "triangles": 2184
+      "triangles": 2184,
+      "volume_cm3": 25.01,
+      "filament": {
+        "solid_g": 28.8,
+        "g_low": 24.2,
+        "g_high": 28.8,
+        "infill": 0.6,
+        "walls": 6,
+        "assumed": false
+      }
     },
     {
       "key": "link4_cap",
@@ -258,7 +357,16 @@
       "file": "inchworm-link4_cap-x1.stl",
       "bytes": 65084,
       "size": "64 KB",
-      "triangles": 1300
+      "triangles": 1300,
+      "volume_cm3": 1.61,
+      "filament": {
+        "solid_g": 1.9,
+        "g_low": 0.6,
+        "g_high": 1.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "antenna_tip",
@@ -270,7 +378,16 @@
       "file": "inchworm-antenna_tip-x2.stl",
       "bytes": 55184,
       "size": "54 KB",
-      "triangles": 1102
+      "triangles": 1102,
+      "volume_cm3": 0.34,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.4,
+        "g_high": 0.4,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "base_dome",
@@ -282,7 +399,16 @@
       "file": "inchworm-base_dome-x1.stl",
       "bytes": 374784,
       "size": "366 KB",
-      "triangles": 7494
+      "triangles": 7494,
+      "volume_cm3": 93.11,
+      "filament": {
+        "solid_g": 118.3,
+        "g_low": 41.4,
+        "g_high": 76.9,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "glow_ring",
@@ -294,7 +420,16 @@
       "file": "inchworm-glow_ring-x1.stl",
       "bytes": 82484,
       "size": "81 KB",
-      "triangles": 1648
+      "triangles": 1648,
+      "volume_cm3": 9.09,
+      "filament": {
+        "solid_g": 11.5,
+        "g_low": 11.5,
+        "g_high": 11.5,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "camera_hood",
@@ -306,7 +441,16 @@
       "file": "inchworm-camera_hood-x1.stl",
       "bytes": 228584,
       "size": "223 KB",
-      "triangles": 4570
+      "triangles": 4570,
+      "volume_cm3": 0.23,
+      "filament": {
+        "solid_g": 0.3,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "display_retainer",
@@ -318,7 +462,16 @@
       "file": "inchworm-display_retainer-x1.stl",
       "bytes": 44984,
       "size": "44 KB",
-      "triangles": 898
+      "triangles": 898,
+      "volume_cm3": 1.29,
+      "filament": {
+        "solid_g": 1.6,
+        "g_low": 0.6,
+        "g_high": 1.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "face_bezel",
@@ -330,7 +483,16 @@
       "file": "inchworm-face_bezel-x1.stl",
       "bytes": 73284,
       "size": "72 KB",
-      "triangles": 1464
+      "triangles": 1464,
+      "volume_cm3": 3.94,
+      "filament": {
+        "solid_g": 5,
+        "g_low": 1.8,
+        "g_high": 3.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "head_front",
@@ -342,7 +504,16 @@
       "file": "inchworm-head_front-x1.stl",
       "bytes": 150684,
       "size": "147 KB",
-      "triangles": 3012
+      "triangles": 3012,
+      "volume_cm3": 5.73,
+      "filament": {
+        "solid_g": 7.3,
+        "g_low": 2.5,
+        "g_high": 4.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "head_rear",
@@ -354,7 +525,16 @@
       "file": "inchworm-head_rear-x1.stl",
       "bytes": 175284,
       "size": "171 KB",
-      "triangles": 3504
+      "triangles": 3504,
+      "volume_cm3": 8.13,
+      "filament": {
+        "solid_g": 10.3,
+        "g_low": 3.6,
+        "g_high": 6.7,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "sensor_clamp",
@@ -366,7 +546,16 @@
       "file": "inchworm-sensor_clamp-x3.stl",
       "bytes": 82684,
       "size": "81 KB",
-      "triangles": 1652
+      "triangles": 1652,
+      "volume_cm3": 0.29,
+      "filament": {
+        "solid_g": 0.4,
+        "g_low": 0.1,
+        "g_high": 0.2,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link1_ribs",
@@ -378,7 +567,16 @@
       "file": "inchworm-link1_ribs-x2.stl",
       "bytes": 45784,
       "size": "45 KB",
-      "triangles": 914
+      "triangles": 914,
+      "volume_cm3": 2.77,
+      "filament": {
+        "solid_g": 3.5,
+        "g_low": 3.5,
+        "g_high": 3.5,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "link1_shell_L",
@@ -390,7 +588,16 @@
       "file": "inchworm-link1_shell_L-x1.stl",
       "bytes": 128784,
       "size": "126 KB",
-      "triangles": 2574
+      "triangles": 2574,
+      "volume_cm3": 6.59,
+      "filament": {
+        "solid_g": 8.4,
+        "g_low": 2.9,
+        "g_high": 5.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link1_shell_R",
@@ -402,7 +609,16 @@
       "file": "inchworm-link1_shell_R-x1.stl",
       "bytes": 128084,
       "size": "125 KB",
-      "triangles": 2560
+      "triangles": 2560,
+      "volume_cm3": 6.59,
+      "filament": {
+        "solid_g": 8.4,
+        "g_low": 2.9,
+        "g_high": 5.4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link2_ribs",
@@ -414,7 +630,16 @@
       "file": "inchworm-link2_ribs-x2.stl",
       "bytes": 45784,
       "size": "45 KB",
-      "triangles": 914
+      "triangles": 914,
+      "volume_cm3": 2.77,
+      "filament": {
+        "solid_g": 3.5,
+        "g_low": 3.5,
+        "g_high": 3.5,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "link2_shell_L",
@@ -426,7 +651,16 @@
       "file": "inchworm-link2_shell_L-x1.stl",
       "bytes": 125884,
       "size": "123 KB",
-      "triangles": 2516
+      "triangles": 2516,
+      "volume_cm3": 5.86,
+      "filament": {
+        "solid_g": 7.4,
+        "g_low": 2.6,
+        "g_high": 4.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link2_shell_R",
@@ -438,7 +672,16 @@
       "file": "inchworm-link2_shell_R-x1.stl",
       "bytes": 125884,
       "size": "123 KB",
-      "triangles": 2516
+      "triangles": 2516,
+      "volume_cm3": 5.86,
+      "filament": {
+        "solid_g": 7.4,
+        "g_low": 2.6,
+        "g_high": 4.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link3_ribs",
@@ -450,7 +693,16 @@
       "file": "inchworm-link3_ribs-x2.stl",
       "bytes": 45784,
       "size": "45 KB",
-      "triangles": 914
+      "triangles": 914,
+      "volume_cm3": 2.77,
+      "filament": {
+        "solid_g": 3.5,
+        "g_low": 3.5,
+        "g_high": 3.5,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "link3_shell_L",
@@ -462,7 +714,16 @@
       "file": "inchworm-link3_shell_L-x1.stl",
       "bytes": 117884,
       "size": "115 KB",
-      "triangles": 2356
+      "triangles": 2356,
+      "volume_cm3": 4.9,
+      "filament": {
+        "solid_g": 6.2,
+        "g_low": 2.2,
+        "g_high": 4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link3_shell_R",
@@ -474,7 +735,16 @@
       "file": "inchworm-link3_shell_R-x1.stl",
       "bytes": 117984,
       "size": "115 KB",
-      "triangles": 2358
+      "triangles": 2358,
+      "volume_cm3": 4.9,
+      "filament": {
+        "solid_g": 6.2,
+        "g_low": 2.2,
+        "g_high": 4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link4_ribs",
@@ -486,7 +756,16 @@
       "file": "inchworm-link4_ribs-x2.stl",
       "bytes": 45784,
       "size": "45 KB",
-      "triangles": 914
+      "triangles": 914,
+      "volume_cm3": 2.77,
+      "filament": {
+        "solid_g": 3.5,
+        "g_low": 3.5,
+        "g_high": 3.5,
+        "infill": 1,
+        "walls": null,
+        "assumed": false
+      }
     },
     {
       "key": "link4_shell_L",
@@ -498,7 +777,16 @@
       "file": "inchworm-link4_shell_L-x1.stl",
       "bytes": 117884,
       "size": "115 KB",
-      "triangles": 2356
+      "triangles": 2356,
+      "volume_cm3": 4.9,
+      "filament": {
+        "solid_g": 6.2,
+        "g_low": 2.2,
+        "g_high": 4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "link4_shell_R",
@@ -510,7 +798,16 @@
       "file": "inchworm-link4_shell_R-x1.stl",
       "bytes": 117984,
       "size": "115 KB",
-      "triangles": 2358
+      "triangles": 2358,
+      "volume_cm3": 4.9,
+      "filament": {
+        "solid_g": 6.2,
+        "g_low": 2.2,
+        "g_high": 4,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "speaker_ring",
@@ -522,7 +819,16 @@
       "file": "inchworm-speaker_ring-x1.stl",
       "bytes": 117484,
       "size": "115 KB",
-      "triangles": 2348
+      "triangles": 2348,
+      "volume_cm3": 0.61,
+      "filament": {
+        "solid_g": 0.8,
+        "g_low": 0.3,
+        "g_high": 0.5,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "xiao_cradle",
@@ -534,7 +840,16 @@
       "file": "inchworm-xiao_cradle-x1.stl",
       "bytes": 41784,
       "size": "41 KB",
-      "triangles": 834
+      "triangles": 834,
+      "volume_cm3": 1.59,
+      "filament": {
+        "solid_g": 2,
+        "g_low": 0.7,
+        "g_high": 1.3,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "tpu_foot",
@@ -546,7 +861,16 @@
       "file": "inchworm-tpu_foot-x1.stl",
       "bytes": 144284,
       "size": "141 KB",
-      "triangles": 2884
+      "triangles": 2884,
+      "volume_cm3": 56.91,
+      "filament": {
+        "solid_g": 68.9,
+        "g_low": 24.1,
+        "g_high": 44.8,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     },
     {
       "key": "proleg",
@@ -558,7 +882,16 @@
       "file": "inchworm-proleg-x8.stl",
       "bytes": 92884,
       "size": "91 KB",
-      "triangles": 1856
+      "triangles": 1856,
+      "volume_cm3": 0.18,
+      "filament": {
+        "solid_g": 0.2,
+        "g_low": 0.1,
+        "g_high": 0.1,
+        "infill": null,
+        "walls": null,
+        "assumed": true
+      }
     }
   ],
   "buy": [
@@ -937,6 +1270,51 @@
     "TPU 95A"
   ],
   "total_prints": 51,
+  "filament": {
+    "by_material": {
+      "CF-nylon": {
+        "volume_cm3": 307.8,
+        "solid_g": 354,
+        "g_low": 229.8,
+        "g_high": 321.5,
+        "assumed": 6,
+        "parts": 12
+      },
+      "PETG": {
+        "volume_cm3": 191.9,
+        "solid_g": 243.5,
+        "g_low": 111.4,
+        "g_high": 172,
+        "assumed": 19,
+        "parts": 30
+      },
+      "TPU 95A": {
+        "volume_cm3": 58.3,
+        "solid_g": 70.5,
+        "g_low": 24.9,
+        "g_high": 45.6,
+        "assumed": 9,
+        "parts": 9
+      }
+    },
+    "total": {
+      "volume_cm3": 558,
+      "solid_g": 668,
+      "g_low": 366.1,
+      "g_high": 539.1,
+      "assumed": 34,
+      "parts": 51
+    }
+  },
+  "service_estimate": {
+    "usd_low": 169,
+    "usd_high": 512,
+    "setup_usd": 25,
+    "currency": "USD",
+    "source": "industry band for FDM service pricing, $0.10-0.50/cm3",
+    "calibrated": false,
+    "unpriced_materials": []
+  },
   "esp32_only": false,
   "servo_type": "serial bus"
 }

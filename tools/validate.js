@@ -464,6 +464,37 @@ function readDir(g, dir, what) {
   }
 }
 
+// ------------------------------------------------------------ site data ---
+{
+  const g = group('sitedata');
+  if (!g.skip) {
+    // Every STL must appear in the site data. This exists because it did not:
+    // a non-greedy filename regex mis-split hyphenated slugs, so rover-lite and
+    // biped-mini shipped with empty Print tabs hiding 66 files between them,
+    // and nothing failed because the download-all zip reads the directory.
+    for (const s of slugs) {
+      const file = path.join(P.ROOT, 'site', 'data', `${s}.json`);
+      if (!fs.existsSync(file)) { g.fail(`${s}: no site/data/${s}.json (run npm run site-data)`); continue; }
+      let d;
+      try { d = JSON.parse(fs.readFileSync(file, 'utf8')); }
+      catch (e) { g.fail(`${s}: site/data/${s}.json is not valid JSON — ${e.message}`); continue; }
+
+      let stls;
+      try { stls = fs.readdirSync(path.join(P.packDir(s), 'stl')).filter(f => f.endsWith('.stl')); }
+      catch (e) { g.pass(); continue; }      // layout group reports a missing stl/
+
+      g.check((d.parts || []).length === stls.length,
+        `${s}: site data lists ${(d.parts || []).length} parts but ${stls.length} STLs are on disk ` +
+        '— run npm run site-data');
+
+      // And every listed part points at a file that is really there.
+      for (const p of d.parts || []) {
+        g.check(stls.includes(p.file), `${s}: site data names ${p.file}, which is not in stl/`);
+      }
+    }
+  }
+}
+
 // --------------------------------------------------------- scaffolding ---
 {
   const g = group('scaffold');
