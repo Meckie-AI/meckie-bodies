@@ -1307,5 +1307,58 @@
     "unpriced_materials": []
   },
   "esp32_only": false,
-  "servo_type": "serial bus"
+  "servo_type": "serial bus",
+  "print_service": {
+    "schema": "meckie-print-service/1",
+    "calibrated": false,
+    "unpainted": {
+      "printed_g": 471,
+      "plates": 2,
+      "painted_parts": 6,
+      "filament_usd": 10.05,
+      "machine_hours": [
+        18.8,
+        31.4
+      ],
+      "handling_hours": 2,
+      "paint_hours": 0,
+      "labour_usd": 60,
+      "packaging_usd": 11.65,
+      "cost_usd": [
+        87.35,
+        91.11
+      ],
+      "usd_low": 142,
+      "usd_high": 148,
+      "lead_days_low": 6,
+      "lead_days_high": 7,
+      "labour_share": 0.66,
+      "calibrated": false
+    },
+    "painted": {
+      "printed_g": 471,
+      "plates": 2,
+      "painted_parts": 6,
+      "filament_usd": 10.05,
+      "machine_hours": [
+        18.8,
+        31.4
+      ],
+      "handling_hours": 2,
+      "paint_hours": 1.7,
+      "labour_usd": 111,
+      "packaging_usd": 11.65,
+      "cost_usd": [
+        138.35,
+        142.11
+      ],
+      "usd_low": 225,
+      "usd_high": 231,
+      "lead_days_low": 8,
+      "lead_days_high": 9,
+      "labour_share": 0.78,
+      "calibrated": false
+    },
+    "capacity_bodies_per_month": 17
+  }
 }

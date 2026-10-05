@@ -15,6 +15,7 @@ const fs = require('fs');
 const path = require('path');
 const P = require('./lib/packs');
 const csv = require('./lib/csv');
+const printService = require('./lib/print-service');
 const mesh = require('./lib/mesh');
 
 const check = process.argv.includes('--check');
@@ -193,6 +194,12 @@ async function main() {
       esp32_only: targets.every(t => t.role),
       servo_type: /sts32/i.test(entry.servos) ? 'serial bus' : /mg90|n20/i.test(entry.servos) ? 'PWM / gearmotor' : 'other',
     };
+
+    // What it would cost to have US print it, as opposed to a service bureau.
+    // Attached after the literal because it needs the finished document: the
+    // price is driven by printed mass and painted-part count, both of which
+    // are computed above.
+    doc.print_service = printService.quote(doc);
 
     writeIfChanged(path.join(OUT, `${slug}.json`), JSON.stringify(doc, null, 2) + '\n');
 

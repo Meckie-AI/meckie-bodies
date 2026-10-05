@@ -1,0 +1,55 @@
+{
+  "_why": [
+    "What it costs Meckie to print a body and post it, and therefore what a",
+    "made-to-order price has to clear. Separate from rates.json on purpose:",
+    "rates.json prices an outside service bureau, which is a different business",
+    "with different costs. This file prices OUR printer and OUR hands.",
+    "",
+    "The headline finding, which the numbers below will reproduce: filament is",
+    "not the cost. A whole body is $2 to $13 of plastic. Machine time is nearly",
+    "free once the printer is bought. What costs money is attention - plate",
+    "changes, part removal, inspection, packing - and painting, which is hand",
+    "labour measured in coats and dry time.",
+    "",
+    "Run `npm run print-price` to see what these knobs produce per body, and",
+    "`npm run print-price -- --compare` to see them against an outside service."
+  ],
+  "currency": "USD",
+  "calibrated": false,
+  "_calibrated_note": "No body has been printed start to finish yet, so every hour figure here is an estimate. Printing one Scout and timing it honestly replaces the guesswork: that is the single measurement that makes this file real.",
+  "machine": {
+    "usd_per_hour": 0.3,
+    "note": "Amortisation plus power plus consumables, not a billed rate. A ~$400 printer over a ~2000 hour life is $0.20/h, roughly 100 W at $0.15/kWh is $0.015/h, and nozzles, belts and a plate are a rough $0.10/h. Unattended machine time is the cheapest input in this file, which is why batching matters more than speed.",
+    "grams_per_hour": [
+      15,
+      25
+    ],
+    "grams_per_hour_note": "Throughput for a direct-drive machine at 0.2 mm layers on shells with sparse infill. A heuristic standing in for a slicer. Slice one real plate and replace this with the measured figure."
+  },
+  "labour": {
+    "usd_per_hour": 30,
+    "handling_hours_base": 1,
+    "handling_hours_per_plate": 0.5,
+    "handling_note": "Loading, starting, removing parts, checking them against the parts list, and boxing. Charged per body plus per plate, because a single-extruder printer cannot run PLA and TPU together and each material is at least one more plate to attend to.",
+    "paint_hours_base": 0.5,
+    "paint_hours_per_part": 0.2,
+    "paint_note": "Chrome parts are filler primer, gloss black, chrome-effect, gloss clear: four coats with dry time between. The per-part figure is active handling only and assumes coats are batched across a whole body's painted parts. This is the most expensive thing on the menu and the easiest to decline."
+  },
+  "packaging": {
+    "usd_base": 6,
+    "usd_per_100g": 1.2,
+    "note": "Box, padding and postage. Scales with mass because a 542 g Rover Lite set is a bigger parcel than a 90 g Scout set. Domestic only; international is quoted case by case."
+  },
+  "failure_allowance": 0.2,
+  "failure_note": "NOTHING IN THIS CATALOGUE HAS BEEN TEST-PRINTED. Early orders will fail parts, and a failed part is filament plus the machine hours plus the handling again. 20% is a guess that should fall once there is real data, and should rise if the first runs say so.",
+  "margin": 0.35,
+  "margin_note": "On top of recovered cost. Not a profit target so much as the difference between a favour and a product: it has to cover the order that goes wrong, the email thread, and the reprint.",
+  "capacity": {
+    "printers": 1,
+    "hours_per_month_per_printer": 730,
+    "realistic_utilisation": 0.5,
+    "note": "A printer at 24/7 is 730 h/month, and half of that is honest once failures, sleep and plate changes are counted. This is the number that decides what lead time to promise, and it is the reason to quote a date rather than imply dispatch.",
+    "post_days": 3,
+    "post_days_note": "Domestic post, added to every lead time. A quote also adds current queue depth, which is not in this file because it changes hour to hour."
+  }
+}

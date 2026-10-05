@@ -188,70 +188,153 @@ function printPaths(b) {
           ? `A range because walls and infill drive it more than volume does. The briefs state settings for ${totalParts - assumed} of ${totalParts} parts; the rest assume 3 walls and 20–40%.`
           : 'Calculated from the settings each brief states.')),
 
-    // --- have it made ---
-    el('div', { class: 'card', style: 'padding:22px 24px;display:flex;flex-direction:column' },
-      el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em" },
-        'Have it made'),
-      el('p', { class: 'muted small', style: 'margin:8px 0 16px' },
-        'If you have no printer, or not one that will do carbon-filled nylon.'),
-      el('div', { style: 'font:italic 700 42px/1 \'Jost\';margin:4px 0 2px' },
-        '$' + est.usd_low + '\u2013' + est.usd_high),
-      el('p', { class: 'label', style: 'margin:0 0 14px' },
-        'estimated, printed parts only'),
-      el('div', { class: 'note warn', style: 'margin:0 0 16px' },
-        el('strong', {}, 'An estimate, not a quote. '),
-        est.calibrated
-          ? 'Calibrated against a real order.'
-          : 'Nothing here has been priced against a real order yet. It comes from ' +
-            est.source + ', plus a $' + est.setup_usd + ' setup charge.'),
-      el('p', { class: 'small muted', style: 'margin:0 0 16px;flex:1' },
-        'For comparison, the electronics for this body come to about $' + b.bom_usd +
-        '. Printed parts roughly double the cost of a build.'),
-      interestForm(b)));
+    // --- we print it for you ---
+    madeByUs(b, est));
 }
 
-// Interest, not a cart. There is no provider account and no checkout yet, so
-// the honest thing is to record who would buy and tell them when it is real.
-// Posts to the site's existing waitlist, which already handles idempotency,
-// rate limiting and list-merge; the body slug rides along as `source`.
-function interestForm(b) {
+/**
+ * We print it and post it. Priced from print-service.json, not rates.json: the
+ * bureau band prices somebody else's automated shop, and ours is one printer
+ * and a pair of hands, which costs differently. The bureau figure stays on the
+ * card as a comparison, because a buyer deserves to know they have the option.
+ *
+ * Paint is a toggle rather than a default because it is most of the price on
+ * most bodies, and the chrome parts are genuinely pleasant to do yourself.
+ */
+function madeByUs(b, est) {
+  const ps = b.print_service;
+  if (!ps) return el('div', {});
+
+  const state = { paint: false };
+  const price = el('div', { style: 'font:italic 700 42px/1 \'Jost\';margin:4px 0 2px' });
+  const label = el('p', { class: 'label', style: 'margin:0 0 4px' });
+  const lead = el('p', { class: 'small muted', style: 'margin:0 0 14px' });
+  const compare = el('p', { class: 'small muted', style: 'margin:0 0 16px;flex:1' });
+
+  const paintBtn = el('button', {
+    class: 'pill', type: 'button',
+    style: 'padding:5px 13px;font:600 12px \'Jost\'',
+  });
+
+  function render() {
+    const r = state.paint ? ps.painted : ps.unpainted;
+    price.textContent = r.usd_low === r.usd_high
+      ? '$' + r.usd_low : '$' + r.usd_low + '\u2013' + r.usd_high;
+    label.textContent = state.paint
+      ? 'printed parts, chrome and brass finished'
+      : 'printed parts, unpainted';
+    lead.textContent = 'About ' + (r.lead_days_low === r.lead_days_high
+      ? r.lead_days_low + ' days' : r.lead_days_low + '\u2013' + r.lead_days_high + ' days')
+      + ' once we start, plus whatever is already in the queue. '
+      + r.machine_hours[1] + ' hours of printing across ' + r.plates + ' plates.';
+    paintBtn.textContent = state.paint ? 'Painted \u2713' : 'Add paint';
+    paintBtn.classList.toggle('red', state.paint);
+
+    // The honest comparison, computed rather than asserted: which way it falls
+    // depends on the body, and it fell the other way when this was written.
+    const ratio = r.usd_high / Math.max(1, b.bom_usd);
+    compare.textContent =
+      'The electronics for this body come to about $' + b.bom_usd + ', so printed parts are '
+      + (ratio > 1.15 ? 'more than the electronics' : ratio < 0.85 ? 'less than the electronics'
+        : 'about the same as the electronics')
+      + '. An outside print bureau would quote roughly $' + est.usd_low + '\u2013' + est.usd_high
+      + ' for the same parts, and a printer that handles this whole catalogue costs about $200.';
+  }
+  paintBtn.onclick = () => { state.paint = !state.paint; render(); };
+
+  const card = el('div', { class: 'card', style: 'padding:22px 24px;display:flex;flex-direction:column' },
+    el('div', { class: 'row', style: 'gap:10px;align-items:baseline;justify-content:space-between' },
+      el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em" },
+        'We print it for you'),
+      ps.unpainted.painted_parts ? paintBtn : el('span', {})),
+    el('p', { class: 'muted small', style: 'margin:8px 0 16px' },
+      'Posted to you as a box of finished parts. You still do the electronics and the build.'),
+    price, label, lead,
+    el('div', { class: 'note warn', style: 'margin:0 0 16px' },
+      el('strong', {}, 'An estimate, and nothing is charged here. '),
+      'Ask and you get a real price and a real date by email first. '
+      + (ps.calibrated ? '' : 'No body in this catalogue has been printed start to finish yet, so treat the number as a working figure \u2014 and the parts as untested.')),
+    compare,
+    requestForm(b, () => state));
+  render();
+  return card;
+}
+
+/**
+ * A request, not a cart.
+ *
+ * Nothing is charged and no address is stored: someone says which body and
+ * roughly where they are, we reply with a price and a date, and an invoice
+ * collects the address only if they say yes. That order exists because selling
+ * a physical good needs terms of sale, a refund position, sales tax and a
+ * warranty stance on parts nobody has printed yet, and none of that is written.
+ * This finds out whether anyone wants it before all of that gets built.
+ */
+function requestForm(b, getState) {
   const wrap = el('div', {});
-  const input = el('input', {
-    type: 'email', placeholder: 'you@example.com', 'aria-label': 'Email',
-    style: "flex:1 1 180px;min-width:0;padding:9px 14px;border:2px solid var(--mkt-ink);" +
+  const field = (attrs) => el('input', Object.assign({
+    style: "flex:1 1 150px;min-width:0;padding:9px 14px;border:2px solid var(--mkt-ink);" +
       "border-radius:999px;background:var(--mkt-bg);color:var(--mkt-ink);" +
       "font:400 14px 'Jost',sans-serif",
+  }, attrs));
+
+  const email = field({ type: 'email', placeholder: 'you@example.com', 'aria-label': 'Email' });
+  const country = field({ type: 'text', placeholder: 'Country', 'aria-label': 'Country' });
+  const postcode = field({ type: 'text', placeholder: 'Post code', 'aria-label': 'Post code' });
+  const notes = el('textarea', {
+    placeholder: 'Anything we should know? Colour preferences, a deadline, parts you already have.',
+    'aria-label': 'Notes', rows: '2',
+    style: "width:100%;box-sizing:border-box;padding:9px 14px;border:2px solid var(--mkt-ink);" +
+      "border-radius:14px;background:var(--mkt-bg);color:var(--mkt-ink);" +
+      "font:400 14px 'Jost',sans-serif;resize:vertical",
   });
-  const btn = el('button', { class: 'pill red', type: 'button' }, 'Tell me when this is real');
+  const btn = el('button', { class: 'pill red', type: 'button' }, 'Ask for a price');
   const msg = el('p', { class: 'small', style: 'margin:10px 0 0' });
 
   btn.onclick = async () => {
-    const email = input.value.trim();
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    const v = email.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) {
       msg.style.color = 'var(--mkt-red)';
       msg.textContent = 'That email does not look right.';
       return;
     }
-    btn.disabled = true; btn.textContent = 'Sending…';
+    const st = getState();
+    const shown = st.paint ? b.print_service.painted : b.print_service.unpainted;
+    btn.disabled = true; btn.textContent = 'Sending\u2026';
     try {
-      const r = await fetch((MKT.site || '') + '/api/waitlist', {
+      const r = await fetch((MKT.site || '') + '/api/print-request', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, lists: ['printing'], source: 'bodies-' + b.slug }),
+        body: JSON.stringify({
+          body: b.slug, body_name: b.name, paint: st.paint, qty: 1,
+          email: v, country: country.value.trim(), postcode: postcode.value.trim(),
+          notes: notes.value.trim(),
+          // What the page showed, so a later disagreement about the price has
+          // an answer. Recorded, never trusted.
+          shown_usd_low: shown.usd_low, shown_usd_high: shown.usd_high,
+          shown_lead_low: shown.lead_days_low, shown_lead_high: shown.lead_days_high,
+          est_hours_low: shown.machine_hours[0], est_hours_high: shown.machine_hours[1],
+        }),
       });
-      if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'that did not go through');
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || 'that did not go through');
       msg.style.color = 'var(--mkt-deep-foam)';
-      msg.textContent = 'Noted. We will tell you when ' + b.name + ' parts can be ordered.';
-      btn.textContent = 'Done'; input.disabled = true;
+      msg.textContent = j.message || 'Got it. You will get a price and a date by email.';
+      btn.textContent = 'Asked'; email.disabled = true;
     } catch (e) {
       msg.style.color = 'var(--mkt-red)';
       msg.textContent = String(e.message);
-      btn.disabled = false; btn.textContent = 'Tell me when this is real';
+      btn.disabled = false; btn.textContent = 'Ask for a price';
     }
   };
-  input.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
+  email.addEventListener('keydown', (e) => { if (e.key === 'Enter') btn.click(); });
 
-  wrap.append(el('div', { class: 'row', style: 'gap:8px;flex-wrap:nowrap' }, input, btn), msg);
+  wrap.append(
+    el('div', { class: 'row', style: 'gap:8px;flex-wrap:wrap;margin:0 0 8px' }, email),
+    el('div', { class: 'row', style: 'gap:8px;flex-wrap:wrap;margin:0 0 8px' }, country, postcode),
+    notes,
+    el('div', { class: 'row', style: 'gap:8px;margin:10px 0 0' }, btn),
+    msg);
   return wrap;
 }
 

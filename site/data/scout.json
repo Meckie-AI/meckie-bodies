@@ -782,5 +782,58 @@
     "unpriced_materials": []
   },
   "esp32_only": true,
-  "servo_type": "PWM / gearmotor"
+  "servo_type": "PWM / gearmotor",
+  "print_service": {
+    "schema": "meckie-print-service/1",
+    "calibrated": false,
+    "unpainted": {
+      "printed_g": 90,
+      "plates": 2,
+      "painted_parts": 4,
+      "filament_usd": 2.18,
+      "machine_hours": [
+        3.6,
+        6
+      ],
+      "handling_hours": 2,
+      "paint_hours": 0,
+      "labour_usd": 60,
+      "packaging_usd": 7.08,
+      "cost_usd": [
+        70.34,
+        71.06
+      ],
+      "usd_low": 114,
+      "usd_high": 116,
+      "lead_days_low": 5,
+      "lead_days_high": 5,
+      "labour_share": 0.84,
+      "calibrated": false
+    },
+    "painted": {
+      "printed_g": 90,
+      "plates": 2,
+      "painted_parts": 4,
+      "filament_usd": 2.18,
+      "machine_hours": [
+        3.6,
+        6
+      ],
+      "handling_hours": 2,
+      "paint_hours": 1.3,
+      "labour_usd": 99,
+      "packaging_usd": 7.08,
+      "cost_usd": [
+        109.34,
+        110.06
+      ],
+      "usd_low": 178,
+      "usd_high": 179,
+      "lead_days_low": 7,
+      "lead_days_high": 7,
+      "labour_share": 0.9,
+      "calibrated": false
+    },
+    "capacity_bodies_per_month": 17
+  }
 }
