@@ -1,0 +1,261 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "a5a71cad0935d0aa7111169c04f7d738657a754dac9e0f1f1a5a0a2d946c6f74"
+  },
+  "body": {
+    "id": "rover-lite",
+    "name": "Rover Lite",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": true,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "role": "body",
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "board_options": {
+        "board_upload.flash_size": "16MB",
+        "board_build.arduino.memory_type": "qio_opi",
+        "build_flags": [
+          "-DBOARD_HAS_PSRAM"
+        ]
+      },
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    },
+    "face": {
+      "host": "rpi_zero_2w",
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client",
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "writes": "servos[].offset_deg"
+    },
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each motor forward briefly",
+      "writes": "drive.invert"
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "writes": "imu.offsets"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "lidar_fwd",
+        "drop_front",
+        "drop_rear"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "left": false,
+      "right": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "rover",
+      "name": "Rover Lite",
+      "vendor": "Meckie bodies",
+      "model": "rover-lite",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "drive": {
+        "deadman_ms": 500
+      },
+      "look_at": {
+        "actuated": true,
+        "yaw_range": [
+          -150,
+          150
+        ],
+        "pitch_range": [
+          -25,
+          35
+        ]
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 48000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 3
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/rover-lite/firmware/hangar_bay_rover_lite.yaml",
+      "hardware_sha256": "a5a71cad0935d0aa7111169c04f7d738657a754dac9e0f1f1a5a0a2d946c6f74",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "rover-lite",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "motors": {
+      "driver": "drv8833",
+      "type": "tracked_skid_steer",
+      "pins": {
+        "ain1": 38,
+        "ain2": 39,
+        "bin1": 40,
+        "bin2": 41
+      }
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "pan",
+            "model": "sts3215",
+            "min_deg": -150,
+            "max_deg": 150,
+            "rest_deg": 0
+          },
+          {
+            "id": 2,
+            "name": "tilt",
+            "model": "sts3215",
+            "min_deg": -25,
+            "max_deg": 35,
+            "rest_deg": -25
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display (gc9a01)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+      },
+      {
+        "what": "motor enable pins (ena/enb)",
+        "value": "n/a on a DRV8833",
+        "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+      },
+      {
+        "what": "2 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "mic (ics43434)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "camera (imx708)",
+        "value": "hosted on face",
+        "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): face",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/rover-lite/hangar-bay/rover-lite.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: rover_lite\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: hull, reserved_gpio: [19, 20, 26-37, 43, 44] }\n  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: hull }\npower:\n  battery: { cells: 3, mah: 1500, smart: true, gauge: sbs, balance: true }\n  charger: { part: bq25798, input: usb_c_pd, request_v: 15 }\n  rails:   { servo: vbat_via_efuse, motor_6v: buck_3a, logic_5v: buck_5a }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  i2c0:      { host: reflex, sda: 8,  scl: 9,  hz: 400000 }\n  i2c1_smb:  { host: reflex, sda: 12, scl: 13, hz: 100000 }\n  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\n  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000, cable_mm: 300 }\n  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }\n  csi:       { host: face, port: cam0, ffc_mm: 300 }\ndrive:\n  type: tracked_skid_steer\n  sprocket_pitch_r_mm: 20\n  gauge_mm: 120\n  contact_len_mm: 160\n  motor: { part: n20_6v, ratio: 298, driver: drv8833, pwm_hz: 20000, vm: 6.0 }\n  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }\n  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }\n  driver: { nsleep: 42, nfault: 21 }        # shared fault line, see shared_pins\n  limits: { accel_mps2: 1.5, brake_mps2: 2.5, v_mps: 0.2, v_reverse_mps: 0.12 }\nservos:\n  - { id: 1, name: pan,  model: sts3215, min_deg: -150, max_deg: 150, rest_deg: 0 }\n  - { id: 2, name: tilt, model: sts3215, min_deg: -25,  max_deg: 35,  rest_deg: -25 }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }\nshared_pins:\n  # Both fault outputs are open-drain active-low, so they wire-OR onto one pin.\n  # This is deliberate, not a leftover: the reflex ESP32-S3 has exactly two\n  # unused GPIOs (0 and 45) and both are boot strapping pins, so there is no\n  # safe pin to separate them onto. A pulled-up fault on 45 selects 1.8 V flash\n  # at boot, and on 0 a latched fault at power-on drops the board into download\n  # mode instead of booting - failing worst exactly when a fault is present.\n  #\n  # The cost is that firmware cannot tell which source tripped, so safety\n  # declares one `fault` trigger rather than drv_fault and efuse_fault. Both\n  # mean the same thing anyway: stop, brake, go to rest.\n  - { host: reflex, gpio: 21, active: low, wire_or: open_drain,\n      signals: [drive.driver.nfault, servo_pwr.fault] }\nperipherals:\n  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }   # shared, see shared_pins\n  - { name: lidar_fwd,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 4, int: 5, zones: 8x8, role: obstacle }\n  - { name: drop_front, part: vl53l0x,  bus: i2c0, addr: 0x30, xshut: 10, tilt_deg: 30, role: drop_off }\n  - { name: drop_rear,  part: vl53l0x,  bus: i2c0, addr: 0x31, xshut: 11, tilt_deg: -30, role: drop_off }\n  - { name: imu,        part: bno085,   bus: i2c0, addr: 0x4A, int: 7, location: com, role: imu }\n  - { name: charger,    part: bq25798,  bus: i2c0, addr: 0x6B, int: 6 }\n  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }\n  - { name: face_wake,  gpio: 46, to: face.gpio3 }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: display,    part: gc9a01,    bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }\n  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 84 }\n  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }\n  - { name: camera,     part: imx708,    bus: csi }\nreflexes:\n  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_30mm] }\n  obstacle: { sensor: lidar_fwd, stop_mm: 60 }\n  tilt:     { sensor: imu, max_deg: 35, action: tracks_off }\nsafety:\n  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, fault, stall_1s]\n  routine:  [stop, brake, wait_2s, edge_clear_creep, head_to_rest_slow, torque_low, face_sleepy]\n  resume:   fresh_command_only\n"
+}

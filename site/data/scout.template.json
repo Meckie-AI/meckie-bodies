@@ -1,0 +1,184 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "9af9ae5d92fd0da5a93e4dfabedc4918dcbab288a6bca63bf9e1a16b16d5bb4e"
+  },
+  "body": {
+    "id": "scout",
+    "name": "Scout",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": true,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "role": "body",
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each motor forward briefly",
+      "writes": "drive.invert"
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "writes": "imu.offsets"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "lidar_fwd",
+        "drop_front",
+        "drop_rear"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "left": false,
+      "right": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "rover",
+      "name": "Scout",
+      "vendor": "Meckie bodies",
+      "model": "scout",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "drive": {
+        "deadman_ms": 500
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      }
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "onboard_pdm"
+      },
+      "state": {},
+      "depth": {
+        "sensors": 3
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/scout/firmware/hangar_bay_scout.yaml",
+      "hardware_sha256": "9af9ae5d92fd0da5a93e4dfabedc4918dcbab288a6bca63bf9e1a16b16d5bb4e",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "scout",
+    "board": "seeed_xiao_esp32s3",
+    "body_platform": "espressif32@6.6.0",
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8
+      }
+    },
+    "motors": {
+      "driver": "drv8833",
+      "type": "differential",
+      "pins": {}
+    },
+    "mic_type": "onboard_pdm",
+    "mic": {
+      "pins": {
+        "bclk": 42,
+        "din": 41
+      }
+    },
+    "speaker": "pam8302",
+    "camera": true,
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs/rst/bl",
+        "value": "cs=tied_low rst=expander.p3 bl=expander.p4",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2c0.sda; bl would use GPIO 4, which this body uses for drive.right.pwm",
+        "collides": true
+      },
+      {
+        "what": "drive pins",
+        "value": "{\"left\":{\"pwm\":3,\"dir\":\"expander.p0\",\"enc_a\":1,\"pcnt_unit\":0},\"right\":{\"pwm\":4,\"dir\":\"expander.p1\",\"enc_a\":2,\"pcnt_unit\":1}}",
+        "reason": "differential: motor direction runs through expander.p0 rather than a second MCU pin, so the ain1/ain2 + bin1/bin2 shape does not fit"
+      },
+      {
+        "what": "mic (onboard_pdm)",
+        "value": "clk 42, data 41",
+        "reason": "the generator's audio_up block is I2S; a PDM mic needs a different driver, so audio_up cannot be generated for this body"
+      },
+      {
+        "what": "speaker amp shutdown",
+        "value": "sd=expander.p6",
+        "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/scout/hangar-bay/scout.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: scout\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500, antenna: ufl_external }\nmcu:\n  reflex: { chip: esp32s3, module: xiao_esp32s3_sense, psram: 8MB, role: [reflex, face, camera, mic] }\npower:\n  battery: { cells: 1, chem: lipo, mah: 1000, protected: true }\n  charger: { part: bq24074_class, input: usb_c_5v, ichg_ma: 1000, power_path: true }\n  rail_3v3: { part: buck_boost, en: main_switch }\n  low_soc_pct: 15\n  low_v: 3.45\nbuses:\n  i2c0: { sda: 5, scl: 6, hz: 400000 }\n  spi2: { sclk: 7, mosi: 9, hz: 40000000 }\nexpander: { part: tca9554, bus: i2c0, addr: 0x20,\n  pins: { p0: motor_l_dir, p1: motor_r_dir, p2: drv_nsleep, p3: disp_rst, p4: disp_bl, p5: tof_rear_xshut, p6: amp_sd, p7: chg_pg_in } }\ndrive:\n  type: differential\n  wheel_d_mm: 40\n  track_mm: 108\n  motor: { part: n20_6v, ratio: 100, driver: drv8833, mode: pwm_in1_dir_in2, pwm_hz: 20000 }\n  left:  { pwm: 3, dir: expander.p0, enc_a: 1, pcnt_unit: 0 }\n  right: { pwm: 4, dir: expander.p1, enc_a: 2, pcnt_unit: 1 }\n  enc_cpr_wheel: 1400\n  limits: { accel_mps2: 2.5, brake_mps2: 3.5, v_table_mps: 0.4, v_reverse_mps: 0.15, yaw_dps: 360 }\nperipherals:\n  - { name: lidar_fwd, part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 44, fov: 27, role: obstacle }\n  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, tilt_deg: 25, role: drop_off }\n  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x29, xshut: expander.p5, tilt_deg: -25, role: drop_off }\n  - { name: imu,       part: lsm6dsox, bus: i2c0, addr: 0x6A, location: com, role: imu }\n  - { name: gauge,     part: max17048, bus: i2c0, addr: 0x36 }\n  - { name: display,   part: gc9a01, bus: spi2, dc: 8, cs: tied_low, rst: expander.p3, bl: expander.p4, size: 240x240 }\n  - { name: mic,       part: onboard_pdm, clk: 42, data: 41 }\n  - { name: speaker,   part: pam8302, input: pdm_tx, pin: 43, sd: expander.p6 }\n  - { name: camera,    part: ov3660, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\nreflexes:\n  obstacle: { sensor: lidar_fwd, stop_mm: 80, slow_mm: 250 }\n  edge:  { sensors: [drop_front, drop_rear], drop_mm: 25, action: [brake, back_off_20mm] }\n  lift:  { sensors: [imu, drop_front, drop_rear], action: motors_off }\n  bump:  { sensors: [imu, encoders], decel_g: 1.5, stall_ms: 300, action: [stop, back_off_30mm] }\nsafety:\n  triggers: [heartbeat_lost, soc_below_15, vbat_below_3v45, drv_fault, stall_1s, overcurrent]\n  routine:  [stop, brake, wait_2s, edge_clear_creep, motors_coast, face_sleepy]\n  resume:   fresh_command_only\n"
+}

@@ -3,10 +3,10 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,500;0,700;1,700&display=swap" rel="stylesheet">
 <script type="importmap">
 {"imports":{
- "three":"https://unpkg.com/three@0.184.0/build/three.module.js",
- "three/addons/controls/OrbitControls.js":"https://unpkg.com/three@0.184.0/examples/jsm/controls/OrbitControls.js",
- "three-mesh-bvh":"https://unpkg.com/three-mesh-bvh@0.8.3/build/index.module.js",
- "three-bvh-csg":"https://unpkg.com/three-bvh-csg@0.0.16/build/index.module.js"
+ "three":"https://cdn.jsdelivr.net/npm/three@0.184.0/build/three.module.js",
+ "three/addons/controls/OrbitControls.js":"https://cdn.jsdelivr.net/npm/three@0.184.0/examples/jsm/controls/OrbitControls.js",
+ "three-mesh-bvh":"https://cdn.jsdelivr.net/npm/three-mesh-bvh@0.8.3/build/index.module.js",
+ "three-bvh-csg":"https://cdn.jsdelivr.net/npm/three-bvh-csg@0.0.16/build/index.module.js"
 }}
 </script>
 <style>
@@ -46,7 +46,7 @@ button.alt{background:#f7f0de;color:#23292b}
 <script type="module">
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-const MF=await (await import('https://unpkg.com/manifold-3d@3.0.0/manifold.js')).default();MF.setup();const {Manifold,Mesh}=MF;
+const MF=await (await import('https://cdn.jsdelivr.net/npm/manifold-3d@3.0.0/manifold.js')).default();MF.setup();const {Manifold,Mesh}=MF;
 THREE.Object3D.DEFAULT_UP.set(0,0,1);
 const P=Math.PI;
 function toM(g){if(g instanceof Manifold)return g;const pos=(g.index?g.toNonIndexed():g).attributes.position;const map=new Map(),vp=[],tv=[];

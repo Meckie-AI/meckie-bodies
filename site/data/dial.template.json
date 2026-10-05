@@ -1,0 +1,217 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01"
+  },
+  "body": {
+    "id": "dial",
+    "name": "Dial",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": false,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "role": "body",
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "board_options": {
+        "board_upload.flash_size": "16MB",
+        "board_build.arduino.memory_type": "qio_opi",
+        "build_flags": [
+          "-DBOARD_HAS_PSRAM"
+        ]
+      },
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    },
+    "face": {
+      "host": "rpi_zero_2w",
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client",
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "writes": "servos[].offset_deg"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "tof_front"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "left": false,
+      "right": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "desk",
+      "name": "Dial",
+      "vendor": "Meckie bodies",
+      "model": "dial",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 320,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 48000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 1
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/dial/firmware/hangar_bay_dial.yaml",
+      "hardware_sha256": "13fbc276c6b9d8f046ad8873ea51613b19d023a8db32803c8bcbe8ca29566f01",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "dial",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "pan",
+            "model": "sts3215"
+          },
+          {
+            "id": 2,
+            "name": "tilt",
+            "model": "sts3215"
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display (st7789v)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+      },
+      {
+        "what": "2 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "mic (ics43434)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "camera (imx708)",
+        "value": "hosted on face",
+        "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): face",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/dial/hangar-bay/dial.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: dial\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, reserved_gpio: [26-37] }\n  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: head }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  i2c0:      { host: reflex, sda: 8,  scl: 9,  hz: 400000 }\n  i2c1_smb:  { host: reflex, sda: 10, scl: 11, hz: 100000 }\n  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\n  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 62500000 }\n  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }\n  csi:       { host: face, port: cam0 }\nservos:\n  - { id: 1, name: pan,  model: sts3215, center: 2048, min: 341,  max: 3755, rest: 2048 }\n  - { id: 2, name: tilt, model: sts3215, center: 2048, min: 1707, max: 2503, rest: 1764 }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, slow_dps: 30 }\nperipherals:\n  - { name: tof_front,  part: vl53l8cx,  bus: i2c0, addr: 0x29, lpn: 4, int: 5, role: presence }\n  - { name: charger,    part: bq25798,   bus: i2c0, addr: 0x6B, int: 6, ce: 7 }\n  - { name: gauge,      part: sbs_pack,  bus: i2c1_smb, addr: 0x0B }\n  - { name: servo_pwr,  part: efuse,     en: 12, fault: 13 }\n  - { name: face_wake,  gpio: 14, to: face.gpio3 }\n  - { name: status_led, part: ws2812,    gpio: 48 }\n  - { name: display,    part: st7789v,   bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 320x240, rotation: 90 }\n  - { name: mics,       part: ics43434,  bus: i2s, count: 2, sel: [gnd, 3v3], spacing_mm: 92 }\n  - { name: speaker_amp, part: max98357a, bus: i2s, sd: 16 }\n  - { name: camera,     part: imx708,    bus: csi }\nsensing_rule: { drives: false, forward_lidar: tof_front, drop_off: not_applicable_fixed_base }\nsafety:\n  triggers: [heartbeat_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]\n  routine:  [stop, brake, wait_2s, slow_to_rest, torque_low, face_sleepy]\n  resume:   fresh_command_only\n"
+}

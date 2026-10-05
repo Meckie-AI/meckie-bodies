@@ -5,22 +5,31 @@
 <title>Meckie bodies</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,700;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<script>
+// The same files are served standalone at / and mounted on meckie.ai under
+// /bodies, so the prefix has to be decided before anything else loads.
+(function () {
+  var p = /^\/bodies(\/|$)/.test(location.pathname) ? '/bodies' : '';
+  document.write('<link rel="stylesheet" href="' + p + '/style.css">');
+  document.write('<scr' + 'ipt src="' + p + '/js/where.js"><\/scr' + 'ipt>');
+})();
+</script>
 </head>
 <body>
 
 <div class="topbar"><div class="wrap">
-  <a class="brand" href="/">Meckie bodies<span class="dot">.</span></a>
+  <a class="brand" data-link="home" href="/">Meckie bodies<span class="dot">.</span></a>
   <nav class="topnav">
-    <a href="/">Catalog</a>
-    <a href="/contribute">Contribute</a>
-    <a href="/bodies.json">Feed</a>
+    <a data-link="home" href="/">Catalog</a>
+    <a data-link="contribute" href="/contribute">Contribute</a>
+    <a data-link="feed" href="/bodies.json">Feed</a>
+    <a data-link="site" href="/" title="Meckie OS">Meckie OS &rarr;</a>
   </nav>
 </div></div>
 
 <div class="wrap">
   <header class="masthead">
-    <p class="label" style="margin:0 0 10px"><a href="/">&larr; All bodies</a></p>
+    <p class="label" style="margin:0 0 10px"><a data-link="home" href="/">&larr; All bodies</a></p>
     <h1 id="name">&nbsp;</h1>
     <p class="tagline" id="tagline"></p>
     <div class="rule"></div>
@@ -33,9 +42,20 @@
 </div>
 
 <footer><div class="wrap">
-  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT). Meckie OS is free to
-     download; the Meckie brain is a paid service.</p>
+  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT).
+     <a id="f-os" href="#">Meckie OS</a> is free to download; the
+     <a id="f-plans" href="#">Meckie brain</a> is a paid service. A body flashes and runs its
+     reflexes without an account &mdash; it needs one to think and talk.</p>
 </div></footer>
+<script>
+  document.getElementById('f-os').href = MKT.os;
+  document.getElementById('f-plans').href = MKT.plans;
+  document.querySelectorAll('[data-link]').forEach(function (a) {
+    var k = a.getAttribute('data-link');
+    a.href = k === 'home' ? MKT.home : k === 'contribute' ? MKT.contribute
+      : k === 'feed' ? MKT.feed : k === 'site' ? (MKT.site || '/') : a.href;
+  });
+</script>
 
 <script>
 const SLUG = location.pathname.replace(/\/+$/, '').split('/').pop();
@@ -56,13 +76,13 @@ const head = (num, title, ...rest) =>
   el('div', { class: 'section-head' }, el('span', { class: 'section-num' }, num),
     el('h2', { class: 'section-title' }, title), ...rest);
 
-const packFile = (b, p) => '/packs/' + b.slug + '/' + p.split('/').slice(2).map(encodeURIComponent).join('/');
+const packFile = (b, p) => MKT.packs(b.slug + '/' + p.split('/').slice(2).map(encodeURIComponent).join('/'));
 
 // ── 3D ──────────────────────────────────────────────────────────────
 function tab3D(b) {
   const frame = el('iframe', { src: viewerSrc(b, 'iso'), title: b.name + ' — 3D view' });
   function viewerSrc(b, view) {
-    return '/packs/' + b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop()) +
+    return MKT.packs(b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop())) +
       '?view=' + view + '&embed=1';
   }
   const bar = el('div', { class: 'viewbar' });
@@ -98,7 +118,7 @@ function tabBuild(b) {
       'print orientation and the safety reflex.'),
     el('div', { class: 'row', style: 'margin-bottom:18px' },
       el('a', { class: 'pill red', href: src, target: '_blank' }, 'Open the brief'),
-      el('a', { class: 'pill', href: '/packs/' + b.slug + '/README.txt', target: '_blank' }, 'Maker notes')),
+      el('a', { class: 'pill', href: MKT.packs(b.slug + '/README.txt'), target: '_blank' }, 'Maker notes')),
     el('div', { class: 'viewer-wrap' },
       el('iframe', { src, title: b.name + ' — design brief', style: 'height:min(80vh,900px)' })));
 }
@@ -117,7 +137,7 @@ function tabPrint(b) {
       el('td', { class: 'mono' }, '×' + p.qty),
       el('td', { class: 'small muted' }, p.orientation || '—'),
       el('td', { class: 'mono small', style: 'white-space:nowrap' }, p.size),
-      el('td', {}, el('a', { class: 'pill', href: '/packs/' + b.slug + '/stl/' + p.file, download: '' }, 'STL'))));
+      el('td', {}, el('a', { class: 'pill', href: MKT.packs(b.slug + '/stl/' + p.file), download: '' }, 'STL'))));
     return el('div', { style: 'margin-bottom:34px' },
       el('div', { class: 'row', style: 'margin-bottom:12px' },
         el('h3', { style: "font:700 18px 'Jost';text-transform:uppercase;letter-spacing:0.06em" }, mat),
@@ -132,7 +152,7 @@ function tabPrint(b) {
 
   return el('div', {},
     head('06', 'Print',
-      el('a', { class: 'pill red', href: '/api/bodies/' + b.slug + '/stl.zip' },
+      el('a', { class: 'pill red', href: MKT.api(b.slug + '/stl.zip') },
         'Download all ' + b.stl + ' STLs')),
     el('p', { class: 'muted', style: 'margin:0 0 24px' },
       b.total_prints + ' printed pieces from ' + b.stl + ' files, in ' + b.materials.length +
@@ -186,12 +206,12 @@ function tabParts(b) {
     el('p', { class: 'small muted', style: 'margin-top:18px' },
       'BOM figures are single-unit retail estimates from October 2026 and have not been checked ' +
       'against current listings. ',
-      el('a', { href: '/packs/' + b.slug + '/parts-list.csv', download: '' }, 'Download the CSV')));
+      el('a', { href: MKT.packs(b.slug + '/parts-list.csv'), download: '' }, 'Download the CSV')));
 }
 
 // ── Hangar Bay ──────────────────────────────────────────────────────
 function tabHangar(b) {
-  const templateUrl = location.origin + '/api/bodies/' + b.slug + '/template';
+  const templateUrl = location.origin + MKT.api(b.slug + '/template');
   const deep = 'meckie://hangar-bay/add?template=' + encodeURIComponent(templateUrl);
 
   const flash = b.targets.map(t => el('tr', {},
@@ -270,8 +290,8 @@ function tabFirmware(b) {
     el('div', { class: 'row', style: 'margin-bottom:16px' },
       copy,
       el('a', { class: 'pill', href: packFile(b, b.manifest), download: '' }, 'Download YAML'),
-      el('a', { class: 'pill', href: '/packs/' + b.slug + '/generated/manifest.json', target: '_blank' }, 'manifest.json'),
-      el('a', { class: 'pill', href: '/packs/' + b.slug + '/generated/build.json', target: '_blank' }, 'build.json')),
+      el('a', { class: 'pill', href: MKT.packs(b.slug + '/generated/manifest.json'), target: '_blank' }, 'manifest.json'),
+      el('a', { class: 'pill', href: MKT.packs(b.slug + '/generated/build.json'), target: '_blank' }, 'build.json')),
     pre);
 }
 
@@ -281,7 +301,7 @@ const TABS = [
   ['Parts', tabParts], ['Hangar Bay', tabHangar], ['Firmware', tabFirmware],
 ];
 
-fetch('/data/' + SLUG + '.json').then(r => {
+fetch(MKT.data(SLUG + '.json')).then(r => {
   if (!r.ok) throw new Error('no such body');
   return r.json();
 }).then(b => {

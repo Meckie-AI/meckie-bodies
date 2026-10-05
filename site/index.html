@@ -5,16 +5,25 @@
 <title>Meckie bodies</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Jost:ital,wght@0,400;0,500;0,700;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css">
+<script>
+// The same files are served standalone at / and mounted on meckie.ai under
+// /bodies, so the prefix has to be decided before anything else loads.
+(function () {
+  var p = /^\/bodies(\/|$)/.test(location.pathname) ? '/bodies' : '';
+  document.write('<link rel="stylesheet" href="' + p + '/style.css">');
+  document.write('<scr' + 'ipt src="' + p + '/js/where.js"><\/scr' + 'ipt>');
+})();
+</script>
 </head>
 <body>
 
 <div class="topbar"><div class="wrap">
-  <a class="brand" href="/">Meckie bodies<span class="dot">.</span></a>
+  <a class="brand" data-link="home" href="/">Meckie bodies<span class="dot">.</span></a>
   <nav class="topnav">
-    <a href="/" class="on">Catalog</a>
-    <a href="/contribute">Contribute</a>
-    <a href="/bodies.json">Feed</a>
+    <a data-link="home" href="/" class="on">Catalog</a>
+    <a data-link="contribute" href="/contribute">Contribute</a>
+    <a data-link="feed" href="/bodies.json">Feed</a>
+    <a data-link="site" href="/" title="Meckie OS">Meckie OS &rarr;</a>
   </nav>
 </div></div>
 
@@ -58,9 +67,20 @@
 </div>
 
 <footer><div class="wrap">
-  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT). Meckie OS is free to
-     download; the Meckie brain is a paid service.</p>
+  <p>Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT).
+     <a id="f-os" href="#">Meckie OS</a> is free to download; the
+     <a id="f-plans" href="#">Meckie brain</a> is a paid service. A body flashes and runs its
+     reflexes without an account &mdash; it needs one to think and talk.</p>
 </div></footer>
+<script>
+  document.getElementById('f-os').href = MKT.os;
+  document.getElementById('f-plans').href = MKT.plans;
+  document.querySelectorAll('[data-link]').forEach(function (a) {
+    var k = a.getAttribute('data-link');
+    a.href = k === 'home' ? MKT.home : k === 'contribute' ? MKT.contribute
+      : k === 'feed' ? MKT.feed : k === 'site' ? (MKT.site || '/') : a.href;
+  });
+</script>
 
 <script>
 const FILTERS = [
@@ -136,12 +156,12 @@ function card(b) {
   const stat = (k, v) => el('div', {}, el('span', { class: 'k' }, k), el('span', { class: 'v' }, v));
   // The viewer is the pack's own three.js page, embedded. It is the same file a
   // builder opens from disk, so the catalog cannot drift from the geometry.
-  const src = '/packs/' + b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop()) + '?view=iso&embed=1';
+  const src = MKT.packs(b.slug + '/' + encodeURIComponent(b.viewer.split('/').pop())) + '?view=iso&embed=1';
   const frame = el('iframe', { src, loading: 'lazy', title: b.name + ' — 3D view' });
   const port = el('div', { class: 'viewport' }, el('div', { class: 'loading' }, 'Building geometry…'), frame);
   frame.addEventListener('load', () => { const l = port.querySelector('.loading'); if (l) l.remove(); });
 
-  return el('a', { class: 'card bodycard', href: '/body/' + b.slug, style: 'color:inherit' },
+  return el('a', { class: 'card bodycard', href: MKT.body(b.slug), style: 'color:inherit' },
     port,
     el('div', { class: 'body' },
       el('h3', {}, b.name),
@@ -168,7 +188,7 @@ function drawGrid() {
       : list.length + ' of ' + BODIES.length + ' bodies';
 }
 
-fetch('/data/index.json').then(r => r.json()).then(d => {
+fetch(MKT.data('index.json')).then(r => r.json()).then(d => {
   BODIES = d.bodies;
   topStats(BODIES);
   drawFilters();

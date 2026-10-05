@@ -1,0 +1,315 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7"
+  },
+  "body": {
+    "id": "inchworm",
+    "name": "Inchworm",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": false,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "role": "body",
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "board_options": {
+        "board_upload.flash_size": "16MB",
+        "board_build.arduino.memory_type": "qio_opi",
+        "build_flags": [
+          "-DBOARD_HAS_PSRAM"
+        ]
+      },
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    },
+    "head": {
+      "role": "head",
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    },
+    "audio": {
+      "host": "rpi_zero_2w",
+      "os": "raspberrypi-os-bookworm-lite-64",
+      "provision": "meckie-body-client",
+      "flash": {
+        "method": "sd_card",
+        "tool": "rpi_imager",
+        "by": "builder"
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns the IDs in this manifest",
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Hold each joint at its marked zero and confirm",
+      "writes": "servos[].offset_deg"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "lidar_fwd"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "left": false,
+      "right": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "arm",
+      "name": "Inchworm",
+      "vendor": "Meckie bodies",
+      "model": "inchworm",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 16000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 1
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/inchworm/firmware/hangar_bay_inchworm.yaml",
+      "hardware_sha256": "b61a4d8df30e2fe1f5fb71ae0cb3cd40dc52214a35951e543ec8daa4487f49b7",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "inchworm",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8,
+        "rst": 1
+      }
+    },
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "servos": [
+          {
+            "id": 1,
+            "name": "j1_pitch",
+            "model": "sts3215",
+            "min_deg": -45,
+            "max_deg": 90,
+            "rest_deg": 85
+          },
+          {
+            "id": 2,
+            "name": "j2_yaw",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 30,
+            "rest_deg": 0
+          },
+          {
+            "id": 3,
+            "name": "j3_pitch",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 35,
+            "rest_deg": -35
+          },
+          {
+            "id": 4,
+            "name": "j4_yaw",
+            "model": "sts3215",
+            "min_deg": -80,
+            "max_deg": 30,
+            "rest_deg": 0
+          },
+          {
+            "id": 5,
+            "name": "j5_pitch",
+            "model": "sts3215",
+            "min_deg": -85,
+            "max_deg": 30,
+            "rest_deg": -30
+          }
+        ]
+      }
+    ],
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "mic_type": "ics43434",
+    "mic": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5
+      }
+    },
+    "camera": true,
+    "topology": {
+      "boards": [
+        {
+          "role": "body",
+          "mcu": "esp32s3",
+          "board": "esp32-s3-devkitc-1",
+          "pack_mcu_key": "reflex"
+        },
+        {
+          "role": "head",
+          "mcu": "esp32s3",
+          "board": "seeed_xiao_esp32s3",
+          "pack_mcu_key": "head"
+        }
+      ],
+      "neck": {
+        "declared_in_pack": {
+          "head": {
+            "reflex": {
+              "uart": 2,
+              "tx": 15,
+              "rx": 16
+            },
+            "head": {
+              "tx": 43,
+              "rx": 44
+            },
+            "baud": 921600,
+            "via": "spine_harness"
+          },
+          "pi": {
+            "reflex": {
+              "uart": 0,
+              "tx": 43,
+              "rx": 44
+            },
+            "pi": {
+              "uart": 0,
+              "tx": 14,
+              "rx": 15
+            },
+            "baud": 921600
+          }
+        }
+      }
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs/bl",
+        "value": "cs=tied_low bl=tied_on",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.head_i2s.din; bl would use GPIO 4, which this body uses for bus.head_i2s.ws",
+        "collides": true
+      },
+      {
+        "what": "5 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on audio",
+        "reason": "wired to the audio board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "1 Raspberry Pi target(s): audio",
+        "value": "rpi_zero_2w",
+        "reason": "firmware-gen emits PlatformIO ESP32 builds only. The Pi is imaged by the builder and provisioned separately; it is not a flash target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/inchworm/hangar-bay/inchworm.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: inchworm\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: base, role: [ik, servo_bus, power, safety] }\n  audio:  { chip: rpi_zero_2w, os: bookworm-lite, location: base, role: [speech, motion_clips] }\n  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: head, role: [camera, face, mics, lidar] }\npower:  { source: usb_c_pd, request_v: 15, min_v: 13.0, battery: none }\nlinks:\n  head: { reflex: { uart: 2, tx: 15, rx: 16 }, head: { tx: 43, rx: 44 }, baud: 921600, via: spine_harness }\n  pi:   { reflex: { uart: 0, tx: 43, rx: 44 }, pi: { uart: 0, tx: 14, rx: 15 }, baud: 921600 }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true }\n  head_spi:  { host: head, sclk: 7, mosi: 9, hz: 40000000 }\n  head_i2s:  { host: head, bclk: 3, ws: 4, din: 5, rate: 16000 }\n  head_i2c:  { host: head, sda: 6, scl: 2, hz: 400000 }\n  pi_i2s:    { host: audio, bclk: 18, lrclk: 19, dout: 21, rate: 48000 }\nkinematics:\n  chain: [ { id: 1, axis: pitch, link_mm: 70 }, { id: 2, axis: yaw, link_mm: 65 }, { id: 3, axis: pitch, link_mm: 60 },\n           { id: 4, axis: yaw, link_mm: 60 }, { id: 5, axis: pitch, link_mm: 45 } ]\n  base_h_mm: 78\n  ik_hz: 100\nservos:\n  - { id: 1, name: j1_pitch, model: sts3215, min_deg: -45, max_deg: 90, rest_deg: 85 }\n  - { id: 2, name: j2_yaw,   model: sts3215, min_deg: -85, max_deg: 30, rest_deg: 0 }\n  - { id: 3, name: j3_pitch, model: sts3215, min_deg: -85, max_deg: 35, rest_deg: -35 }\n  - { id: 4, name: j4_yaw,   model: sts3215, min_deg: -80, max_deg: 30, rest_deg: 0 }\n  - { id: 5, name: j5_pitch, model: sts3215, min_deg: -85, max_deg: 30, rest_deg: -30 }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 20, contact_torque_pct: 30, contact_err_deg: 6, j1_hold_max_s: 20 }\nperipherals:\n  - { name: servo_pwr,  part: efuse, en: 14, fault: 21 }\n  - { name: pd_good,    gpio: 6 }\n  - { name: vin_sense,  adc_gpio: 1, divider: 100k_10k }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: glow,       part: sk6812_2020, gpio: 38, count: 66, map: { seg1: 0-11, seg2: 12-23, seg3: 24-35, seg4: 36-47, antennae: 48-49, base_ring: 50-65 }, max_brightness_pct: 40 }\n  - { name: display,    part: gc9a01, host: head, bus: head_spi, dc: 8, rst: 1, bl: tied_on, cs: tied_low, size: 240x240 }\n  - { name: mics,       part: ics43434, host: head, bus: head_i2s, count: 2, sel: [gnd, 3v3] }\n  - { name: lidar_fwd,  part: vl53l1x, host: head, bus: head_i2c, addr: 0x29, location: chin, role: obstacle }\n  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\n  - { name: speaker_amp, part: max98357a, host: audio, bus: pi_i2s, sd: 16 }\nsensing_rule: { drives: false, forward_lidar: lidar_fwd, drop_off: not_applicable_fixed_base }\nreflexes:\n  near:    { sensor: lidar_fwd, stop_mm: 60, action: [stop, back_off_20mm] }\n  contact: { sensors: [servo_load], action: [stop, torque_30] }\nsafety:\n  triggers: [heartbeat_lost, servo_overtemp, vin_below_13v, efuse_fault, contact]\n  routine:  [stop, brake, wait_2s, bow_to_rest, torque_low, face_sleepy]\n  resume:   fresh_command_only\n"
+}

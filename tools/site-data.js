@@ -118,8 +118,31 @@ async function main() {
       servo_type: /sts32/i.test(entry.servos) ? 'serial bus' : /mg90|n20/i.test(entry.servos) ? 'PWM / gearmotor' : 'other',
     };
 
-    const file = path.join(OUT, `${slug}.json`);
-    writeIfChanged(file, JSON.stringify(doc, null, 2) + '\n');
+    writeIfChanged(path.join(OUT, `${slug}.json`), JSON.stringify(doc, null, 2) + '\n');
+
+    // The Hangar Bay template, pre-rendered as JSON.
+    //
+    // The pack authors YAML, but every consumer is JSON: Meckie OS has no YAML
+    // parser, and neither does the marketing site that mounts this catalog.
+    // Generating it here means the template is parsed exactly once, by the repo
+    // that owns the format, and everyone else just serves a file.
+    writeIfChanged(path.join(OUT, `${slug}.template.json`), JSON.stringify({
+      template: 'meckie-hangar-bay/1',
+      known_template: {
+        catalog: 'meckie-bodies', origin: 'official',
+        hardware_sha256: tpl.known_template.hardware_sha256,
+      },
+      body: tpl.body,
+      targets: tpl.targets,
+      pairing: tpl.pairing,
+      calibration_wizard: tpl.calibration_wizard,
+      calibration: tpl.calibration,
+      manifest: bodyManifest,
+      build,
+      // The manifest exactly as authored, so a consumer can recompute the hash
+      // itself rather than trusting whoever served this.
+      hardware: manifestText,
+    }, null, 2) + '\n');
 
     index.bodies.push({
       slug: entry.slug, name: entry.name, class: entry.class, tagline: entry.tagline,

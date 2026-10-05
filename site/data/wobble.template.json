@@ -1,0 +1,263 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "69f482c86c8c12e86b258fe828c301086a54f2a0c06ae3a9cc74044b80527e16"
+  },
+  "body": {
+    "id": "wobble",
+    "name": "Wobble",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": true,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "role": "body",
+      "mcu": "esp32s3",
+      "board": "esp32-s3-devkitc-1",
+      "platform": "espressif32@6.6.0",
+      "board_options": {
+        "board_upload.flash_size": "16MB",
+        "board_build.arduino.memory_type": "qio_opi",
+        "build_flags": [
+          "-DBOARD_HAS_PSRAM"
+        ]
+      },
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    },
+    "head": {
+      "role": "head",
+      "mcu": "esp32s3",
+      "board": "seeed_xiao_esp32s3",
+      "platform": "espressif32@6.6.0",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "esptool_js",
+        "erase": true
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each motor forward briefly",
+      "writes": "drive.invert"
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "writes": "imu.offsets"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "lidar_fwd",
+        "drop_front",
+        "drop_rear"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; the body must go to its rest pose",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "left": false,
+      "right": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "rover",
+      "name": "Wobble",
+      "vendor": "Meckie bodies",
+      "model": "wobble",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "drive": {
+        "deadman_ms": 500
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 16000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 3
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/wobble/firmware/hangar_bay_wobble.yaml",
+      "hardware_sha256": "69f482c86c8c12e86b258fe828c301086a54f2a0c06ae3a9cc74044b80527e16",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "wobble",
+    "board": "esp32-s3-devkitc-1",
+    "body_platform": "espressif32@6.6.0",
+    "flash_size": "16MB",
+    "arduino": {
+      "memory_type": "qio_opi"
+    },
+    "display": {
+      "controller": "gc9a01",
+      "width": 240,
+      "height": 240,
+      "pins": {
+        "mosi": 9,
+        "sclk": 7,
+        "dc": 8,
+        "rst": 1,
+        "bl": 2
+      }
+    },
+    "motors": {
+      "driver": "drv8833",
+      "type": "two_wheel_balancing",
+      "pins": {
+        "ain1": 38,
+        "ain2": 39,
+        "bin1": 40,
+        "bin2": 41
+      }
+    },
+    "servo": {
+      "pan": 14,
+      "axes": 1,
+      "part": "mg90s",
+      "role": "kickstand"
+    },
+    "led": {
+      "pin": 48,
+      "part": "ws2812"
+    },
+    "mic_type": "ics43434",
+    "mic": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5,
+        "dout": 6
+      }
+    },
+    "speaker": "max98357a",
+    "speaker_pins": {
+      "pins": {
+        "bclk": 3,
+        "lrclk": 4,
+        "din": 5,
+        "dout": 6
+      }
+    },
+    "camera": true,
+    "topology": {
+      "boards": [
+        {
+          "role": "body",
+          "mcu": "esp32s3",
+          "board": "esp32-s3-devkitc-1",
+          "pack_mcu_key": "reflex"
+        },
+        {
+          "role": "head",
+          "mcu": "esp32s3",
+          "board": "seeed_xiao_esp32s3",
+          "pack_mcu_key": "head"
+        }
+      ],
+      "neck": {
+        "declared_in_pack": {
+          "base_head": {
+            "reflex": {
+              "uart": 2,
+              "tx": 17,
+              "rx": 18
+            },
+            "head": {
+              "tx": 43,
+              "rx": 44
+            },
+            "baud": 921600
+          }
+        }
+      }
+    },
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display cs",
+        "value": "cs=tied_low",
+        "reason": "tied to a rail or behind the I2C GPIO expander, not an MCU pin, so firmware-gen falls back to its default — and on this body that collides: cs would use GPIO 5, which this body uses for bus.i2s.din",
+        "collides": true
+      },
+      {
+        "what": "motor enable pins (ena/enb)",
+        "value": "n/a on a DRV8833",
+        "reason": "firmware-gen expects an L298N-style enable; a DRV8833 PWMs the input pins directly, so ena/enb would fall back to defaults 14/32"
+      },
+      {
+        "what": "speaker amp shutdown",
+        "value": "sd=tied_high",
+        "reason": "tied to a rail or behind the I2C expander, not an MCU pin"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/wobble/hangar-bay/wobble.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: wobble\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, location: belly, role: [balance, drive, sense, legs, power] }\n  head:   { chip: esp32s3, module: xiao_esp32s3_sense, location: top, role: [camera, face, mics, speaker] }\npower:\n  battery: { cells: 2, mah: 1000, smart: true, gauge: sbs, balance: true }\n  charger: { part: bq25798, input: usb_c_pd, request_v: 9 }\n  rails:   { motor: vbat_direct, logic_5v: buck_3a, servo: 5v_load_switch }\n  sit_soc_pct: 20\n  sit_v: 6.8\nlinks:\n  base_head: { reflex: { uart: 2, tx: 17, rx: 18 }, head: { tx: 43, rx: 44 }, baud: 921600 }\nbuses:\n  i2c0:     { host: reflex, sda: 8, scl: 9, hz: 400000 }\n  i2c1_smb: { host: reflex, sda: 4, scl: 5, hz: 100000 }\n  spi:      { host: head, sclk: 7, mosi: 9, hz: 40000000 }\n  i2s:      { host: head, bclk: 3, ws: 4, din: 5, dout: 6, rate: 16000 }\nbalance:\n  imu: { name: imu, part: bno085, bus: i2c0, addr: 0x4A, int: 7, rst: 6, reports: { game_rv_hz: 400, gyro_hz: 400 }, location: axle_line, role: imu }\n  loop_hz: 400\n  controller: lqr_cascade\n  com_above_axle_mm: 63\n  pitch_trim_deg: 0.0\n  sway: { source: head.speech_envelope, max_deg: 8, max_hz: 2 }\n  fall_deg: 35\ndrive:\n  type: two_wheel_balancing\n  wheel_d_mm: 64\n  track_mm: 140\n  motor: { part: n20_6v, ratio: 50, driver: drv8833, pwm_hz: 20000, max_duty_pct: 78 }\n  left:  { in1: 38, in2: 39, enc_a: 1,  enc_b: 2, pcnt_unit: 0 }\n  right: { in1: 40, in2: 41, enc_a: 47, enc_b: 3, pcnt_unit: 1 }\n  driver: { nsleep: 42, nfault: 21 }\n  enc_cpr_wheel: 1400\n  limits: { v_mps: 0.3, v_reverse_mps: 0.15, decel_mps2: 2.0 }\nkickstand:\n  servo: { part: mg90s, pwm_gpio: 14, hz: 50, power_en: 15 }\n  stowed_us: 2350\n  deployed_us: 650\n  over_centre_deg: 4\nperipherals:\n  - { name: lidar_fwd,  part: vl53l1x, bus: i2c0, addr: 0x2A, xshut: 10, role: obstacle }\n  - { name: drop_front, part: vl53l0x, bus: i2c0, addr: 0x30, xshut: 11, tilt_deg: 35, role: drop_off, pitch_comp: true }\n  - { name: drop_rear,  part: vl53l0x, bus: i2c0, addr: 0x31, xshut: 12, tilt_deg: -35, role: drop_off, pitch_comp: true }\n  - { name: charger,    part: bq25798, bus: i2c0, addr: 0x6B, int: 13 }\n  - { name: gauge,      part: sbs_pack, bus: i2c1_smb, addr: 0x0B }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: display,    part: gc9a01, host: head, bus: spi, dc: 8, rst: 1, bl: 2, cs: tied_low, size: 240x240 }\n  - { name: mics,       part: ics43434, host: head, bus: i2s, count: 2, sel: [gnd, 3v3] }\n  - { name: speaker,    part: max98357a, host: head, bus: i2s, sd: tied_high }\n  - { name: camera,     part: ov3660, host: head, bus: onboard_dvp, stream: mjpeg_wifi, res: 800x600, fps: 15 }\nreflexes:\n  edge:     { sensors: [drop_front, drop_rear], drop_mm: 25, action: [stop, back_off_40mm] }\n  obstacle: { sensor: lidar_fwd, slow_mm: 400, stop_mm: 200 }\n  fall:     { sensor: imu, pitch_deg: 35, action: motors_off }\nsafety:\n  triggers: [heartbeat_lost, soc_below_20, vbat_below_6v8, drv_fault, stall_1s, head_link_lost]\n  routine:  [stop, hold_position, wait_2s, legs_deploy, settle_on_legs, motors_off, servo_off, face_sleepy]\n  resume:   fresh_command_only\n"
+}
