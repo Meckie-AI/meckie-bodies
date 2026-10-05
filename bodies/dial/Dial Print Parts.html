@@ -271,13 +271,13 @@ part('camera_bracket','Camera bracket',1,'PLA','Foot down. No supports.',()=>{
  for(const[x,z]of [[-10.5,8],[10.5,8],[-10.5,20.5],[10.5,20.5]])g=S(g,new THREE.CylinderGeometry(INS.M2[0],INS.M2[0],5.2,24).rotateX(P/2).rotateX(P/2).translate(x,-1.5,z).rotateX(0));
  return g;});
 
-part('camera_pod','Camera pod (snap-on)',1,'PLA, chrome paint','Top face down; hooks print upright.',()=>{
+part('camera_pod','Camera pod (snap-on)',1,'PLA metallic silver','Top face down; hooks print upright.',()=>{
  let g=S(BOX(30,14,14,0,0,0),BOX(26.8,10.8,13,0,0,1.6));
  g=S(g,CYLY(4,6,0,-7,8));
  for(const y of [-5.5,5.5])g=U(g,hook(0,y,14,y>0?P/2:-P/2,{L:6,t:1.2,w:6,barb:.8,root:4,gap:.0}));
  return g;});
 
-part('screen_surround','Screen surround',1,'PLA, chrome paint','Face down; tabs print upright.',()=>{
+part('screen_surround','Screen surround',1,'PLA metallic silver','Face down; tabs print upright.',()=>{
  let g=S(RR(74,58,5.5,3),RR(61.4,47.4,1.5,5,0,0,-1));
  for(const s of [-1,1]){g=U(g,hook(0,s*26,3,s>0?P/2:-P/2,{L:5,t:1,w:5,barb:.5,root:2.5,gap:-.95}));g=U(g,hook(s*33,0,3,s>0?0:P,{L:5,t:1,w:5,barb:.5,root:2.5,gap:-.95}));}
  return g;});
@@ -289,20 +289,20 @@ part('knob_panel','Knob panel',1,'PLA sea foam','Front face down; tabs print upr
  for(const s of [-1,1])g=U(g,hook(0,s*33,1.5,s>0?P/2:-P/2,{L:4.6,t:1.2,w:4,barb:.6,root:1.5,gap:-.75}));
  return g;});
 
-part('knob','Knob (snap pin, free-turning)',2,'PLA, brass paint','Face down, pin up.',()=>{
+part('knob','Knob (snap pin, free-turning)',2,'PLA metallic brass','Face down, pin up.',()=>{
  let g=U(CYL(6.2,6,0,0,0,48),CYL(1.9,5.6,0,0,6),CONE(2.35,1.9,1,0,0,11.6));
  g=S(g,BOX(.9,6,4,0,0,9),BOX(1,4,.6,0,4,5.5));
  return g;});
 
-part('seam_band','Seam band (split ring)',1,'PLA, chrome paint','Flat.',()=>{
+part('seam_band','Seam band (split ring)',1,'PLA metallic silver','Flat.',()=>{
  let g=S(RR(W+1.2,H+1.2,RC+.6,1.4),RR(W-1.4,H-1.4,RC-.7,3,0,0,-1));return S(g,BOX(1.2,6,4,0,-H/2,-1));});
 
 part('mic_clamp','Mic retainer plate',2,'PLA','Flat.',()=>{let g=S(RR(8,22,2,2),BOX(4,4,4,0,0,-1));for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
 part('speaker_ring','Speaker ring (Ø40)',1,'PLA','Flat.',()=>{let g=S(CYL(24,2,0,0,0,64),CYL(18,4,0,0,-1,64));for(let i=0;i<3;i++){const q=i*2*Math.PI/3;g=S(g,clr('M2',21*Math.cos(q),21*Math.sin(q),-1,4),csk('M2',21*Math.cos(q),21*Math.sin(q),2,true));}return g;});
 part('tof_bezel','ToF window bezel (red)',1,'PLA signal red','Face down.',()=>{let g=S(RR(22,12,3,2.4),RR(16,6,1.5,4,0,0,-1));for(const x of [-8.5,8.5])g=S(g,clr('M2',x,0,-1,4));return g;});
-part('carry_handle','Carry handle (chrome, M3 into rear-cover inserts)',1,'PLA, chrome paint','Flat on its side.',()=>{const sh=new THREE.Shape();sh.moveTo(-48,0);sh.lineTo(-48,14);sh.quadraticCurveTo(-48,22,-40,22);sh.lineTo(40,22);sh.quadraticCurveTo(48,22,48,14);sh.lineTo(48,0);sh.lineTo(40,0);sh.lineTo(40,12);sh.quadraticCurveTo(40,15,37,15);sh.lineTo(-37,15);sh.quadraticCurveTo(-40,15,-40,12);sh.lineTo(-40,0);sh.lineTo(-48,0);
+part('carry_handle','Carry handle (chrome, M3 into rear-cover inserts)',1,'PLA metallic silver','Flat on its side.',()=>{const sh=new THREE.Shape();sh.moveTo(-48,0);sh.lineTo(-48,14);sh.quadraticCurveTo(-48,22,-40,22);sh.lineTo(40,22);sh.quadraticCurveTo(48,22,48,14);sh.lineTo(48,0);sh.lineTo(40,0);sh.lineTo(40,12);sh.quadraticCurveTo(40,15,37,15);sh.lineTo(-37,15);sh.quadraticCurveTo(-40,15,-40,12);sh.lineTo(-40,0);sh.lineTo(-48,0);
  let g=EX(sh,8,0);for(const x of [-44,44])g=S(g,CYLY(CLR.M3,12,x,4,4),CYLY(3.2,8,x,18,4));return g;});
-part('handle_caps','Handle boss caps (brass, snap over the screw heads)',2,'PLA, brass paint','Flat.',()=>U(CYL(3.6,1.5,0,0,0,24),CYL(3.05,2.5,0,0,-2.5,24)));
+part('handle_caps','Handle boss caps (brass, snap over the screw heads)',2,'PLA metallic brass','Flat.',()=>U(CYL(3.6,1.5,0,0,0,24),CYL(3.05,2.5,0,0,-2.5,24)));
 part('cable_clock','Cable clock (1.25-turn spool, screws to the turntable underside)',1,'PLA','Flange down.',()=>{let g=U(RING(28,15,2,0),RING(18,15,12,2),RING(22,15,2,14));g=S(g,BOX(4,10,10,0,18,4));for(const x of [-24,24])g=S(g,clr('M3',x,0,-1,4),csk('M3',x,0,0,false));return g;});
 part('rear_grommet','Neck harness grommet',1,'TPU 95A','Flange down.',()=>S(U(CYL(6,1.5,0,0,0,24),CYL(4.1,3,0,0,1.5,24),CYL(5,1,0,0,4.5,24)),CYL(2.5,8,0,0,-1,20)));
 part('ballast_dxf_note','Steel ballast disc (laser-cut, not printed)',1,'Mild steel 4 mm','Preview only: Ø130, 3× M4 tapped at R50 (30°, 150°, 270°).',()=>{

@@ -47,8 +47,12 @@ if (slugs.length === 1) {
 } else {
   const list = slugs.length ? slugs : P.slugs();
   console.log('\n  MADE TO ORDER: what to charge\n');
-  console.log('   body          mass   hrs   unpainted     painted      lead   labour' +
-    (compare ? '    outside bureau' : ''));
+  // The painted column only earns its space if some body actually has painted
+  // parts. The official packs have none since paint was dropped for metallic
+  // PLA, but a contributed pack may bring it back.
+  const anyPaint = list.some((s) => PS.price(doc(s), { paint: true }).painted_parts > 0);
+  console.log('   body          mass   hrs       price' + (anyPaint ? '     painted   ' : '   ') +
+    '  lead   labour' + (compare ? '    outside bureau' : ''));
   for (const slug of list) {
     const d = doc(slug);
     const u = PS.price(d, { paint: false });
@@ -56,7 +60,8 @@ if (slugs.length === 1) {
     const money = (r) => `$${r.usd_low}-${r.usd_high}`;
     console.log(`   ${slug.padEnd(12)} ${(u.printed_g + 'g').padStart(5)} ` +
       `${(Math.round(u.machine_hours[0]) + '-' + Math.round(u.machine_hours[1])).padStart(5)} ` +
-      `${money(u).padStart(11)} ${(u.painted_parts ? money(p) : '—').padStart(11)} ` +
+      `${money(u).padStart(11)} ` +
+      (anyPaint ? `${(u.painted_parts ? money(p) : '—').padStart(11)} ` : '') +
       `${(u.lead_days_low + '-' + u.lead_days_high + 'd').padStart(7)} ` +
       `${((u.labour_share * 100).toFixed(0) + '%').padStart(6)}` +
       (compare ? `   $${d.service_estimate.usd_low}-${d.service_estimate.usd_high}`.padStart(18) : ''));

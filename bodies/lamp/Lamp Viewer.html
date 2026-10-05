@@ -45,11 +45,11 @@ const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughn
 const mat={
  shell:M('PLA_cream',0xefe3c8,{r:0.42}),
  teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
+ tealDeep:M('PLA_seafoam_deep',0x3f7d76,{r:0.46}),
  red:M('signal_red',0xc8463a,{r:0.38}),
- chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
- alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
- brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
+ chrome:M('PLA_metallic_silver',0xc9ced2,{r:0.4,m:0.25}),
+ alu:M('PLA_metallic_silver_alt',0xc4c9cd,{r:0.44,m:0.22}),
+ brass:M('PLA_metallic_brass',0xbd9a45,{r:0.42,m:0.28}),
  cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
@@ -139,7 +139,7 @@ tube(PIN,'spk_lead',[[0.054,0.019,0.018],[0.066,0.02,0.008],[0.072,0.021,0.0]],m
 const yaw=G(model,'yaw_stage',{pos:[0,0.062,0],ex:[0,0.09,0]});
 yaw.rotation.y=P.yaw*D;
 const S=V(0,0.04,0);
-const tur=G(yaw,'turret',{label:'Turret · PLA, brushed-alu finish, spring lugs',ex:[0,-0.03,0]});
+const tur=G(yaw,'turret',{label:'Turret · PLA metallic silver, spring lugs',ex:[0,-0.03,0]});
 add(tur,'turret',lathe([[0.036,-0.004],[0.036,0.006],[0.03,0.016],[0.02,0.022],[0,0.022]]),mat.alu);
 add(tur,'yaw_horn',CY(0.011,0.003),mat.chrome,[0,-0.0055,0]);
 for(const z of [0.074,-0.08]){add(tur,'spring_lug',BX(0.012,0.008,0.006),mat.alu,[-0.032,0.012,z]);add(tur,'lug_arm',BX(0.006,0.006,Math.abs(z)-0.03),mat.alu,[-0.032,0.012,Math.sign(z)*(Math.abs(z)+0.03)/2]);}

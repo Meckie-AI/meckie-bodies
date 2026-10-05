@@ -1,10 +1,14 @@
 {
   "_why": [
     "What it costs Meckie to print a body and post it, and therefore what a",
-    "made-to-order price has to clear. Separate from rates.json on purpose:",
+    "The headline finding, which the numbers below will reproduce: filament is",
     "rates.json prices an outside service bureau, which is a different business",
     "with different costs. This file prices OUR printer and OUR hands.",
     "",
+    "",
+    "Paint used to be the largest line on most bodies - Scout's four chrome parts",
+    "added $64 to a $114 set. Dropping it for metallic PLA removed that line",
+    "entirely, which is why no body shows a painted price any more.",
     "The headline finding, which the numbers below will reproduce: filament is",
     "not the cost. A whole body is $2 to $13 of plastic. Machine time is nearly",
     "free once the printer is bought. What costs money is attention - plate",
@@ -33,7 +37,7 @@
     "handling_note": "Loading, starting, removing parts, checking them against the parts list, and boxing. Charged per body plus per plate, because a single-extruder printer cannot run PLA and TPU together and each material is at least one more plate to attend to.",
     "paint_hours_base": 0.5,
     "paint_hours_per_part": 0.2,
-    "paint_note": "Chrome parts are filler primer, gloss black, chrome-effect, gloss clear: four coats with dry time between. The per-part figure is active handling only and assumes coats are batched across a whole body's painted parts. This is the most expensive thing on the menu and the easiest to decline."
+    "paint_note": "Retained but now ZERO on every official pack: paint was dropped 2026-10-05 in favour of metallic-filled PLA, which cannot chip and costs no labour. The knobs stay because a CONTRIBUTED pack may still specify a painted or sanded finish, and pricing it at nothing would quietly absorb somebody's evening. A part counts as painted when its material names paint or a finish."
   },
   "packaging": {
     "usd_base": 6,

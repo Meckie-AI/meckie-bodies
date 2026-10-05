@@ -45,11 +45,11 @@ const M=(name,color,o={})=>{const m=new THREE.MeshStandardMaterial({color,roughn
 const mat={
  shell:M('PLA_cream',0xefe3c8,{r:0.42}),
  teal:M('PLA_seafoam',0x5ea49b,{r:0.42}),
- tealDeep:M('PLA_seafoam_paint',0x3f7d76,{r:0.5}),
+ tealDeep:M('PLA_seafoam_deep',0x3f7d76,{r:0.46}),
  red:M('signal_red',0xc8463a,{r:0.38}),
- chrome:M('chrome_trim',0xdfe2e4,{r:0.2,m:0.35}),
- alu:M('brushed_alu_finish',0xc9cdd0,{r:0.34,m:0.45}),
- brass:M('brass_finish',0xc29a48,{r:0.3,m:0.55}),
+ chrome:M('PLA_metallic_silver',0xc9ced2,{r:0.4,m:0.25}),
+ alu:M('PLA_metallic_silver_alt',0xc4c9cd,{r:0.44,m:0.22}),
+ brass:M('PLA_metallic_brass',0xbd9a45,{r:0.42,m:0.28}),
  cf:M('PLA_structural',0x323438,{r:0.72}),
  servo15:M('STS3215_black',0x232427,{r:0.5}),
  steel:M('steel',0xbfc3c7,{r:0.22,m:0.4}),
@@ -141,7 +141,7 @@ add(tt,'brg_6806',new THREE.TorusGeometry(0.0185,0.003,10,48).rotateX(Math.PI/2)
 // pan stage
 const PIV=0.061;
 const pan=G(model,'pan_stage',{pos:[0.015,0.075,0],ex:[0,0.1,0]});pan.rotation.y=PO.pan*D;
-const yoke=G(pan,'yoke',{label:'Yoke · PLA, brushed-alu finish'});
+const yoke=G(pan,'yoke',{label:'Yoke · PLA metallic silver'});
 add(yoke,'neck',CY(0.011,0.01,32),mat.alu,[0,0.005,0]);
 add(yoke,'yoke_base',BX(0.026,0.006,0.1),mat.alu,[0,0.013,0]);
 for(const s of [-1,1]){add(yoke,'yoke_arm',BX(0.016,PIV-0.013,0.006),mat.alu,[0,(PIV+0.013)/2,s*0.047]);add(yoke,'yoke_boss',CZ(0.009,0.006,32),mat.alu,[0,PIV,s*0.047]);add(yoke,'pivot_cap',CZ(0.0068,0.003,32),mat.brass,[0,PIV,s*0.0515]);}

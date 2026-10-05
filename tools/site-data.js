@@ -52,7 +52,7 @@ function serviceEstimate(parts) {
 }
 const OUT = path.join(P.ROOT, 'site', 'data');
 
-// "PLA sea foam" / "TPU 95A black" / "PLA, chrome paint" -> the stock you buy.
+// "PLA sea foam" / "TPU 95A black" / "PLA metallic silver" -> the stock you buy.
 //
 // The official packs specify PLA and TPU only. PETG and CF-nylon are still
 // recognised rather than folded into PLA, because a contributed pack may name

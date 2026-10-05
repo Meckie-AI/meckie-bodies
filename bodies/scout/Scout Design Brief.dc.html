@@ -430,7 +430,7 @@ a:hover{color:#23292b;text-decoration:underline}
         </div>
       </sc-for>
     </div>
-    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Every part fits a 256 × 256 bed several times over; a full set prints on two plates (PLA and TPU). Chrome parts: filler primer, gloss black, chrome-effect paint, gloss clear. Brass parts get a metallic brass base under satin clear.</p>
+    <p style="margin:0;font:400 13px/1.5 'IBM Plex Mono',monospace;color:#3d4344;max-width:900px">Every part fits a 256 × 256 bed several times over; a full set prints on two plates (PLA and TPU). No painting or finishing anywhere: the silver and brass parts print in metallic-filled PLA.</p>
   </section>
 
   <section data-screen-label="06 Material note" style="display:flex;flex-direction:column;gap:20px">
@@ -462,6 +462,7 @@ a:hover{color:#23292b;text-decoration:underline}
       <p style="margin:0;font:400 15px/1.6 'Jost';color:#3d4344;text-wrap:pretty"><strong>If you want the margin back:</strong> the geometry does not change. Print the shells in PETG and the load-bearing structure in CF-nylon and every part still fits, because that was the original specification and the only thing that changed is which spool is on the shelf. The cost is a hardened nozzle, a dry box, and a printer that holds 260&nbsp;&deg;C. If you have that printer, the tougher parts are yours for a filament swap.</p>
     </div>
   </section>
+
 
 
 
@@ -573,7 +574,7 @@ safety:
       <li>PDM-to-PAM8302 audio quality through an RC filter; if it is too noisy, swap to a MAX98357A and free a pin by moving the display DC to an expander-driven 9-bit SPI mode.</li>
       <li>IMU choice: the shared core calls for a BNO085 at the centre of mass. Scout uses an LSM6DSOX to hold the budget; confirm heading drift is acceptable or take the +$15.</li>
       <li>Ears and tail: TPU ears must not reach the wheels when floppy; the whip must spring back after being stepped on.</li>
-      <li>Shell scuffing: chrome-effect paint on the bezel and hood will chip on bumps; consider printed silver PLA for those parts.</li>
+      <li>Shell scuffing: metallic PLA cannot chip, since the colour runs all the way through, but it scuffs and the flake shows wear differently from a flat colour. Worth a look after the first few collisions.</li>
     </ul>
   </section>
 </div>

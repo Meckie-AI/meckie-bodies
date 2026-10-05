@@ -155,7 +155,7 @@ part('deck','Deck lid',1,'PLA cream','Top face down. No supports.',()=>{
  for(const[x,y]of [[SVX+9,-8],[SVX+9,8],[SVX+18,-8],[SVX+18,8]])g=U(g,BOX(6,6,DZ1-WT-51.0,x,y,51.2));                    // harness pass-through to the neck
  return g;});
 
-part('corner_cap','Deck corner cap (hides screw)',4,'PLA, chrome paint','Flat.',()=>U(CYL(3.5,1.6,0,0,0,32),CYL(2.9,2,0,0,-2,32),CONE(3.2,2.9,.6,0,0,-2)));
+part('corner_cap','Deck corner cap (hides screw)',4,'PLA metallic silver','Flat.',()=>U(CYL(3.5,1.6,0,0,0,32),CYL(2.9,2,0,0,-2,32),CONE(3.2,2.9,.6,0,0,-2)));
 
 const sleeve=(key,name,Lp,Wp,Hs,note)=>{part(key,name,1,'PLA','Flange down. No supports. '+note,()=>{
  let g=U(BOX(Lp+6,Wp+6,Hs,0,0,0),BOX(Lp+6,2*(CRAD+4),3,0,0,0));
@@ -231,14 +231,14 @@ part('tilt_cap','Tilt servo sleeve cap',1,'PLA','Flat.',()=>{const Lp=49.6,Wp=25
 part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
 
-part('porthole_bezel','Porthole bezel with rivets',1,'PLA, chrome paint (rivets brass)','Face down.',()=>{
+part('porthole_bezel','Porthole bezel with rivets',1,'PLA metallic silver','Face down.',()=>{
  let g=U(RING(26,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<8;i++){const a=i*P/4;g=U(g,new THREE.SphereGeometry(1.7,12,8).translate(25.5*Math.cos(a),25.5*Math.sin(a),0));}
  g=I(g,BOX(80,80,10,0,0,0));
  for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}
  return g;});
 
-part('camera_lamp','Camera lamp housing',1,'PLA, chrome paint','Lamp face down.',()=>{
+part('camera_lamp','Camera lamp housing',1,'PLA metallic silver','Lamp face down.',()=>{
  let g=U(CYL(10,12,0,0,0,48),CYL(15,3,0,0,12,64));
  g=S(g,CYL(8,12.1,0,0,1.6,48),CYL(4,4,0,0,-1,32));
  g=S(g,new THREE.CylinderGeometry(DR,DR,60,128).rotateZ(P/2).translate(0,0,15+DR-1.2));

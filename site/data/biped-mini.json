@@ -494,7 +494,7 @@
       "name": "Porthole bezel with rivets",
       "qty": 1,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Face down.",
       "file": "biped-mini-porthole-x1.stl",
       "bytes": 110684,
@@ -1331,7 +1331,7 @@
     "unpainted": {
       "printed_g": 495,
       "plates": 2,
-      "painted_parts": 1,
+      "painted_parts": 0,
       "filament_usd": 10.51,
       "machine_hours": [
         19.8,
@@ -1355,25 +1355,25 @@
     "painted": {
       "printed_g": 495,
       "plates": 2,
-      "painted_parts": 1,
+      "painted_parts": 0,
       "filament_usd": 10.51,
       "machine_hours": [
         19.8,
         33
       ],
       "handling_hours": 2,
-      "paint_hours": 0.7,
-      "labour_usd": 81,
+      "paint_hours": 0,
+      "labour_usd": 60,
       "packaging_usd": 11.94,
       "cost_usd": [
-        109.4,
-        113.37
+        88.4,
+        92.37
       ],
-      "usd_low": 178,
-      "usd_high": 184,
-      "lead_days_low": 8,
-      "lead_days_high": 9,
-      "labour_share": 0.71,
+      "usd_low": 144,
+      "usd_high": 150,
+      "lead_days_low": 6,
+      "lead_days_high": 7,
+      "labour_share": 0.65,
       "calibrated": false
     },
     "capacity_bodies_per_month": 17

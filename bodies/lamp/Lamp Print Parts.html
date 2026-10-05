@@ -132,7 +132,7 @@ part('tray','Electronics tray (ring, Pi bosses + M2 grid)',1,'PLA','Flat.',()=>{
 
 part('clamp_ring','Bearing clamp ring',1,'PLA','Flat.',()=>{let g=RING(42,31,3,0);for(let i=0;i<6;i++){const a=i*P/3,x=37*Math.cos(a),y=37*Math.sin(a);g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));}return g;});
 
-part('turret','Turret',1,'PLA, brushed-alu finish','Disc down, spigot up. 6 walls, 60%.',()=>{
+part('turret','Turret',1,'PLA metallic silver','Disc down, spigot up. 6 walls, 60%.',()=>{
  let g=U(CYL(36,6,0,0,0,96),CYL(24.95,9,0,0,6,96));
  g=S(g,CYL(10.4,4.1,0,0,11),CYL(4.5,20,0,0,-1));
  for(let i=0;i<4;i++){const a=i*P/2+P/4,x=HPCD*Math.cos(a),y=HPCD*Math.sin(a);g=S(g,clr('M3',x,y,-1,20),csk('M3',x,y,0,false));}
@@ -154,14 +154,14 @@ const podHalf=(key,name,sd)=>part(key,name,1,'PLA cream','Split face down. No su
 podHalf('pod_right','Shoulder pod, right half (shoulder servo ID 2)',1);
 podHalf('pod_left','Shoulder pod, left half (elbow-drive servo ID 3)',-1);
 
-part('pod_cap','Pod side cap (chrome)',2,'PLA, chrome paint','Flat.',()=>S(CYL(15,2,0,0,0,48),CYL(11.5,4,0,0,-1)));
+part('pod_cap','Pod side cap (chrome)',2,'PLA metallic silver','Flat.',()=>S(CYL(15,2,0,0,0,48),CYL(11.5,4,0,0,-1)));
 
 part('drive_crank','Elbow drive crank (on ID 3 horn)',1,'PLA','Flat. 100% infill.',()=>{
  let g=U(CYL(7.45,8.5,0,0,0,48),CYL(10,4,0,0,8.5,48),BOX(8,RC+8,4,0,-RC/2,8.5),CYL(5,4,0,-RC,8.5,32));
  g=S(g,CYL(4.2,30,0,0,-1));for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,clr('M3',HPCD*Math.cos(a),HPCD*Math.sin(a),-1,20),CYL(3,3,HPCD*Math.cos(a),HPCD*Math.sin(a),10));}
  g=S(g,insUp('M3',0,-RC,12.5));return g;});
 
-const rail=(key,name,L,lowCut,hiCut,rl=11)=>part(key,name,1,'PLA, brushed-alu finish','Flat. 6 walls, 60%.',()=>{
+const rail=(key,name,L,lowCut,hiCut,rl=11)=>part(key,name,1,'PLA metallic silver','Flat. 6 walls, 60%.',()=>{
  let g=U(BOX(11,L,4,0,L/2,0),CYL(rl,5,0,0,0,48),CYL(10,5,0,L,0,48));
  g=S(g,lowCut(),hiCut());
  for(const y of [60,L*0.6])g=S(g,CYL(CLR.M3,10,0,y,-1));
@@ -211,13 +211,13 @@ part('liner','Reflector liner (LED ring + display carrier)',1,'PLA white','Small
 part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
 part('led_diffuser','LED ring diffuser',1,'PLA natural (translucent)','Flat.',()=>RING(33.9,28.3,1.6,0));
-part('face_bezel','Face bezel',1,'PLA, chrome paint','Face down.',()=>RING(23.4,16.2,2.4,0));
+part('face_bezel','Face bezel',1,'PLA metallic silver','Face down.',()=>RING(23.4,16.2,2.4,0));
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PLA','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-3.5,3.5])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
 part('mic_clamp','Mic retainer plate',2,'PLA','Flat.',()=>{let g=S(RR(8,20,2,2),BOX(4,4,4,0,0,-1));for(const y of [-6,6])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
 part('speaker_ring','Speaker ring',1,'PLA','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
-part('finial','Finial',1,'PLA, brass paint','Ball up.',()=>U(CYL(1.9,8,0,0,0,20),new THREE.SphereGeometry(4.2,24,16).translate(0,0,10)));
+part('finial','Finial',1,'PLA metallic brass','Ball up.',()=>U(CYL(1.9,8,0,0,0,20),new THREE.SphereGeometry(4.2,24,16).translate(0,0,10)));
 part('ballast_note','Steel ballast ring (laser-cut, not printed)',1,'Mild steel 14 mm','Preview only: Ø150 / Ø90 × 14, 4× M4 tapped at R62, 4× Ø9 standoff holes at R55.',()=>{let g=RING(75,45,14,0);for(let i=0;i<4;i++){const a=i*P/2;g=S(g,CYL(1.65,10,62*Math.cos(a),62*Math.sin(a),-1));}for(let i=0;i<4;i++){const a=i*P/2+P/4;g=S(g,CYL(4.5,10,55*Math.cos(a),55*Math.sin(a),-1));}return g;});
 
 // ---------- viewer ----------

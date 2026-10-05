@@ -116,7 +116,7 @@ const shellHalf=(L,s)=>{const c=(SY0+L-16)/2,ay=(L-16-SY0)/2+7;let g=S(shellE(L)
  return bigOf(g);};
 const cap=L=>{let g=BOX(31.2,L-41,3,0,(L-19+22)/2,0);for(const x of [-14,14])for(const y of [L-22,25])g=S(g,clr('M3',x,y,-1,5),csk('M3',x,y,3,true));return g;};
 LK.forEach((L,i)=>{
- part('link'+(i+1)+'_frame','Link '+(i+1)+' frame (holds J'+(i+2)+' servo), '+L+' mm',1,'PLA, chrome paint on cheeks','Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.',()=>frame(L));
+ part('link'+(i+1)+'_frame','Link '+(i+1)+' frame (holds J'+(i+2)+' servo), '+L+' mm',1,'PLA metallic silver','Back face down (as modelled, z = ZB on the bed). 6 walls, 60%. No supports.',()=>frame(L));
  part('link'+(i+1)+'_cap','Link '+(i+1)+' sleeve cap',1,'PLA','Flat.',()=>cap(L));
  for(const s of [1,-1])part('link'+(i+1)+'_shell_'+(s>0?'R':'L'),'Link '+(i+1)+' shell, '+(s>0?'right':'left')+' half',1,i%2?'PLA cream':'PLA sea foam','Split face down. No supports.',()=>shellHalf(L,s).rotate([0,s>0?-90:90,0]));
  part('link'+(i+1)+'_ribs','Link '+(i+1)+' glow rib (snaps over shell screws, holds 6 LEDs)',2,'PLA natural (translucent)','Flat. 100% infill for even glow.',()=>{const f=.82;const el=(dx,dz,h,z)=>{const sh=new THREE.Shape();sh.absellipse(0,0,24*f+dx,30*f+dz,0,2*P);return EX(sh,h,z);};
@@ -179,12 +179,12 @@ part('head_rear','Head shell, rear',1,'PLA cream','Rim down. No supports.',()=>{
  return bigOf(g);});
 part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const q=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(q),19.6*Math.sin(q),2.4,q,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
-part('face_bezel','Face bezel + red TPU-look ring',1,'PLA, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
+part('face_bezel','Face bezel + red TPU-look ring',1,'PLA metallic silver','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<3;i++){const q=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(q),22.7*Math.sin(q),5.9));const b2=q+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}return g;});
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PLA','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-7,7])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
-part('camera_hood','Camera hood',1,'PLA, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
+part('camera_hood','Camera hood',1,'PLA metallic silver','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
 part('sensor_clamp','Lidar / mic clamp plate',3,'PLA','Flat.',()=>{let g=S(RR(8,22,2,2.5),BOX(4,10,4,0,0,-1));for(const y of [-9,9])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2.5,true));return g;});
 part('speaker_ring','Speaker ring',1,'PLA','Flat.',()=>{let g=S(RR(42,10,2,2),CYL(12,4,0,0,-1));g=U(g,RING(15,13,2,0));for(const y of [-17,17])g=S(g,clr('M2',y,0,-1,4),csk('M2',y,0,2,true));return g;});
 part('antenna_tip','Antenna glow tip (over a 2020 LED)',2,'PLA natural (translucent)','Hole up. 100% infill.',()=>bigOf(S(new THREE.SphereGeometry(4.5,24,16).translate(0,0,4.5),CYL(1.6,3.2,0,0,-.1),CYL(.9,6,0,0,2))));

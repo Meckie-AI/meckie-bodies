@@ -21,7 +21,7 @@ PRINTING
   PLA for shells, hubs, trim, the deck and motor straps; TPU 95A for
   tyres, bumpers and ears. No supports needed. Quantities are in the file names (-x2).
   Insert bores: M2 3.2 mm, M2.5 3.6 mm, M3 4.0 mm (standard short brass heat-set inserts).
-  Chrome parts: gloss black, chrome-effect spray, gloss clear.
+ 
 
 FIT
   Interfaces are set from datasheets: N20 gearmotor (12 x 10 gearbox, 3 mm D-shaft with a

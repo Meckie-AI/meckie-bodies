@@ -199,7 +199,7 @@ part('wheel_hub','Wheel hub',2,'PLA cream','Outer face down.',()=>{
 part('tyre','Tyre',2,'TPU 95A red','Flat. 3 walls, 30% gyroid, 20 mm/s.',()=>{let g=S(CYL(WRo,13,0,0,0,128),CYL(21.6,15,0,0,-1,96));g=U(g,RING(22,20.9,1.2,3.4));
  g=S(g,RING(WRo+1,WRo-.9,.9,6));return g;});
 
-part('hubcap','Hubcap',2,'PLA, chrome paint','Face down; pins upright.',()=>{let g=I(ELL(14,14,5,0,0,0),BOX(40,40,5,0,0,0));
+part('hubcap','Hubcap',2,'PLA metallic silver','Face down; pins upright.',()=>{let g=I(ELL(14,14,5,0,0,0),BOX(40,40,5,0,0,0));
  for(let i=0;i<6;i++){const a=i*P/3+P/6;g=U(g,new THREE.SphereGeometry(2.1,10,8).translate(17.2*Math.cos(a)*.7,17.2*Math.sin(a)*.7,3.6));}
  for(let i=0;i<3;i++){const a=i*2*P/3,x=12*Math.cos(a),y=12*Math.sin(a);g=U(g,CYL(1.4,4.2,x,y,-4.2+.01),CONE(1.75,1.4,.8,x,y,-4.2));g=S(g,BOX(.7,4,3.2,x,y,-4.4));}
  return I(g,BOX(60,60,12,0,0,-4.4));});
@@ -207,14 +207,14 @@ part('hubcap','Hubcap',2,'PLA, chrome paint','Face down; pins upright.',()=>{let
 part('display_retainer','Display retainer ring (snap)',1,'PLA','Flange down; hooks upright.',()=>{let g=RING(19.6,15,2.4,0);
  for(let i=0;i<3;i++){const a=i*2*P/3+P/2;g=U(g,hook(19.6*Math.cos(a),19.6*Math.sin(a),2.4,a,{L:4,t:1,w:5,barb:.6,root:1.5,gap:.3}));}return g;});
 
-part('face_bezel','Face bezel + TPU-look visor ring',1,'PLA, chrome paint','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
+part('face_bezel','Face bezel + TPU-look visor ring',1,'PLA metallic silver','Face down.',()=>{let g=U(RING(24.5,16.2,3,0),RING(24.5,23.2,4,3));
  for(let i=0;i<3;i++){const a=i*2*P/3;g=U(g,BOX(3,1.2,1.1,22.7*Math.cos(a),22.7*Math.sin(a),5.9));const b2=a+P/3;g=S(g,BOX(1.2,4,5,23.85*Math.cos(b2),23.85*Math.sin(b2),3.5));}return g;});
 
 part('xiao_cradle','XIAO ESP32-S3 Sense cradle',1,'PLA','Base down.',()=>{let g=BOX(26,24,2,0,0,0);
  for(const s of [-1,1])g=U(g,BOX(26,1.4,6,0,s*9.6,0),BOX(18,1.2,.8,0,s*8.6,4.6));g=U(g,BOX(1.6,17.8,4,-12.3,0,0));
  for(const y of [-8,8])g=S(g,clr('M2',0,y,-1,4),csk('M2',0,y,2,true));return g;});
 
-part('camera_hood','Camera hood',1,'PLA, chrome paint','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
+part('camera_hood','Camera hood',1,'PLA metallic silver','Rim down.',()=>{let g=S(I(ELL(7.4,7.4,7,0,0,0),BOX(20,20,7,0,0,0)),I(ELL(6.6,6.6,6.2,0,0,0),BOX(20,20,6.3,0,0,-.1)),CYL(4.1,10,4,0,-1));return U(g,RING(7.4,6.6,1.8,-1.5));});
 
 part('battery_door','Battery door',1,'PLA sea foam (deep)','Outer face down; latch upright.',()=>{
  let g=RR(43.4,51.4,6,2);g=U(g,BOX(38,3.6,1.2,0,-(51.4/2)-1.5,.6).rotateZ?BOX(3.6,38,1.2,0,0,0):0);
@@ -228,7 +228,7 @@ part('corner_bumper','Corner bumper',2,'TPU 95A red','Flat face down.',()=>{let 
 
 part('antenna_ball','Antenna ball',2,'TPU 95A red','Hole up.',()=>bigOf(S(new THREE.SphereGeometry(5.2,28,18).translate(0,0,5.2),CYL(.75,6,0,0,4))));
 
-part('band','Chrome band (split ring)',2,'PLA, chrome paint','Flat.',()=>{let g=S(RR(2*BX0+1.2,2*BY0+1.2,RC+.6,1.4),RR(2*BX0-1.4,2*BY0-1.4,RC-.7,3,0,0,-1));return S(g,BOX(1.2,6,4,0,-BY0,-1));});
+part('band','Chrome band (split ring)',2,'PLA metallic silver','Flat.',()=>{let g=S(RR(2*BX0+1.2,2*BY0+1.2,RC+.6,1.4),RR(2*BX0-1.4,2*BY0-1.4,RC-.7,3,0,0,-1));return S(g,BOX(1.2,6,4,0,-BY0,-1));});
 
 // ---------- viewer ----------
 const cv=document.getElementById('cv'),info=document.getElementById('info'),busy=document.getElementById('busy');

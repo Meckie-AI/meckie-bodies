@@ -145,7 +145,7 @@
       "name": "Camera lamp housing",
       "qty": 1,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Lamp face down.",
       "file": "rover-lite-camera_lamp-x1.stl",
       "bytes": 59984,
@@ -187,7 +187,7 @@
       "name": "Deck corner cap (hides screw)",
       "qty": 4,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Flat.",
       "file": "rover-lite-corner_cap-x4.stl",
       "bytes": 23884,
@@ -502,7 +502,7 @@
       "name": "Porthole bezel with rivets",
       "qty": 1,
       "material": "PLA",
-      "material_full": "PLA, chrome paint (rivets brass)",
+      "material_full": "PLA metallic silver",
       "orientation": "Face down.",
       "file": "rover-lite-porthole_bezel-x1.stl",
       "bytes": 112684,
@@ -1164,7 +1164,7 @@
     "unpainted": {
       "printed_g": 542,
       "plates": 2,
-      "painted_parts": 6,
+      "painted_parts": 0,
       "filament_usd": 12.51,
       "machine_hours": [
         21.7,
@@ -1188,25 +1188,25 @@
     "painted": {
       "printed_g": 542,
       "plates": 2,
-      "painted_parts": 6,
+      "painted_parts": 0,
       "filament_usd": 12.51,
       "machine_hours": [
         21.7,
         36.1
       ],
       "handling_hours": 2,
-      "paint_hours": 1.7,
-      "labour_usd": 111,
+      "paint_hours": 0,
+      "labour_usd": 60,
       "packaging_usd": 12.51,
       "cost_usd": [
-        142.53,
-        146.86
+        91.53,
+        95.86
       ],
-      "usd_low": 231,
-      "usd_high": 238,
-      "lead_days_low": 8,
-      "lead_days_high": 10,
-      "labour_share": 0.76,
+      "usd_low": 149,
+      "usd_high": 156,
+      "lead_days_low": 6,
+      "lead_days_high": 8,
+      "labour_share": 0.63,
       "calibrated": false
     },
     "capacity_bodies_per_month": 17

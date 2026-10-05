@@ -171,7 +171,7 @@
       "name": "Camera hood",
       "qty": 1,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Rim down.",
       "file": "wobble-camera_hood-x1.stl",
       "bytes": 228584,
@@ -192,7 +192,7 @@
       "name": "Chrome band (split ring)",
       "qty": 2,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Flat.",
       "file": "wobble-band-x2.stl",
       "bytes": 91884,
@@ -255,7 +255,7 @@
       "name": "Face bezel + TPU-look visor ring",
       "qty": 1,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Face down.",
       "file": "wobble-face_bezel-x1.stl",
       "bytes": 73284,
@@ -276,7 +276,7 @@
       "name": "Hubcap",
       "qty": 2,
       "material": "PLA",
-      "material_full": "PLA, chrome paint",
+      "material_full": "PLA metallic silver",
       "orientation": "Face down; pins upright.",
       "file": "wobble-hubcap-x2.stl",
       "bytes": 180584,
@@ -986,7 +986,7 @@
     "unpainted": {
       "printed_g": 278,
       "plates": 2,
-      "painted_parts": 6,
+      "painted_parts": 0,
       "filament_usd": 6.42,
       "machine_hours": [
         11.1,
@@ -1010,25 +1010,25 @@
     "painted": {
       "printed_g": 278,
       "plates": 2,
-      "painted_parts": 6,
+      "painted_parts": 0,
       "filament_usd": 6.42,
       "machine_hours": [
         11.1,
         18.5
       ],
       "handling_hours": 2,
-      "paint_hours": 1.7,
-      "labour_usd": 111,
+      "paint_hours": 0,
+      "labour_usd": 60,
       "packaging_usd": 9.33,
       "cost_usd": [
-        130.09,
-        132.31
+        79.09,
+        81.31
       ],
-      "usd_low": 211,
-      "usd_high": 215,
-      "lead_days_low": 7,
-      "lead_days_high": 8,
-      "labour_share": 0.84,
+      "usd_low": 129,
+      "usd_high": 132,
+      "lead_days_low": 5,
+      "lead_days_high": 6,
+      "labour_share": 0.74,
       "calibrated": false
     },
     "capacity_bodies_per_month": 17
