@@ -33,7 +33,7 @@ listings**.
 **No STL in this repo has been sliced or test-printed.** Everything here is
 verified by measurement and by CI, not by a working robot:
 
-- 204 STLs: all watertight, single-shell, inside the 256 mm bed, correctly
+- 204 STLs: all watertight, single-shell, inside the 220 mm bed, correctly
   named, zero zero-area triangles.
 - 7 manifests and 7 Hangar Bay templates: all parse, all hash-verified, all
   satisfying the sensing and safety rules.

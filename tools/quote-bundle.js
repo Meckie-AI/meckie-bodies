@@ -92,7 +92,7 @@ function bundle(slug) {
     `${data.name.toUpperCase()} — PARTS FOR QUOTE`,
     '='.repeat(60), '',
     `${data.total_prints} printed pieces from ${data.parts.length} files, in ${data.materials.length} materials.`,
-    `Everything fits a 256 x 256 x 256 mm build volume.`,
+    `Everything fits a 220 x 220 x 220 mm build volume.`,
     '',
     'WHAT TO QUOTE',
     '-'.repeat(60),
@@ -133,7 +133,7 @@ function bundle(slug) {
     data: Buffer.from(JSON.stringify({
       body: slug, name: data.name,
       generated: new Date().toISOString(),
-      build_volume_mm: [256, 256, 256],
+      build_volume_mm: [220, 220, 220],
       by_material: Object.fromEntries(Object.entries(byMat).map(([m, b]) => [m, {
         ...b, volume_cm3: +b.volume_cm3.toFixed(2),
         ask_for: (SERVICE_MATERIAL[m] || {}).ask_for || m,

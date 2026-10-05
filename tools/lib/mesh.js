@@ -15,7 +15,16 @@
 // removing, but they are not holes and they are not non-manifold.
 
 const fs = require('fs');
-const BED = 256;
+
+// Build volume every part must fit, in mm. Was 256, which was the figure the
+// packs were authored against and nothing actually needed: the largest part in
+// the catalog is rover-lite's fender at 210 mm. 220 is the real requirement and
+// a far more inclusive claim, since it is the common entry-level bed size.
+//
+// Note how tight that leaves the worst case. A 210 mm part on a 220 mm bed has
+// 5 mm a side, which is not enough for a brim and barely enough for a skirt.
+// It fits, and it is the thing to watch when a part near the limit is sliced.
+const BED = 220;
 
 function triangles(file) {
   const buf = fs.readFileSync(file);

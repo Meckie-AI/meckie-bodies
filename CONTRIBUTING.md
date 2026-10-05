@@ -112,7 +112,7 @@ cannot tell the sources apart. Say so in `safety.triggers` too: rover-lite
 declares one `fault` trigger rather than `drv_fault` and `efuse_fault`, because
 its wiring cannot distinguish them.
 
-**6. Fabrication.** Fits a 256 × 256 mm bed. PLA shells and structure,
+**6. Fabrication.** Fits a 220 × 220 mm bed. PLA shells and structure,
 TPU bumpers and tyres. Bearings at every pivot, metal servo horns, hidden
 fasteners. Insert bores: M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4.
 
@@ -122,7 +122,7 @@ URL over a specific listing: listings rot, searches do not.
 ## Meshes
 
 Every STL must be binary, watertight (no boundary edges), a single shell, inside
-256³, named `-x<qty>.stl`, and free of zero-area triangles. `npm run clean-mesh`
+220³, named `-x<qty>.stl`, and free of zero-area triangles. `npm run clean-mesh`
 fixes zero-area triangles mechanically.
 
 Edges used by more than two triangles are also a failure, with one exception:

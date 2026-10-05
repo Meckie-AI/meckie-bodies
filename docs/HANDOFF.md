@@ -72,7 +72,7 @@ Each `bodies/<slug>/` contains:
 1. **No glue, ever.** Everything screws into heat-set inserts or snaps together. No adhesive, tape, epoxy, foam pads or adhesive cable mounts. Press-fits only when a screw or clamp retains them. Every internal component has a listed mount (screws into inserts or standoffs, snap-in cradle with latch, strap on hooks, or screw-down retainer).
 2. **Sensing rule for anything that drives:** at least a forward lidar (VL53L8CX / VL53L1X class) plus drop-off ToF front and rear, shown in the views, BOM, wiring, manifest and safety reflex.
 3. **Safety reflex:** on Central heartbeat loss (≈500 ms), low battery or servo over-temperature, the body stops, brakes, waits about 2 s, moves slowly to a safe rest pose, lowers servo torque and shows a "sleepy / lost connection" face. It resumes **only on a fresh command**.
-4. **Fabrication:** fits a 256 × 256 mm FDM bed. PLA shells and structure, TPU bumpers, feet and tyres. Bearings at every pivot, metal servo horns, hidden fasteners.
+4. **Fabrication:** fits a 220 × 220 mm FDM bed. PLA shells and structure, TPU bumpers, feet and tyres. Bearings at every pivot, metal servo horns, hidden fasteners.
 5. **Insert bores:** M2 Ø3.2 · M2.5 Ø3.6 · M3 Ø4.0 · M4 Ø5.6 · M5 Ø6.4 (standard short brass heat-set inserts).
 
 ## Catalog (also in `bodies.json`)
@@ -104,7 +104,7 @@ BOM figures are single-unit retail estimates (Oct 2026) and have not been checke
 **Footer (all pages):** "Meckie bodies are open hardware (CERN-OHL-S-2.0) and open code (MIT). Meckie OS is free to download; the Meckie brain is a paid service."
 
 ## CI validation to implement
-- Every STL parses, is watertight (every edge shared by exactly two triangles), is a single body, and fits 256 × 256 × 256.
+- Every STL parses, is watertight (every edge shared by exactly two triangles), is a single body, and fits 220 × 220 × 220.
 - The `-x<qty>` filename suffix is present.
 - `parts-list.csv` has the required columns and non-empty links.
 - The YAML parses, servo IDs are unique per bus, and pins are unique per MCU. Bodies with `drives: true` must declare `lidar_fwd` plus drop-off front and rear.

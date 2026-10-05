@@ -237,8 +237,8 @@ const scene=new THREE.Scene();scene.background=new THREE.Color(0xebe2cb);
 const cam=new THREE.PerspectiveCamera(30,1,1,5000);cam.position.set(260,-320,240);
 const ctl=new OrbitControls(cam,cv);
 scene.add(new THREE.HemisphereLight(0xffffff,0x8a7f66,1.6));const dl=new THREE.DirectionalLight(0xffffff,2.2);dl.position.set(200,-150,400);scene.add(dl);
-const bed=new THREE.GridHelper(256,16,0x23292b,0xb8ad93);bed.rotation.x=P/2;scene.add(bed);
-const edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(256,256,.1)),new THREE.LineBasicMaterial({color:0xc8463a}));scene.add(edge);
+const bed=new THREE.GridHelper(220,16,0x23292b,0xb8ad93);bed.rotation.x=P/2;scene.add(bed);
+const edge=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(220,220,.1)),new THREE.LineBasicMaterial({color:0xc8463a}));scene.add(edge);
 const mat=new THREE.MeshStandardMaterial({color:0x5ea49b,roughness:.55,flatShading:false});
 let cur=null;const cache={};
 function fit(){const w=cv.clientWidth,h=cv.clientHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}

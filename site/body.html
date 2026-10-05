@@ -370,7 +370,7 @@ function tabPrint(b) {
         'Download all ' + b.stl + ' STLs')),
     el('p', { class: 'muted', style: 'margin:0 0 24px' },
       b.total_prints + ' printed pieces from ' + b.stl + ' files, in ' + b.materials.length +
-      ' material' + (b.materials.length === 1 ? '' : 's') + '. Fits a 256 × 256 mm bed.'),
+      ' material' + (b.materials.length === 1 ? '' : 's') + '. Fits a 220 × 220 mm bed.'),
     printPaths(b),
     ...sections,
     el('div', { class: 'note warn' },
