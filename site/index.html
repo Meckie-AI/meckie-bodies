@@ -40,7 +40,6 @@
   <nav class="subnav">
     <a data-link="home" href="/" class="on">Catalog</a>
     <a data-link="contribute" href="/contribute">Contribute</a>
-    <a data-link="feed" href="/bodies.json">Feed</a>
   </nav>
 </div></div>
 
@@ -95,7 +94,7 @@
   document.querySelectorAll('[data-link]').forEach(function (a) {
     var k = a.getAttribute('data-link');
     a.href = k === 'home' ? MKT.home : k === 'contribute' ? MKT.contribute
-      : k === 'feed' ? MKT.feed : k === 'site' ? (MKT.site || '/') : a.href;
+      : k === 'site' ? (MKT.site || '/') : a.href;
   });
 </script>
 

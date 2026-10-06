@@ -40,7 +40,6 @@
   <nav class="subnav">
     <a data-link="home" href="/">Catalog</a>
     <a data-link="contribute" href="/contribute" class="on">Contribute</a>
-    <a data-link="feed" href="/bodies.json">Feed</a>
   </nav>
 </div></div>
 
@@ -207,6 +206,34 @@ npm run check     # validate + generators current + the gates still fail on bad 
       pick it by name in Hangar Bay, flash, go — once it is accepted into the catalog. Until then it
       uses Hangar Bay's builder, which can already build whatever you design.</p>
   </section>
+
+  <section>
+    <div class="section-head"><span class="section-num">05</span>
+      <h2 class="section-title">The catalog, for machines</h2></div>
+    <p class="muted" style="margin:0 0 18px;max-width:800px">The catalog is readable as JSON, which
+      is how <strong>Hangar Bay</strong> fills its body picker: it reads the feed to list the
+      official bodies, then fetches one template to get that body's manifest, pin map and
+      calibration wizard. If you are writing something that needs the catalog, read these rather
+      than scraping the pages.</p>
+    <pre class="code">GET <span class="mono">/bodies.json</span>
+    every body: slug, class, servos, brains, mass_g, bom_usd,
+    total_prints, materials, status, plus template_url and page_url
+
+GET /api/bodies/&lt;slug&gt;/template
+    the Hangar Bay template, pre-rendered by this repo. Served
+    byte-for-byte as published, so the `hardware` text you hash
+    is the text the pack signed.
+
+GET /api/bodies/&lt;slug&gt;/stl.zip
+    every STL for one body, in one zip.</pre>
+    <p class="small muted" style="margin:16px 0 0">The feed sends
+      <span class="mono">Access-Control-Allow-Origin: *</span> on purpose &mdash; another app on
+      your own machine reading it is the point &mdash; and no-cache, so a body you scaffold shows up
+      the moment it exists. While the catalog is in private preview it also accepts the access
+      token as <span class="mono">?t=</span> or an
+      <span class="mono">X-Meckie-Bodies-Token</span> header, because Hangar Bay has no browser
+      session to carry a cookie.</p>
+  </section>
 </div>
 
 <footer><div class="wrap">
@@ -221,7 +248,7 @@ npm run check     # validate + generators current + the gates still fail on bad 
   document.querySelectorAll('[data-link]').forEach(function (a) {
     var k = a.getAttribute('data-link');
     a.href = k === 'home' ? MKT.home : k === 'contribute' ? MKT.contribute
-      : k === 'feed' ? MKT.feed : k === 'site' ? (MKT.site || '/') : a.href;
+      : k === 'site' ? (MKT.site || '/') : a.href;
   });
 </script>
 
