@@ -126,7 +126,7 @@ shared/                 the master copy of the per-pack HTML runtime
 schema/                 MANIFEST.schema.json, vendored from the Body SDK
 tools/                  validators and generators
 docs/HANDOFF.md         the original design handoff, as received
-mesh-exceptions.json    the 4 remaining non-manifold meshes, with coordinates
+mesh-exceptions.json    the 8 remaining non-manifold meshes, with coordinates
 stl-drift.json          the 26 STLs that do not reproduce from their generator
 ```
 
