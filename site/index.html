@@ -38,6 +38,11 @@
   document.write('<scr' + 'ipt src="' + site + '/js/nav.js"><\/scr' + 'ipt>');
   document.write('<link rel="stylesheet" href="' + p + '/style.css">');
   document.write('<scr' + 'ipt src="' + p + '/js/where.js"><\/scr' + 'ipt>');
+  // Google Analytics, from the site this catalog is mounted on. Only when
+  // mounted: a standalone checkout on localhost must not post hits to the real
+  // property. The marketing site has loaded this on every page since the split;
+  // the catalog was the one surface missing it.
+  if (mounted) document.write('<scr' + 'ipt async src="/js/analytics.js"><\/scr' + 'ipt>');
 })();
 </script>
 </head>
