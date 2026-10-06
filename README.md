@@ -1,8 +1,9 @@
 # Meckie bodies
 
 Open-hardware robot bodies for Meckie OS. A **body** is a thin-client vehicle a
-household Meckie can inhabit: it runs its reflexes and senses locally and
-streams to Central for thinking. Print one, flash it, and it is a body.
+household Meckie can inhabit: it runs its reflexes and senses locally and leaves
+the thinking to Central — the Meckie's brain, on your home server or in its
+private cloud. Print one, flash it, and it is a body.
 
 Hardware is **CERN-OHL-S-2.0**, code is **MIT**. Build, modify, share or sell;
 if you distribute a product or a modified design, publish its source. Meckie OS
