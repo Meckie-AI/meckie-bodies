@@ -1,4 +1,4 @@
-body: comet_12
+body: comet
 doctrine: thin-client
 central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
 mcu:

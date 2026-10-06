@@ -1,5 +1,5 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>COMET-12 · 3D viewer</title>
+<html><head><meta charset="utf-8"><title>Comet · 3D viewer</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@500;700&display=swap" rel="stylesheet">
 <script type="importmap">
 {
@@ -30,7 +30,7 @@ three-d-stage:not(:defined){visibility:hidden}
 #bar button{font:700 12px 'Jost',sans-serif;letter-spacing:.08em;text-transform:uppercase;border:1.5px solid #23292b;background:#f6efdd;border-radius:999px;padding:6px 12px;cursor:pointer;color:#23292b}
 #bar button.on{background:#23292b;color:#f6efdd}
 </style></head><body>
-<three-d-stage name="comet12" background="#ebe2cb"></three-d-stage>
+<three-d-stage name="comet" background="#ebe2cb"></three-d-stage>
 <svg id="ln"></svg><div id="ov"></div><div id="bar"></div>
 <script src="three-d-stage.js"></script>
 <script type="module">
@@ -78,7 +78,7 @@ function link(p,name,m,a,b,z,r1,r2,t,holes){const L=Math.hypot(b[0]-a[0],b[1]-a[
 function rod(p,name,m,a,b,r){const A=V(...a),B=V(...b),d=B.clone().sub(A);const o=new THREE.Mesh(new THREE.CylinderGeometry(r,r,d.length(),12),m);o.name=name;o.position.copy(A).add(B).multiplyScalar(0.5);o.quaternion.setFromUnitVectors(V(0,1,0),d.normalize());p.add(o);return o;}
 function bearing(p,name,pos,ro,ri,w,ax='z'){const g=ax==='z'?CZ:CX;add(p,name+'_race',g(ro,w),mat.steel,pos);add(p,name+'_bore',g(ri,w+0.0006,20),mat.servo15,pos);}
 
-const model=new THREE.Group();model.name='COMET-12';
+const model=new THREE.Group();model.name='Comet';
 // ---------- body shell ----------
 const body=new THREE.Group();body.name='body_shell';model.add(body);
 const R=0.062,XF=0.185,XR=0.18,XT=0.172,CY=0.228,SY=0.8;

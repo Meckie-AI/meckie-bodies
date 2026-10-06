@@ -106,7 +106,7 @@ async function main() {
     for (const p of pack.parts) {
       // Mirrored parts ship as several STLs from one build function. The
       // suffix names which copy: _L/_R for a left/right pair, _A/_B where a
-      // quadruped's four legs take two mirrored pairs (comet-12's abduction
+      // quadruped's four legs take two mirrored pairs (comet's abduction
       // cradles are "A: FR + RL, B: FL + RR"). Without _A/_B those STLs match
       // no part, and the Print tab silently omits them the way a bad slug
       // regex once hid 29 and 37 files.

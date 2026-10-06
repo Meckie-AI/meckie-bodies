@@ -1,4 +1,4 @@
-COMET-12 · Meckie body download pack
+Comet · Meckie body download pack
 =====================================
 
 A compact companion quadruped with wheel feet that skate-walk at human pace.
@@ -6,13 +6,13 @@ About 1,780 g with the 2200 mAh pack, about $684 in parts.
 Everything screws into heat-set inserts or snaps together. No glue anywhere.
 
 WHAT'S IN HERE
-  COMET-12 Design Brief.dc.html   Design brief: views, linkage, load check, wiring, BOM, assembly, safety, manifest.
-  COMET-12 Viewer.html            Interactive 3D viewer (concept geometry; print parts are the source of truth).
-  COMET-12 Print Parts.html       Print-part generator: preview every part, re-export STLs.
+  Comet Design Brief.dc.html   Design brief: views, linkage, load check, wiring, BOM, assembly, safety, manifest.
+  Comet Viewer.html            Interactive 3D viewer (concept geometry; print parts are the source of truth).
+  Comet Print Parts.html       Print-part generator: preview every part, re-export STLs.
   stl/                            40 print-ready STLs, mm, Z up. _A/_B and _R/_L are mirrored pairs.
   parts-list.csv                  Parts with quantity and a buy link.
-  firmware/hangar_bay_comet_12.yaml   Peripherals, buses, pins, servo IDs, joint limits.
-  hangar-bay/comet-12.template.yaml   Known Hangar Bay template for this design.
+  firmware/hangar_bay_comet.yaml   Peripherals, buses, pins, servo IDs, joint limits.
+  hangar-bay/comet.template.yaml   Known Hangar Bay template for this design.
   support.js, three-d-stage.js    Needed by the HTML files. Keep everything in one folder.
 
 LEGS
@@ -33,8 +33,8 @@ JOINT RANGES (collision sweep of these parts)
   knee bent the same way together under about 40 degrees.
 
 HANGAR BAY (choose your body, flash, go)
-  hangar-bay/comet-12.template.yaml is the known Hangar Bay template for this design.
-  In Meckie OS: Hangar Bay -> Add body -> COMET-12 -> Flash -> Calibrate -> Pair.
+  hangar-bay/comet.template.yaml is the known Hangar Bay template for this design.
+  In Meckie OS: Hangar Bay -> Add body -> Comet -> Flash -> Calibrate -> Pair.
   Changed the design? Use Hangar Bay's builder instead.
 
 BUYING PARTS

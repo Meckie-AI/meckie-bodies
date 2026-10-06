@@ -43,9 +43,9 @@
     "bodies/rover-lite/stl/rover-lite-hull-x1.stl": 3,
     "bodies/lamp/stl/lamp-knuckle_half-x2.stl": 4,
     "bodies/inchworm/stl/inchworm-link1_frame-x1.stl": 2,
-    "bodies/comet-12/stl/comet-12-abd_cradle_A-x2.stl": 1,
-    "bodies/comet-12/stl/comet-12-abd_cradle_B-x2.stl": 1,
-    "bodies/comet-12/stl/comet-12-board_cradle_L-x1.stl": 2,
-    "bodies/comet-12/stl/comet-12-tail_light-x1.stl": 51
+    "bodies/comet/stl/comet-abd_cradle_A-x2.stl": 1,
+    "bodies/comet/stl/comet-abd_cradle_B-x2.stl": 1,
+    "bodies/comet/stl/comet-board_cradle_L-x1.stl": 2,
+    "bodies/comet/stl/comet-tail_light-x1.stl": 51
   }
 }

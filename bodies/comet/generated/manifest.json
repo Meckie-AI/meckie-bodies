@@ -2,9 +2,9 @@
   "protocol_version": 1,
   "body": {
     "kind": "quadruped",
-    "name": "COMET-12",
+    "name": "Comet",
     "vendor": "Meckie bodies",
-    "model": "comet-12",
+    "model": "comet",
     "versions": {
       "hardware": "1.0.0"
     }
@@ -51,8 +51,8 @@
   },
   "_generated": {
     "by": "meckie-bodies tools/emit-json.js",
-    "from": "bodies/comet-12/firmware/hangar_bay_comet_12.yaml",
-    "hardware_sha256": "4f69f86a89357d5d23e37a666e51ad18df23a613598b55b91c985185c0d9b29e",
+    "from": "bodies/comet/firmware/hangar_bay_comet.yaml",
+    "hardware_sha256": "4cd600811ceb1a1d6330e94389b24b696c360918ffd655769617de91a4a39bb3",
     "note": "Generated. Edit the pack YAML, then run npm run emit."
   }
 }

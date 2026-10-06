@@ -1,14 +1,14 @@
-# Hangar Bay template · COMET-12
+# Hangar Bay template · Comet
 # Known template for the official design. Pick this body in Hangar Bay, flash, go.
 # Built something of your own? Use Hangar Bay's builder instead; this file is only for prints of this design.
 template: meckie-hangar-bay/1
 known_template:
   catalog: meckie-bodies
   origin: official
-  hardware_sha256: 4f69f86a89357d5d23e37a666e51ad18df23a613598b55b91c985185c0d9b29e   # Hangar Bay can confirm the manifest is unmodified
+  hardware_sha256: 4cd600811ceb1a1d6330e94389b24b696c360918ffd655769617de91a4a39bb3   # Hangar Bay can confirm the manifest is unmodified
 body:
-  id: comet-12
-  name: COMET-12
+  id: comet
+  name: Comet
   version: 1.0.0
   license: { hardware: CERN-OHL-S-2.0, code: MIT }
   drives: true
@@ -33,12 +33,12 @@ calibration_wizard:
   - { step: wheel_direction, prompt: "Lift the body; Hangar Bay spins each wheel forward briefly", writes: "drive.invert" }
   - { step: imu_level, prompt: "Place the body on a flat surface", writes: "imu.offsets" }
   - { step: tof_check, prompt: "Hold a hand 10 cm in front of each sensor", checks: [lidar_fwd, drop_fl, drop_fr, drop_rl, drop_rr] }
-  - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; COMET-12 must brake, wait, and crouch", required: true }
+  - { step: safety_test, prompt: "Hangar Bay drops the heartbeat; Comet must brake, wait, and crouch", required: true }
 calibration:
   servo_offsets_deg: {}
   drive_invert: { fl: false, fr: false, rl: false, rr: false }
 hardware: |
-  body: comet_12
+  body: comet
   doctrine: thin-client
   central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
   mcu:

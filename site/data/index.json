@@ -164,8 +164,8 @@
       "brief": "bodies/biped-mini/Biped Mini Design Brief.dc.html"
     },
     {
-      "slug": "comet-12",
-      "name": "COMET-12",
+      "slug": "comet",
+      "name": "Comet",
       "class": "quadruped",
       "tagline": "A compact companion quadruped that skate-walks on wheel feet at human pace.",
       "servos": "12× STS3215 + 4× N20",
@@ -183,8 +183,8 @@
         "TPU 95A"
       ],
       "total_prints": 83,
-      "viewer": "bodies/comet-12/COMET-12 Viewer.html",
-      "brief": "bodies/comet-12/COMET-12 Design Brief.dc.html"
+      "viewer": "bodies/comet/Comet Viewer.html",
+      "brief": "bodies/comet/Comet Design Brief.dc.html"
     }
   ]
 }
