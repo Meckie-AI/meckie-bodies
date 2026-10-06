@@ -23,16 +23,16 @@
   <div class="top">
     <div>
       <h1>Meckie bodies<span class="dot">.</span></h1>
-      <p class="sub">Seven open-hardware robot bodies. Print them yourself, or have them made.</p>
+      <p class="sub">Eight open-hardware robot bodies. Print them yourself, or have them made.</p>
     </div>
     <span class="badge">Open hardware</span>
   </div>
   <div class="row" id="row"></div>
   <div class="foot"><span>CERN-OHL-S-2.0 hardware &middot; MIT code</span><span>meckie.ai</span></div>
 <script>
-const B=[["scout","Scout","Scout"],["dial","Dial","Dial"],
-         ["rover-lite","Rover Lite","Rover Lite"],["biped-mini","Biped Mini","Biped Mini"]];
-const CLASSES={scout:"floor runner",dial:"desk arm","rover-lite":"explorer","biped-mini":"walker"};
+const B=[["comet","Comet","Comet"],["scout","Scout","Scout"],
+         ["dial","Dial","Dial"],["biped-mini","Biped Mini","Biped Mini"]];
+const CLASSES={comet:"quadruped",scout:"floor runner",dial:"desk arm","biped-mini":"walker"};
 document.getElementById('row').innerHTML=B.map(([slug,name,file])=>
  `<div class="cell"><iframe src="http://localhost:4300/bodies/${slug}/${encodeURIComponent(file)}%20Viewer.html?embed=1&view=iso" scrolling="no"></iframe>
   <div class="cap"><span>${name}</span><b>${CLASSES[slug]}</b></div></div>`).join('');
