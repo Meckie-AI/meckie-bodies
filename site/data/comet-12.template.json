@@ -1,0 +1,288 @@
+{
+  "template": "meckie-hangar-bay/1",
+  "known_template": {
+    "catalog": "meckie-bodies",
+    "origin": "official",
+    "hardware_sha256": "4f69f86a89357d5d23e37a666e51ad18df23a613598b55b91c985185c0d9b29e"
+  },
+  "body": {
+    "id": "comet-12",
+    "name": "COMET-12",
+    "version": "1.0.0",
+    "license": {
+      "hardware": "CERN-OHL-S-2.0",
+      "code": "MIT"
+    },
+    "drives": true,
+    "pack": "unpublished"
+  },
+  "targets": {
+    "reflex": {
+      "board": "esp32s3_devkitc_n16r8",
+      "firmware": "meckie-reflex@stable",
+      "flash": {
+        "method": "usb_serial",
+        "tool": "built_in",
+        "erase": true
+      }
+    },
+    "face": {
+      "board": "rpi_zero_2w",
+      "image": "meckie-face@stable",
+      "flash": {
+        "method": "sd_card",
+        "tool": "built_in_imager"
+      }
+    }
+  },
+  "pairing": {
+    "central": "auto_discover",
+    "wifi": "from_meckie_app",
+    "brain": "account_required"
+  },
+  "calibration_wizard": [
+    {
+      "step": "servo_ids",
+      "prompt": "Connect one servo at a time; Hangar Bay assigns IDs 1-12 (FL, FR, RL, RR; abduction, hip pitch, knee)",
+      "auto": true
+    },
+    {
+      "step": "servo_center",
+      "prompt": "Set each leg to the printed stance jig and confirm",
+      "writes": "servos[].offset_deg"
+    },
+    {
+      "step": "knee_rod",
+      "prompt": "Adjust each turnbuckle until the knee reads zero (front 149.5 mm, rear 129.2 mm)",
+      "writes": "servos[].offset_deg"
+    },
+    {
+      "step": "wheel_direction",
+      "prompt": "Lift the body; Hangar Bay spins each wheel forward briefly",
+      "writes": "drive.invert"
+    },
+    {
+      "step": "imu_level",
+      "prompt": "Place the body on a flat surface",
+      "writes": "imu.offsets"
+    },
+    {
+      "step": "tof_check",
+      "prompt": "Hold a hand 10 cm in front of each sensor",
+      "checks": [
+        "lidar_fwd",
+        "drop_fl",
+        "drop_fr",
+        "drop_rl",
+        "drop_rr"
+      ]
+    },
+    {
+      "step": "safety_test",
+      "prompt": "Hangar Bay drops the heartbeat; COMET-12 must brake, wait, and crouch",
+      "required": true
+    }
+  ],
+  "calibration": {
+    "servo_offsets_deg": {},
+    "drive_invert": {
+      "fl": false,
+      "fr": false,
+      "rl": false,
+      "rr": false
+    }
+  },
+  "manifest": {
+    "protocol_version": 1,
+    "body": {
+      "kind": "quadruped",
+      "name": "COMET-12",
+      "vendor": "Meckie bodies",
+      "model": "comet-12",
+      "versions": {
+        "hardware": "1.0.0"
+      }
+    },
+    "modes": {
+      "mode": "vehicle"
+    },
+    "intents": {
+      "stop": {},
+      "look_at": {
+        "actuated": true
+      },
+      "say": {
+        "formats": [
+          "pcm_s16le"
+        ],
+        "mouth_source": "body"
+      },
+      "show_face": {
+        "render": "states",
+        "mouth_source": "body",
+        "w": 240,
+        "h": 240
+      },
+      "led": {}
+    },
+    "senses": {
+      "frames": {},
+      "audio_up": {
+        "format": "pcm_s16le",
+        "mic_type": "ics43434",
+        "rate": 48000,
+        "direction": true
+      },
+      "state": {},
+      "depth": {
+        "sensors": 5
+      }
+    },
+    "streams": {
+      "transports": [
+        "ws"
+      ]
+    },
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/comet-12/firmware/hangar_bay_comet_12.yaml",
+      "hardware_sha256": "4f69f86a89357d5d23e37a666e51ad18df23a613598b55b91c985185c0d9b29e",
+      "note": "Generated. Edit the pack YAML, then run npm run emit."
+    }
+  },
+  "build": {
+    "model": "comet-12",
+    "board": "esp32s3_devkitc_n16r8",
+    "servo_bus": [
+      {
+        "name": "servo_bus",
+        "uart": 1,
+        "tx": 17,
+        "rx": 18,
+        "baud": 1000000,
+        "half_duplex": true,
+        "volts": 12,
+        "servos": [
+          {
+            "id": 1,
+            "name": "fl_abduction",
+            "model": "sts3215",
+            "min_deg": -12,
+            "max_deg": 12
+          },
+          {
+            "id": 2,
+            "name": "fl_hip_pitch",
+            "model": "sts3215",
+            "min_deg": -20,
+            "max_deg": 20
+          },
+          {
+            "id": 3,
+            "name": "fl_knee",
+            "model": "sts3215",
+            "min_deg": -60,
+            "max_deg": 60
+          },
+          {
+            "id": 4,
+            "name": "fr_abduction",
+            "model": "sts3215",
+            "min_deg": -12,
+            "max_deg": 12
+          },
+          {
+            "id": 5,
+            "name": "fr_hip_pitch",
+            "model": "sts3215",
+            "min_deg": -20,
+            "max_deg": 20
+          },
+          {
+            "id": 6,
+            "name": "fr_knee",
+            "model": "sts3215",
+            "min_deg": -60,
+            "max_deg": 60
+          },
+          {
+            "id": 7,
+            "name": "rl_abduction",
+            "model": "sts3215",
+            "min_deg": -12,
+            "max_deg": 12
+          },
+          {
+            "id": 8,
+            "name": "rl_hip_pitch",
+            "model": "sts3215",
+            "min_deg": -20,
+            "max_deg": 20
+          },
+          {
+            "id": 9,
+            "name": "rl_knee",
+            "model": "sts3215",
+            "min_deg": -60,
+            "max_deg": 60
+          },
+          {
+            "id": 10,
+            "name": "rr_abduction",
+            "model": "sts3215",
+            "min_deg": -12,
+            "max_deg": 12
+          },
+          {
+            "id": 11,
+            "name": "rr_hip_pitch",
+            "model": "sts3215",
+            "min_deg": -20,
+            "max_deg": 20
+          },
+          {
+            "id": 12,
+            "name": "rr_knee",
+            "model": "sts3215",
+            "min_deg": -60,
+            "max_deg": 60
+          }
+        ]
+      }
+    ],
+    "transport": "ws",
+    "unsupported": [
+      {
+        "what": "display (gc9a01)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+      },
+      {
+        "what": "12 serial-bus servo(s) on 1 bus(es)",
+        "value": "sts3215",
+        "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+      },
+      {
+        "what": "mic (ics43434)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "speaker (max98357a)",
+        "value": "hosted on face",
+        "reason": "wired to the face board, which is not an ESP32 firmware target"
+      },
+      {
+        "what": "camera (imx708)",
+        "value": "hosted on face",
+        "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+      }
+    ],
+    "_generated": {
+      "by": "meckie-bodies tools/emit-json.js",
+      "from": "bodies/comet-12/hangar-bay/comet-12.template.yaml",
+      "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+    }
+  },
+  "hardware": "body: comet_12\ndoctrine: thin-client\ncentral: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }\nmcu:\n  reflex: { chip: esp32s3, module: N16R8, board: esp32s3_devkitc, location: deck, role: [servo_bus, wheels, sense, power, safety] }\n  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: deck, role: [gait, ik, face, camera, audio] }\npower:\n  battery: { cells: 3, mah: 2200, smart: true, gauge: max17320, balance: true, location: under_deck }\n  charger: { part: bq25798, pd: stusb4500, input: usb_c_pd, request_v: 15 }\nbuses:\n  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true, volts: 12 }\n  i2c0:      { host: reflex, sda: 8, scl: 9, hz: 400000 }\n  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600, targets_hz: 100 }\n  i2c1:      { host: face, sda: 2, scl: 3, hz: 400000 }\n  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000 }\n  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }\n  csi:       { host: face, port: cam0 }\nlegs:\n  thigh_mm: 115\n  shin_to_wheel_mm: 100\n  hip_spacing_mm: 223\n  hip_height_mm: 192\n  knee_linkage: { crank_mm: 18, horn_mm: 23, ratio: 1.28, rod_mm: { front: 149.5, rear: 129.2 } }\nservos:\n  - { id: 1, name: fl_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }\n  - { id: 2, name: fl_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }\n  - { id: 3, name: fl_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }\n  - { id: 4, name: fr_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }\n  - { id: 5, name: fr_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }\n  - { id: 6, name: fr_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }\n  - { id: 7, name: rl_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }\n  - { id: 8, name: rl_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }\n  - { id: 9, name: rl_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }\n  - { id: 10, name: rr_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }\n  - { id: 11, name: rr_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }\n  - { id: 12, name: rr_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }\nservo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 25, fall_torque_pct: 10 }\nwheels:\n  driver: drv8833\n  motors: [ { leg: fl, in: [4, 5], enc_a: 40 }, { leg: fr, in: [6, 7], enc_a: 41 }, { leg: rl, in: [1, 2], enc_a: 42 }, { leg: rr, in: [38, 39], enc_a: 47 } ]\n  wheel_d_mm: 30\n  loop_hz: 1000\nperipherals:\n  - { name: servo_pwr,  part: efuse, en: 21, feeds: [front, rear] }\n  - { name: lidar_fwd, role: obstacle,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 14, zones: 8x8, pitch_deg: -5 }\n  - { name: drop_fl, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x30, xshut: 10 }\n  - { name: drop_fr, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x31, xshut: 11 }\n  - { name: drop_rl, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x32, xshut: 12 }\n  - { name: drop_rr, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x33, xshut: 13 }\n  - { name: status_led, part: ws2812, gpio: 48 }\n  - { name: imu, role: imu,        part: bno085, host: face, bus: i2c1, addr: 0x4A, int: 4, location: com }\n  - { name: gauge,      part: max17320, host: face, bus: i2c1, addr: 0x36 }\n  - { name: charger,    part: bq25798, host: face, bus: i2c1, addr: 0x6B }\n  - { name: pd,         part: stusb4500, host: face, bus: i2c1, addr: 0x28 }\n  - { name: display,    part: gc9a01, host: face, bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }\n  - { name: mics,       part: ics43434, host: face, bus: i2s, count: 2, spacing_mm: 41 }\n  - { name: speaker_amp, part: max98357a, host: face, bus: i2s, sd: 16 }\n  - { name: camera,     part: imx708, host: face, bus: csi }\nreflexes:\n  edge:     { sensors: [drop_fl, drop_fr, drop_rl, drop_rr], action: [wheel_brake, gait_stop] }\n  obstacle: { sensor: lidar_fwd, stop_mm: 150 }\n  fall:     { sensor: imu, tilt_deg: 40, action: torque_10 }\n  link:     { pi_timeout_ms: 200, action: safety_routine }\nsafety:\n  triggers: [heartbeat_lost, pi_link_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]\n  routine:  [wheel_brake, gait_stop, hold, wait_2s, crouch_slow, torque_25, face_sleepy]\n  resume:   fresh_command_only\n"
+}

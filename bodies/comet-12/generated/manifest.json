@@ -1,0 +1,58 @@
+{
+  "protocol_version": 1,
+  "body": {
+    "kind": "quadruped",
+    "name": "COMET-12",
+    "vendor": "Meckie bodies",
+    "model": "comet-12",
+    "versions": {
+      "hardware": "1.0.0"
+    }
+  },
+  "modes": {
+    "mode": "vehicle"
+  },
+  "intents": {
+    "stop": {},
+    "look_at": {
+      "actuated": true
+    },
+    "say": {
+      "formats": [
+        "pcm_s16le"
+      ],
+      "mouth_source": "body"
+    },
+    "show_face": {
+      "render": "states",
+      "mouth_source": "body",
+      "w": 240,
+      "h": 240
+    },
+    "led": {}
+  },
+  "senses": {
+    "frames": {},
+    "audio_up": {
+      "format": "pcm_s16le",
+      "mic_type": "ics43434",
+      "rate": 48000,
+      "direction": true
+    },
+    "state": {},
+    "depth": {
+      "sensors": 5
+    }
+  },
+  "streams": {
+    "transports": [
+      "ws"
+    ]
+  },
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/comet-12/firmware/hangar_bay_comet_12.yaml",
+    "hardware_sha256": "4f69f86a89357d5d23e37a666e51ad18df23a613598b55b91c985185c0d9b29e",
+    "note": "Generated. Edit the pack YAML, then run npm run emit."
+  }
+}

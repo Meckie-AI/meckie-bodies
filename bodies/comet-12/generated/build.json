@@ -1,0 +1,134 @@
+{
+  "model": "comet-12",
+  "board": "esp32s3_devkitc_n16r8",
+  "servo_bus": [
+    {
+      "name": "servo_bus",
+      "uart": 1,
+      "tx": 17,
+      "rx": 18,
+      "baud": 1000000,
+      "half_duplex": true,
+      "volts": 12,
+      "servos": [
+        {
+          "id": 1,
+          "name": "fl_abduction",
+          "model": "sts3215",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 2,
+          "name": "fl_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        },
+        {
+          "id": 3,
+          "name": "fl_knee",
+          "model": "sts3215",
+          "min_deg": -60,
+          "max_deg": 60
+        },
+        {
+          "id": 4,
+          "name": "fr_abduction",
+          "model": "sts3215",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 5,
+          "name": "fr_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        },
+        {
+          "id": 6,
+          "name": "fr_knee",
+          "model": "sts3215",
+          "min_deg": -60,
+          "max_deg": 60
+        },
+        {
+          "id": 7,
+          "name": "rl_abduction",
+          "model": "sts3215",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 8,
+          "name": "rl_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        },
+        {
+          "id": 9,
+          "name": "rl_knee",
+          "model": "sts3215",
+          "min_deg": -60,
+          "max_deg": 60
+        },
+        {
+          "id": 10,
+          "name": "rr_abduction",
+          "model": "sts3215",
+          "min_deg": -12,
+          "max_deg": 12
+        },
+        {
+          "id": 11,
+          "name": "rr_hip_pitch",
+          "model": "sts3215",
+          "min_deg": -20,
+          "max_deg": 20
+        },
+        {
+          "id": 12,
+          "name": "rr_knee",
+          "model": "sts3215",
+          "min_deg": -60,
+          "max_deg": 60
+        }
+      ]
+    }
+  ],
+  "transport": "ws",
+  "unsupported": [
+    {
+      "what": "display (gc9a01)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target, so show_face is served by that board's own software and the generator must not resolve its pins"
+    },
+    {
+      "what": "12 serial-bus servo(s) on 1 bus(es)",
+      "value": "sts3215",
+      "reason": "needs the Feetech STS serial-bus driver, which lives on the Meckie OS branch feat/serial-bus-servos and is NOT on main yet. On main, fw-templates.js has one actuator model - a PWM hobby servo per GPIO (ESP32Servo.h, panServo.write(0..180)) - so look_at cannot be generated for this body from main"
+    },
+    {
+      "what": "mic (ics43434)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "speaker (max98357a)",
+      "value": "hosted on face",
+      "reason": "wired to the face board, which is not an ESP32 firmware target"
+    },
+    {
+      "what": "camera (imx708)",
+      "value": "hosted on face",
+      "reason": "wired to the face board (csi), which is not an ESP32 firmware target"
+    }
+  ],
+  "_generated": {
+    "by": "meckie-bodies tools/emit-json.js",
+    "from": "bodies/comet-12/hangar-bay/comet-12.template.yaml",
+    "note": "`unsupported` lists what the pack declares that Meckie OS cannot yet consume. Nothing here is coerced to fit."
+  }
+}

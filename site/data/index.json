@@ -1,6 +1,6 @@
 {
   "schema": "meckie-marketplace/1",
-  "updated": "2026-10-04",
+  "updated": "2026-10-06",
   "bodies": [
     {
       "slug": "dial",
@@ -162,6 +162,29 @@
       "total_prints": 53,
       "viewer": "bodies/biped-mini/Biped Mini Viewer.html",
       "brief": "bodies/biped-mini/Biped Mini Design Brief.dc.html"
+    },
+    {
+      "slug": "comet-12",
+      "name": "COMET-12",
+      "class": "quadruped",
+      "tagline": "A compact companion quadruped that skate-walks on wheel feet at human pace.",
+      "servos": "12× STS3215 + 4× N20",
+      "brains": "Pi Zero 2 W + ESP32-S3",
+      "moves": "4 legs × 3 DOF + wheel feet (skate-walk)",
+      "mass_g": 1780,
+      "bom_usd": 684,
+      "stl": 41,
+      "status": "design complete · not yet test-printed",
+      "drives": true,
+      "esp32_only": false,
+      "servo_type": "serial bus",
+      "materials": [
+        "PLA",
+        "TPU 95A"
+      ],
+      "total_prints": 83,
+      "viewer": "bodies/comet-12/COMET-12 Viewer.html",
+      "brief": "bodies/comet-12/COMET-12 Design Brief.dc.html"
     }
   ]
 }

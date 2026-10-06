@@ -75,6 +75,66 @@
       "kind": "rotated",
       "note": "axes permuted - generator 17 x 34.5 x 17 mm, file 17 x 17 x 34.5 mm",
       "max_delta_mm": 29.45
+    },
+    "bodies/comet-12/stl/comet-12-sleeve_cap-x4.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 54.2 x 2.5 x 70 mm, file 54.2 x 70 x 2.5 mm"
+    },
+    "bodies/comet-12/stl/comet-12-thigh_bridge-x4.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 13 x 47.9 x 13 mm, file 13 x 13 x 47.9 mm"
+    },
+    "bodies/comet-12/stl/comet-12-foot_bumper-x4.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 24 x 25 x 24 mm, file 24 x 24 x 25 mm"
+    },
+    "bodies/comet-12/stl/comet-12-knee_crank-x4.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 29.45 x 10.1 x 21.84 mm, file 29.45 x 21.84 x 10.1 mm"
+    },
+    "bodies/comet-12/stl/comet-12-fender_pod-x4.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 50.21 x 46.68 x 15 mm, file 50.21 x 46.68 x 15 mm"
+    },
+    "bodies/comet-12/stl/comet-12-shell_mid-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 90 x 124 x 94.6 mm, file 90 x 124 x 94.6 mm"
+    },
+    "bodies/comet-12/stl/comet-12-shell_nose-x1.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 127 x 92.21 x 98.54 mm, file 98.54 x 92.21 x 127 mm"
+    },
+    "bodies/comet-12/stl/comet-12-shell_tail-x1.stl": {
+      "kind": "triangle count",
+      "note": "generator makes 6974 triangles, file has 6972"
+    },
+    "bodies/comet-12/stl/comet-12-seam_band-x2.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 8 x 126.74 x 101.14 mm, file 101.14 x 126.74 x 8 mm"
+    },
+    "bodies/comet-12/stl/comet-12-battery_cradle-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 114 x 42 x 31 mm, file 114 x 42 x 31 mm"
+    },
+    "bodies/comet-12/stl/comet-12-face_mount-x1.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 41 x 48 x 57 mm, file 57 x 48 x 41 mm"
+    },
+    "bodies/comet-12/stl/comet-12-tail_mount-x1.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 49 x 48 x 44 mm, file 44 x 48 x 49 mm"
+    },
+    "bodies/comet-12/stl/comet-12-face_bezel-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 48 x 48 x 6 mm, file 48 x 48 x 6 mm"
+    },
+    "bodies/comet-12/stl/comet-12-speaker_grille-x1.stl": {
+      "kind": "mirrored or shifted",
+      "note": "generator 31 x 31 x 11.4 mm, file 31 x 31 x 11.4 mm"
+    },
+    "bodies/comet-12/stl/comet-12-tail_fin-x1.stl": {
+      "kind": "rotated",
+      "note": "axes permuted - generator 58 x 7.6 x 38 mm, file 58 x 38 x 7.6 mm"
     }
   }
 }

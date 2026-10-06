@@ -1,0 +1,67 @@
+body: comet_12
+doctrine: thin-client
+central: { link: wifi, heartbeat_hz: 10, timeout_ms: 500 }
+mcu:
+  reflex: { chip: esp32s3, module: N16R8, board: esp32s3_devkitc, location: deck, role: [servo_bus, wheels, sense, power, safety] }
+  face:   { chip: rpi_zero_2w, os: bookworm-lite, location: deck, role: [gait, ik, face, camera, audio] }
+power:
+  battery: { cells: 3, mah: 2200, smart: true, gauge: max17320, balance: true, location: under_deck }
+  charger: { part: bq25798, pd: stusb4500, input: usb_c_pd, request_v: 15 }
+buses:
+  servo_bus: { host: reflex, uart: 1, tx: 17, rx: 18, baud: 1000000, half_duplex: true, volts: 12 }
+  i2c0:      { host: reflex, sda: 8, scl: 9, hz: 400000 }
+  link:      { reflex: { uart: 2, tx: 15, rx: 16 }, face: { uart: 0, tx: 14, rx: 15 }, baud: 921600, targets_hz: 100 }
+  i2c1:      { host: face, sda: 2, scl: 3, hz: 400000 }
+  spi0:      { host: face, mosi: 10, sclk: 11, cs: 8, hz: 40000000 }
+  i2s:       { host: face, bclk: 18, lrclk: 19, din: 20, dout: 21, rate: 48000 }
+  csi:       { host: face, port: cam0 }
+legs:
+  thigh_mm: 115
+  shin_to_wheel_mm: 100
+  hip_spacing_mm: 223
+  hip_height_mm: 192
+  knee_linkage: { crank_mm: 18, horn_mm: 23, ratio: 1.28, rod_mm: { front: 149.5, rear: 129.2 } }
+servos:
+  - { id: 1, name: fl_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }
+  - { id: 2, name: fl_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }
+  - { id: 3, name: fl_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }
+  - { id: 4, name: fr_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }
+  - { id: 5, name: fr_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }
+  - { id: 6, name: fr_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }
+  - { id: 7, name: rl_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }
+  - { id: 8, name: rl_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }
+  - { id: 9, name: rl_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }
+  - { id: 10, name: rr_abduction, model: sts3215, min_deg: -12, max_deg: 12, stand_deg: 0 }
+  - { id: 11, name: rr_hip_pitch, model: sts3215, min_deg: -20, max_deg: 20, stand_deg: 0 }
+  - { id: 12, name: rr_knee, model: sts3215, min_deg: -60, max_deg: 60, stand_deg: 0, via: pushrod }
+servo_limits: { temp_warn_c: 65, temp_trip_c: 70, rest_torque_pct: 25, fall_torque_pct: 10 }
+wheels:
+  driver: drv8833
+  motors: [ { leg: fl, in: [4, 5], enc_a: 40 }, { leg: fr, in: [6, 7], enc_a: 41 }, { leg: rl, in: [1, 2], enc_a: 42 }, { leg: rr, in: [38, 39], enc_a: 47 } ]
+  wheel_d_mm: 30
+  loop_hz: 1000
+peripherals:
+  - { name: servo_pwr,  part: efuse, en: 21, feeds: [front, rear] }
+  - { name: lidar_fwd, role: obstacle,  part: vl53l8cx, bus: i2c0, addr: 0x29, lpn: 14, zones: 8x8, pitch_deg: -5 }
+  - { name: drop_fl, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x30, xshut: 10 }
+  - { name: drop_fr, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x31, xshut: 11 }
+  - { name: drop_rl, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x32, xshut: 12 }
+  - { name: drop_rr, role: drop_off,    part: vl53l1x, bus: i2c0, addr: 0x33, xshut: 13 }
+  - { name: status_led, part: ws2812, gpio: 48 }
+  - { name: imu, role: imu,        part: bno085, host: face, bus: i2c1, addr: 0x4A, int: 4, location: com }
+  - { name: gauge,      part: max17320, host: face, bus: i2c1, addr: 0x36 }
+  - { name: charger,    part: bq25798, host: face, bus: i2c1, addr: 0x6B }
+  - { name: pd,         part: stusb4500, host: face, bus: i2c1, addr: 0x28 }
+  - { name: display,    part: gc9a01, host: face, bus: spi0, dc: 25, rst: 24, bl_pwm: 13, size: 240x240 }
+  - { name: mics,       part: ics43434, host: face, bus: i2s, count: 2, spacing_mm: 41 }
+  - { name: speaker_amp, part: max98357a, host: face, bus: i2s, sd: 16 }
+  - { name: camera,     part: imx708, host: face, bus: csi }
+reflexes:
+  edge:     { sensors: [drop_fl, drop_fr, drop_rl, drop_rr], action: [wheel_brake, gait_stop] }
+  obstacle: { sensor: lidar_fwd, stop_mm: 150 }
+  fall:     { sensor: imu, tilt_deg: 40, action: torque_10 }
+  link:     { pi_timeout_ms: 200, action: safety_routine }
+safety:
+  triggers: [heartbeat_lost, pi_link_lost, soc_below_15, vbat_below_10v5, servo_overtemp, efuse_fault]
+  routine:  [wheel_brake, gait_stop, hold, wait_2s, crouch_slow, torque_25, face_sleepy]
+  resume:   fresh_command_only

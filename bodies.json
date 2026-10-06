@@ -1,6 +1,6 @@
 {
   "schema": "meckie-body-catalog/1",
-  "updated": "2026-10-04",
+  "updated": "2026-10-06",
   "bodies": [
     {
       "slug": "dial",
@@ -183,6 +183,32 @@
         "code": "MIT"
       },
       "hangar_bay_template": "bodies/biped-mini/hangar-bay/biped-mini.template.yaml"
+    },
+    {
+      "slug": "comet-12",
+      "name": "COMET-12",
+      "class": "quadruped",
+      "moves": "4 legs × 3 DOF + wheel feet (skate-walk)",
+      "servos": "12× STS3215 + 4× N20",
+      "brains": "Pi Zero 2 W + ESP32-S3",
+      "power": "3S 2200 mAh smart pack + USB-C PD",
+      "mass_g": 1780,
+      "bom_usd": 684,
+      "stl": 41,
+      "tagline": "A compact companion quadruped that skate-walks on wheel feet at human pace.",
+      "folder": "bodies/comet-12",
+      "brief": "bodies/comet-12/COMET-12 Design Brief.dc.html",
+      "viewer": "bodies/comet-12/COMET-12 Viewer.html",
+      "print_parts": "bodies/comet-12/COMET-12 Print Parts.html",
+      "stl_dir": "bodies/comet-12/stl",
+      "parts_csv": "bodies/comet-12/parts-list.csv",
+      "manifest": "bodies/comet-12/firmware/hangar_bay_comet_12.yaml",
+      "hangar_bay_template": "bodies/comet-12/hangar-bay/comet-12.template.yaml",
+      "status": "design complete · not yet test-printed",
+      "license": {
+        "hardware": "CERN-OHL-S-2.0",
+        "code": "MIT"
+      }
     }
   ],
   "license": {
