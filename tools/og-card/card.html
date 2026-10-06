@@ -1,0 +1,39 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:#f7f0de;font-family:Jost,system-ui,sans-serif;color:#23292b;
+       display:flex;flex-direction:column;padding:40px 48px 30px}
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  h1{font-size:60px;font-weight:700;letter-spacing:-.015em;line-height:1}
+  h1 .dot{color:#c8463a}
+  .sub{font-size:22px;font-weight:400;color:#3d4344;margin-top:10px;max-width:900px;line-height:1.35}
+  .badge{font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.1em;text-transform:uppercase;
+         color:#f7f0de;background:#c8463a;padding:7px 13px;border-radius:999px;white-space:nowrap}
+  .row{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px;min-height:0}
+  .cell{position:relative;border:2px solid #23292b;border-radius:18px;overflow:hidden;background:#fffdf5}
+  .cell iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .cap{position:absolute;left:0;right:0;bottom:0;padding:7px 11px;background:#23292b;color:#f7f0de;
+       font:500 13px 'IBM Plex Mono',monospace;letter-spacing:.04em;display:flex;justify-content:space-between}
+  .cap b{font-weight:500;color:#b8ad93}
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;
+        font:500 12px 'IBM Plex Mono',monospace;letter-spacing:.07em;color:#3d4344;text-transform:uppercase}
+</style></head><body>
+  <div class="top">
+    <div>
+      <h1>Meckie bodies<span class="dot">.</span></h1>
+      <p class="sub">Seven open-hardware robot bodies. Print them yourself, or have them made.</p>
+    </div>
+    <span class="badge">Open hardware</span>
+  </div>
+  <div class="row" id="row"></div>
+  <div class="foot"><span>CERN-OHL-S-2.0 hardware &middot; MIT code</span><span>meckie.ai</span></div>
+<script>
+const B=[["scout","Scout","Scout"],["dial","Dial","Dial"],
+         ["rover-lite","Rover Lite","Rover Lite"],["biped-mini","Biped Mini","Biped Mini"]];
+const CLASSES={scout:"floor runner",dial:"desk arm","rover-lite":"explorer","biped-mini":"walker"};
+document.getElementById('row').innerHTML=B.map(([slug,name,file])=>
+ `<div class="cell"><iframe src="http://localhost:4300/bodies/${slug}/${encodeURIComponent(file)}%20Viewer.html?embed=1&view=iso" scrolling="no"></iframe>
+  <div class="cap"><span>${name}</span><b>${CLASSES[slug]}</b></div></div>`).join('');
+</script></body></html>

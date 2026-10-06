@@ -17,7 +17,8 @@
     "site-data": "node tools/site-data.js",
     "new-body": "node tools/new-body.js",
     "quote-bundle": "node tools/quote-bundle.js",
-    "print-price": "node tools/print-price.js"
+    "print-price": "node tools/print-price.js",
+    "og-card": "node tools/og-card/shoot.js"
   },
   "devDependencies": {
     "ajv": "^8.20.0",
